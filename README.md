@@ -135,6 +135,11 @@ For the public dashboard, use mock data only. For real work, copy the prompt tem
 
 `functions/api/command.js` is the first backend step.
 
+Cloudflare Pages deployment:
+
+- Production dashboard: https://ou-ai-command-office-ceo.pages.dev/
+- Mock command endpoint: https://ou-ai-command-office-ceo.pages.dev/api/command
+
 - It receives dashboard commands through `POST /api/command`.
 - It routes the command to a mock agent.
 - It returns a mock output, suggested room, and Drive folder.
