@@ -83,6 +83,29 @@ Use Google Drive for:
 
 MVP v1 uses manual save/upload to Drive. Do not auto-sync private Drive content into GitHub Pages.
 
+## Google Drive Integration Roadmap
+
+Level 1 - Manual vault, current MVP:
+
+- Agent output is drafted in ChatGPT or the dashboard prompt panel.
+- Ou reviews and approves the output.
+- Ou saves the final file as `.md`, `.docx`, `.pdf`, `.xlsx`, or `.pptx`.
+- Ou uploads/moves it into the correct Google Drive folder.
+- GitHub keeps only mock data and public-safe templates.
+
+Level 2 - Google Apps Script helper:
+
+- Create a private Google Sheet or Apps Script inside the Drive vault.
+- Add simple buttons or forms for saving task logs, meeting summaries, and output links.
+- Dashboard can keep a public-safe link checklist, but real file contents stay in Drive.
+
+Level 3 - Drive API backend:
+
+- Add OAuth login and a backend such as Cloudflare Workers, Apps Script Web App, or another private server.
+- Store Drive file IDs, folder IDs, and output metadata.
+- Read/write real Drive files only after Ou signs in.
+- Never expose real private Drive data through public GitHub Pages.
+
 ## How to Command Agents
 
 Default command flow:

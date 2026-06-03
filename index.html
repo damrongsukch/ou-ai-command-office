@@ -8,10 +8,10 @@
       :root {
         color-scheme: dark;
         --bg: #050b14;
-        --panel: rgba(7, 18, 31, 0.92);
-        --panel-2: rgba(10, 28, 47, 0.94);
-        --line: rgba(88, 217, 255, 0.24);
-        --line-strong: rgba(88, 217, 255, 0.52);
+        --panel: rgba(8, 17, 28, 0.94);
+        --panel-2: rgba(10, 24, 38, 0.96);
+        --line: rgba(132, 169, 190, 0.18);
+        --line-strong: rgba(132, 169, 190, 0.34);
         --text: #eef8ff;
         --muted: #91a9bf;
         --cyan: #20dcff;
@@ -21,7 +21,7 @@
         --pink: #ff6fb5;
         --red: #ff6f83;
         --blue: #2e7cff;
-        --shadow: 0 22px 70px rgba(0, 0, 0, 0.45);
+        --shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
       }
 
       * { box-sizing: border-box; }
@@ -31,10 +31,7 @@
         min-height: 100vh;
         color: var(--text);
         font-family: "Segoe UI", "Noto Sans Thai", Arial, sans-serif;
-        background:
-          radial-gradient(circle at 18% 0%, rgba(32, 220, 255, 0.18), transparent 28%),
-          radial-gradient(circle at 88% 10%, rgba(77, 229, 166, 0.11), transparent 24%),
-          linear-gradient(180deg, #040914, #081321 58%, #050b14);
+        background: linear-gradient(180deg, #07111c, #0a1521 58%, #060d16);
       }
 
       h1, h2, h3, p { margin: 0; }
@@ -42,7 +39,7 @@
 
       .page {
         min-height: 100vh;
-        padding: 12px 16px 10px;
+        padding: 14px;
         display: grid;
         grid-template-rows: auto minmax(0, 1fr) auto;
         gap: 10px;
@@ -106,7 +103,7 @@
 
       .status-item {
         min-width: 132px;
-        padding: 9px 14px;
+        padding: 8px 12px;
         background: rgba(8, 22, 38, 0.96);
       }
 
@@ -138,7 +135,7 @@
         padding: 9px 12px;
         border: 1px solid var(--line);
         border-radius: 8px;
-        background: linear-gradient(135deg, rgba(16, 45, 75, 0.95), rgba(9, 26, 44, 0.96));
+        background: rgba(9, 25, 39, 0.96);
         box-shadow: var(--shadow);
       }
 
@@ -160,8 +157,8 @@
       .main {
         min-height: 0;
         display: grid;
-        grid-template-columns: 292px minmax(0, 1fr) 306px;
-        gap: 9px;
+        grid-template-columns: 276px minmax(0, 1fr) 292px;
+        gap: 10px;
       }
 
       .panel, .stage-wrap, .footer {
@@ -247,9 +244,8 @@
       }
 
       button:hover {
-        transform: translateY(-1px);
         border-color: var(--cyan);
-        box-shadow: 0 0 0 2px rgba(32, 220, 255, 0.12);
+        box-shadow: 0 0 0 2px rgba(32, 220, 255, 0.08);
       }
 
       .send-btn {
@@ -326,7 +322,7 @@
       .stage-wrap {
         position: relative;
         overflow: hidden;
-        min-height: 640px;
+        min-height: 620px;
       }
 
       .stage {
@@ -343,7 +339,8 @@
         height: 100%;
         object-fit: cover;
         object-position: center;
-        filter: saturate(1.12) contrast(1.05);
+        filter: saturate(0.86) contrast(0.96) brightness(0.82);
+        opacity: 0.62;
       }
 
       .stage::after {
@@ -359,12 +356,12 @@
       .room-label {
         position: absolute;
         z-index: 2;
-        padding: 7px 14px;
+        padding: 6px 11px;
         border: 1px solid currentColor;
         border-radius: 7px;
-        background: rgba(8, 18, 31, 0.82);
-        box-shadow: 0 0 22px color-mix(in srgb, currentColor 34%, transparent);
-        font-size: 14px;
+        background: rgba(8, 18, 31, 0.72);
+        box-shadow: none;
+        font-size: 12px;
         font-weight: 900;
         text-transform: uppercase;
       }
@@ -380,17 +377,17 @@
         width: 220px;
         min-height: 72px;
         padding: 11px 10px 10px 72px;
-        border: 1px solid rgba(255, 209, 95, 0.32);
+        border: 1px solid rgba(132, 169, 190, 0.26);
         border-radius: 8px;
         color: #eaf8ff;
-        background: rgba(7, 17, 29, 0.86);
-        box-shadow: 0 16px 38px rgba(0,0,0,0.34);
+        background: rgba(8, 18, 30, 0.88);
+        box-shadow: 0 10px 24px rgba(0,0,0,0.25);
         text-align: left;
       }
 
       .agent-card.active {
-        border-color: var(--gold);
-        box-shadow: 0 0 0 2px rgba(255, 209, 95, 0.18), 0 18px 42px rgba(0,0,0,0.44);
+        border-color: rgba(255, 209, 95, 0.72);
+        box-shadow: 0 0 0 2px rgba(255, 209, 95, 0.10), 0 12px 30px rgba(0,0,0,0.32);
       }
 
       .workflow-console {
@@ -406,8 +403,8 @@
         overflow: hidden;
         border: 1px solid rgba(88, 217, 255, 0.32);
         border-radius: 9px;
-        background: rgba(88, 217, 255, 0.18);
-        box-shadow: 0 22px 48px rgba(0,0,0,0.46);
+        background: rgba(132, 169, 190, 0.16);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.34);
       }
 
       .workflow-section {
@@ -850,26 +847,133 @@
         .topbar { grid-template-columns: 1fr; }
         .status-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         .main { grid-template-columns: 1fr; }
-        .stage-wrap { order: 1; min-height: 72vw; }
+        .stage-wrap { order: 1; min-height: min(720px, 72vw); }
         .panel.left { order: 2; }
         .panel.right { order: 3; }
       }
 
       @media (max-width: 760px) {
-        .stage-wrap { min-height: 620px; }
-        .footer { grid-template-columns: 1fr; }
-        .agent-card {
-          width: 190px;
-          grid-template-columns: 36px 1fr;
+        .page {
           padding: 8px;
+          gap: 8px;
         }
-        .agent-copy > span { display: none; }
-        .memory { width: 220px; left: 34%; }
-        .workflow-console {
+
+        .brand h1 {
+          align-items: flex-start;
+          flex-direction: column;
+          font-size: 20px;
+        }
+
+        .brand p,
+        .status-item small,
+        .task small,
+        .recent small {
+          font-size: 11px;
+        }
+
+        .status-strip,
+        .footer {
           grid-template-columns: 1fr;
-          bottom: 10px;
         }
-        .status-strip { grid-template-columns: 1fr; }
+
+        .panel {
+          padding: 10px;
+        }
+
+        .stage-wrap {
+          min-height: 0;
+          overflow: visible;
+        }
+
+        .stage {
+          position: relative;
+          inset: auto;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 8px;
+          padding: 106px 10px 10px;
+          overflow: visible;
+          background: rgba(7, 18, 31, 0.94);
+        }
+
+        .office-bg {
+          height: 96px;
+          object-position: center 30%;
+          opacity: 0.42;
+        }
+
+        .stage::after {
+          height: 96px;
+          bottom: auto;
+        }
+
+        .room-label {
+          display: none;
+        }
+
+        .footer { grid-template-columns: 1fr; }
+
+        .agent-card {
+          position: relative;
+          left: auto;
+          right: auto;
+          top: auto;
+          bottom: auto;
+          width: 100%;
+          min-height: 66px;
+          padding: 10px 10px 10px 66px;
+          transform: none;
+        }
+
+        .agent-card:hover,
+        .chief:hover {
+          transform: none;
+        }
+
+        .agent-copy > span {
+          display: block;
+        }
+
+        .character {
+          left: 8px;
+          bottom: 6px;
+          transform: scale(0.84);
+          transform-origin: left bottom;
+        }
+
+        .chief,
+        .memory,
+        .comm {
+          width: 100%;
+          transform: none;
+        }
+
+        .chief .character {
+          left: 8px;
+          top: auto;
+          bottom: 6px;
+          transform: scale(0.84);
+        }
+
+        .workflow-console {
+          position: relative;
+          left: auto;
+          bottom: auto;
+          width: 100%;
+          transform: none;
+          grid-template-columns: 1fr;
+          margin-top: 2px;
+        }
+
+        .task,
+        .recent {
+          grid-template-columns: 28px 1fr;
+        }
+
+        .task > div:last-child,
+        .recent > small {
+          grid-column: 2;
+        }
       }
     </style>
   </head>
@@ -913,6 +1017,7 @@
             <button class="action blue" data-template="quality"><span class="icon">QC</span><span><strong>Quality Gate</strong><small>Check before use</small></span></button>
             <button class="action green" data-template="evening"><span class="icon">ED</span><span><strong>Evening Debrief</strong><small>Completed / Pending / Tomorrow</small></span></button>
             <button class="action gold" data-template="weekly"><span class="icon">WR</span><span><strong>Weekly Report</strong><small>Sales management summary</small></span></button>
+            <button class="action blue" data-template="drive"><span class="icon">GD</span><span><strong>Drive Setup</strong><small>Private vault workflow</small></span></button>
           </div>
 
           <div class="section-label">Office Navigation</div>
@@ -1087,6 +1192,8 @@
         quality: "Quality Gate: review this output for context, accuracy, action, risk, format, privacy, and memory/update rules. Return Pass or Needs Revision.",
         evening: "Prepare Evening Debrief: completed today, pending/waiting, follow-up needed, risks, tomorrow top 3 priorities, and Save-to-Drive recommendation.",
         weekly: "Prepare Weekly Sales Report: management summary, customer visits, opportunities, follow-up status, issues/blockers, Salesforce update draft, next week plan."
+        ,
+        drive: "Google Drive Setup: use root folder 'Ou AI Command Office - Private Data Vault'. Save real customer, portfolio, family, astrology, and final document outputs to Drive only. MVP v1 uses manual upload; future integration needs OAuth/Drive API or Google Apps Script."
       };
 
       const tasks = [
@@ -1153,7 +1260,8 @@
             life: "life",
             quality: "chief",
             evening: "chief",
-            weekly: "asm"
+            weekly: "asm",
+            drive: "memory"
           };
           selectAgent(route[node.dataset.template] || "chief");
           commandText.value = templates[node.dataset.template];
