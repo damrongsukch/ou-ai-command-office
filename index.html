@@ -763,6 +763,94 @@
         line-height: 1.45;
       }
 
+      .history-panel {
+        margin-top: 13px;
+        padding: 12px;
+        border: 1px solid rgba(88, 217, 255, 0.2);
+        border-radius: 8px;
+        background: rgba(32, 220, 255, 0.05);
+      }
+
+      .history-panel h3 {
+        color: var(--cyan);
+        font-size: 13px;
+        text-transform: uppercase;
+      }
+
+      .history-panel p {
+        margin-top: 6px;
+        color: #afc3d4;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .history-actions {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 7px;
+        margin-top: 10px;
+      }
+
+      .history-actions button,
+      .history-status button {
+        min-height: 32px;
+        color: #dffaff;
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .history-list {
+        display: grid;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .history-item {
+        padding: 9px;
+        border: 1px solid rgba(132, 169, 190, 0.17);
+        border-radius: 8px;
+        background: rgba(4, 13, 25, 0.62);
+      }
+
+      .history-item strong {
+        display: block;
+        color: #eef8ff;
+        font-size: 12px;
+      }
+
+      .history-item small {
+        display: block;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.35;
+      }
+
+      .history-status {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 6px;
+        margin-top: 8px;
+      }
+
+      .status-chip {
+        display: inline-flex;
+        width: fit-content;
+        margin-top: 7px;
+        padding: 3px 7px;
+        border-radius: 5px;
+        color: #06111b;
+        background: var(--gold);
+        font-size: 9px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .status-chip.approved { background: var(--green); }
+      .status-chip.saved { background: var(--cyan); }
+      .status-chip.pending { background: var(--purple); color: #f3efff; }
+
       .drive-vault {
         margin-top: 13px;
         padding: 12px;
@@ -1054,12 +1142,16 @@
         .task,
         .recent,
         .output-actions,
-        .drive-actions {
+        .drive-actions,
+        .history-actions,
+        .history-status {
           grid-template-columns: 28px 1fr;
         }
 
         .output-actions,
-        .drive-actions {
+        .drive-actions,
+        .history-actions,
+        .history-status {
           grid-template-columns: 1fr;
         }
 
@@ -1191,6 +1283,16 @@
           <div id="recentOutputs"></div>
           <button class="view-all">View All Outputs</button>
           <section class="active-output" id="activeOutput"></section>
+          <section class="history-panel">
+            <h3>Local Task History</h3>
+            <p>Saved only in this browser. Use it to track draft prompts before copying final outputs to Google Drive.</p>
+            <div class="history-actions">
+              <button id="saveLatestTask" type="button">Save Latest</button>
+              <button id="copyLatestTask" type="button">Copy Latest</button>
+              <button id="clearHistory" type="button">Clear</button>
+            </div>
+            <div class="history-list" id="historyList"></div>
+          </section>
           <section class="drive-vault" id="driveVault">
             <h3>Drive Vault</h3>
             <p>Manual save mode. Real files stay in Google Drive, not GitHub Pages.</p>
@@ -1411,9 +1513,12 @@
       const activeOutput = document.querySelector("#activeOutput");
       const drivePath = document.querySelector("#drivePath");
       const driveFileName = document.querySelector("#driveFileName");
+      const historyList = document.querySelector("#historyList");
+      const HISTORY_KEY = "ouAiCommandOffice.history.v1";
       let currentDriveUrl = DRIVE_VAULT_URL;
       let currentAgent = agents.chief;
       let currentPromptText = "";
+      let currentWorkflowTitle = "Active Workflow";
 
       function todayStamp() {
         return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Bangkok" });
@@ -1473,6 +1578,7 @@
       }
 
       function renderOutput(title, agent, command, sections) {
+        currentWorkflowTitle = title;
         currentPromptText = promptText(agent, command, sections);
         activeOutput.innerHTML = `
           <h3>${title}</h3>
@@ -1483,6 +1589,86 @@
           </div>
           <pre class="prompt-preview">${escapeHtml(currentPromptText)}</pre>
         `;
+      }
+
+      function readHistory() {
+        try {
+          const parsed = JSON.parse(localStorage.getItem(HISTORY_KEY) || "[]");
+          return Array.isArray(parsed) ? parsed : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function writeHistory(items) {
+        try {
+          localStorage.setItem(HISTORY_KEY, JSON.stringify(items.slice(0, 12)));
+        } catch {
+          activeOutput.innerHTML = "<h3>Local Save Unavailable</h3><p>This browser blocked localStorage. You can still copy prompts manually.</p>";
+        }
+      }
+
+      function statusClass(status) {
+        return status === "Approved" ? "approved" : status === "Saved to Drive" ? "saved" : status === "Pending Review" ? "pending" : "";
+      }
+
+      function renderHistory() {
+        const items = readHistory();
+        if (!items.length) {
+          historyList.innerHTML = `<p>No local history yet. Click Send Command or Save Latest to create the first entry.</p>`;
+          return;
+        }
+
+        historyList.innerHTML = items.map((item) => `
+          <article class="history-item">
+            <strong>${escapeHtml(item.title)}</strong>
+            <small>${escapeHtml(item.agent)} · ${escapeHtml(item.createdAt)}</small>
+            <span class="status-chip ${statusClass(item.status)}">${escapeHtml(item.status)}</span>
+            <small>${escapeHtml(item.fileName)}</small>
+            <div class="history-status">
+              <button type="button" data-history-copy="${item.id}">Copy</button>
+              <button type="button" data-history-status="${item.id}" data-status="Pending Review">Review</button>
+              <button type="button" data-history-status="${item.id}" data-status="Approved">Approve</button>
+              <button type="button" data-history-status="${item.id}" data-status="Saved to Drive">Saved</button>
+            </div>
+          </article>
+        `).join("");
+      }
+
+      function saveCurrentTask(status = "Draft") {
+        const item = {
+          id: `${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+          title: currentWorkflowTitle,
+          agent: currentAgent.name,
+          status,
+          prompt: currentPromptText,
+          drivePath: drivePath.textContent,
+          driveUrl: currentDriveUrl,
+          fileName: driveFileName.textContent,
+          createdAt: new Date().toLocaleString("en-GB", { timeZone: "Asia/Bangkok", hour12: false })
+        };
+        const next = [item, ...readHistory()];
+        writeHistory(next);
+        renderHistory();
+        return item;
+      }
+
+      function updateHistoryStatus(id, status) {
+        const next = readHistory().map((item) => item.id === id ? { ...item, status } : item);
+        writeHistory(next);
+        renderHistory();
+      }
+
+      function historySaveText(item) {
+        return [
+          item.prompt,
+          "",
+          "Local History:",
+          `Status: ${item.status}`,
+          `Save to: ${item.drivePath}`,
+          `File: ${item.fileName}`,
+          `Drive: ${item.driveUrl}`
+        ].join("\n");
       }
 
       async function copyText(text, label) {
@@ -1537,6 +1723,7 @@
 
       document.querySelector("#sendCommand").addEventListener("click", () => {
         renderOutput("Command Accepted", currentAgent, commandText.value, currentAgent.workflow);
+        saveCurrentTask("Draft");
         commandText.value = `${currentAgent.name} accepted: ${commandText.value}`;
       });
 
@@ -1551,6 +1738,38 @@
       document.querySelector("#copyDriveName").addEventListener("click", () => copyText(driveFileName.textContent, "File Name"));
       document.querySelector("#openDriveVault").addEventListener("click", () => {
         window.open(currentDriveUrl, "_blank", "noopener,noreferrer");
+      });
+
+      document.querySelector("#saveLatestTask").addEventListener("click", () => {
+        const item = saveCurrentTask("Draft");
+        activeOutput.innerHTML = `<h3>Saved Locally</h3><p>${escapeHtml(item.title)}<br>${escapeHtml(item.fileName)}</p>`;
+      });
+
+      document.querySelector("#copyLatestTask").addEventListener("click", () => {
+        const latest = readHistory()[0];
+        if (!latest) {
+          activeOutput.innerHTML = "<h3>No Local History</h3><p>Save or send a workflow first.</p>";
+          return;
+        }
+        copyText(historySaveText(latest), "Latest Task");
+      });
+
+      document.querySelector("#clearHistory").addEventListener("click", () => {
+        writeHistory([]);
+        renderHistory();
+        activeOutput.innerHTML = "<h3>History Cleared</h3><p>Local browser task history is now empty.</p>";
+      });
+
+      historyList.addEventListener("click", (event) => {
+        const copyButton = event.target.closest("[data-history-copy]");
+        const statusButton = event.target.closest("[data-history-status]");
+        if (copyButton) {
+          const item = readHistory().find((entry) => entry.id === copyButton.dataset.historyCopy);
+          if (item) copyText(historySaveText(item), "History Item");
+        }
+        if (statusButton) {
+          updateHistoryStatus(statusButton.dataset.historyStatus, statusButton.dataset.status);
+        }
       });
 
       document.querySelector("#taskQueue").innerHTML = tasks.map((task, index) => `
@@ -1581,6 +1800,7 @@
       updateClock();
       setInterval(updateClock, 30000);
       selectAgent("chief");
+      renderHistory();
     </script>
   </body>
 </html>
