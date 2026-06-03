@@ -1185,6 +1185,32 @@
 
     <script>
       const DRIVE_VAULT_URL = "https://drive.google.com/drive/folders/1uDn-U5ZFm7yRhoUu9gvdvu2xy3UGS_lU?usp=sharing";
+      const DRIVE_FOLDER_URLS = {
+        "00_Command_Center/Daily Brief/": "https://drive.google.com/drive/folders/1KsHGfnaFmO8LtfpmioPg2txusgUHaCL3",
+        "00_Command_Center/Weekly Review/": "https://drive.google.com/drive/folders/13MOAWtgqbxhHY84kkl-M1vgjy-og0cYQ",
+        "00_Command_Center/Decision Log/": "https://drive.google.com/drive/folders/1I2vhbi2IY33FW25pkQblob7Q-F3e3Urc",
+        "02_Sales_ProXES/Customer CRM/": "https://drive.google.com/drive/folders/1eM4ZwRaaEomAoSaz60S3dV6RrqZ7dk7m",
+        "02_Sales_ProXES/Meeting Logs/": "https://drive.google.com/drive/folders/1cpwFErX8-1XAd4cOtzL0s6v4jb_j-pVY",
+        "02_Sales_ProXES/Visit Briefs/": "https://drive.google.com/drive/folders/1B99BCx50zEYUABJN0IaW9M6Ap0qq3qt6",
+        "02_Sales_ProXES/Follow-up Emails/": "https://drive.google.com/drive/folders/1nnt2ZFk2FlvpzfG7tvStfEV0bU_Ue4Fp",
+        "02_Sales_ProXES/Proposals/": "https://drive.google.com/drive/folders/11REkjeWtjSJis2QxPR2FwgCN92SZNXmX",
+        "02_Sales_ProXES/Weekly Reports/": "https://drive.google.com/drive/folders/1Nad6qsnwQ74DIZ0ZPrzLidUoQHAEfg9y",
+        "04_Investment/Portfolio Plan/": "https://drive.google.com/drive/folders/1HEmE558pwCJl4TTzpc409kxKck2O0Oni",
+        "04_Investment/DCA Logs/": "https://drive.google.com/drive/folders/1vVi8UGq2awwreryjOuun15z6nQGs7l5R",
+        "04_Investment/Weekly Portfolio Review/": "https://drive.google.com/drive/folders/1KBsPz4pn710C9pLMAlAD0Y1CjjVqicMP",
+        "04_Investment/Risk Notes/": "https://drive.google.com/drive/folders/1YEbRtOvUE2ta3Qc4nk1ps5K103LIXqbd",
+        "05_Documents_Studio/": "https://drive.google.com/drive/folders/15_QHgtJSQjaUPeW5jKufpIlJdzmDaGCP",
+        "05_Documents_Studio/PDF/": "https://drive.google.com/drive/folders/1E-BgrSB6utTQIBU2Pf1yGjtoO2_WurjE",
+        "05_Documents_Studio/Excel/": "https://drive.google.com/drive/folders/14dgttQJfcoizLP914RZDcmZpDK0NW5Vz",
+        "05_Documents_Studio/PowerPoint/": "https://drive.google.com/drive/folders/1rHlFv0jL-E_kEbcll-cNGR2jtQiHaT5B",
+        "05_Documents_Studio/Flyers/": "https://drive.google.com/drive/folders/1uGEtxo8NAiosuLgS-j7d6AC46mjqxTE2",
+        "05_Documents_Studio/Templates/": "https://drive.google.com/drive/folders/1cLCCwnC7hO4Znhg4S7MxWt2Ccg3AEqdK",
+        "06_Life_Astrology/Daily Reading/": "https://drive.google.com/drive/folders/1DRAf3WsbrzC-rZS-RvnRUEa891fkxVQA",
+        "06_Life_Astrology/Weekly Reading/": "https://drive.google.com/drive/folders/105J_UIQJkAPIu0uJ8LF-VF3IT3SQO8vq",
+        "06_Life_Astrology/Auspicious Timing/": "https://drive.google.com/drive/folders/1ffQqgQfWcmk7tBuX24xpJt9Y30_vCa70",
+        "06_Life_Astrology/Family Planning/": "https://drive.google.com/drive/folders/1-yhCtbXh_HKFeRUyrJaCuwnahwYDwpJt",
+        "99_Archive/": "https://drive.google.com/drive/folders/1RtWo3HIcM3eXzef626aodsJ_5grsj6m1"
+      };
 
       const agents = {
         chief: {
@@ -1226,7 +1252,7 @@
           name: "Product Knowledge",
           role: "Solutions fit, technical detail, proposal Q&A.",
           output: "Product Fit, Technical Notes, Objection Handling, Proposal Inputs.",
-          saveTo: "03_Product_Knowledge/Application Notes/",
+          saveTo: "02_Sales_ProXES/Proposals/",
           workflow: ["Identify customer need", "Match product capability", "Prepare evidence", "Draft technical answer", "List missing questions"]
         },
         document: {
@@ -1240,7 +1266,7 @@
           name: "LinkedIn & Email Agent",
           role: "Business English, customer emails, LinkedIn posts, captions, and tone variants.",
           output: "Purpose, Audience, Draft, Tone Notes, Risk / Approval Check, Final Version.",
-          saveTo: "05_Documents_Studio/Templates/ or 02_Sales_ProXES/Follow-up Emails/",
+          saveTo: "05_Documents_Studio/Templates/",
           workflow: ["Clarify audience", "Draft message", "Check tone", "Run privacy/approval gate", "Prepare final version"]
         },
         life: {
@@ -1254,7 +1280,7 @@
           name: "Memory Steward",
           role: "Data vault, naming rules, public/private separation.",
           output: "Data Location, Naming Rule, Privacy Status, Next Storage Action.",
-          saveTo: "GitHub mock data or Google Drive private vault",
+          saveTo: "99_Archive/",
           workflow: ["Classify public/private", "Check folder rule", "Update mock index", "Protect private data", "Recommend GitHub or Drive"]
         }
       };
@@ -1295,6 +1321,7 @@
       const activeOutput = document.querySelector("#activeOutput");
       const drivePath = document.querySelector("#drivePath");
       const driveFileName = document.querySelector("#driveFileName");
+      let currentDriveUrl = DRIVE_VAULT_URL;
 
       function todayStamp() {
         return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Bangkok" });
@@ -1316,6 +1343,7 @@
       function setDriveRoute(agent) {
         drivePath.textContent = agent.saveTo;
         driveFileName.textContent = suggestedFileName(agent);
+        currentDriveUrl = DRIVE_FOLDER_URLS[agent.saveTo] || DRIVE_VAULT_URL;
       }
 
       async function copyText(text, label) {
@@ -1391,7 +1419,7 @@
       document.querySelector("#copyDrivePath").addEventListener("click", () => copyText(drivePath.textContent, "Drive Path"));
       document.querySelector("#copyDriveName").addEventListener("click", () => copyText(driveFileName.textContent, "File Name"));
       document.querySelector("#openDriveVault").addEventListener("click", () => {
-        window.open(DRIVE_VAULT_URL, "_blank", "noopener,noreferrer");
+        window.open(currentDriveUrl, "_blank", "noopener,noreferrer");
       });
 
       document.querySelector("#taskQueue").innerHTML = tasks.map((task, index) => `
