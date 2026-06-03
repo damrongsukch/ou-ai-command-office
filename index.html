@@ -733,6 +733,36 @@
         line-height: 1.45;
       }
 
+      .output-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 7px;
+        margin-top: 10px;
+      }
+
+      .output-actions button {
+        min-height: 34px;
+        color: #06111b;
+        border-color: rgba(255, 209, 95, 0.58);
+        background: linear-gradient(135deg, rgba(255, 209, 95, 0.95), rgba(77, 229, 166, 0.9));
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      .prompt-preview {
+        margin-top: 10px;
+        max-height: 220px;
+        overflow: auto;
+        white-space: pre-wrap;
+        border: 1px solid rgba(132, 169, 190, 0.18);
+        border-radius: 8px;
+        padding: 10px;
+        color: #d8e8f2;
+        background: rgba(4, 13, 25, 0.66);
+        font-size: 11px;
+        line-height: 1.45;
+      }
+
       .drive-vault {
         margin-top: 13px;
         padding: 12px;
@@ -1022,8 +1052,15 @@
         }
 
         .task,
-        .recent {
+        .recent,
+        .output-actions,
+        .drive-actions {
           grid-template-columns: 28px 1fr;
+        }
+
+        .output-actions,
+        .drive-actions {
+          grid-template-columns: 1fr;
         }
 
         .task > div:last-child,
@@ -1285,17 +1322,70 @@
         }
       };
 
-      const templates = {
-        morning: "Prepare Morning Engine: schedule, top 3 priorities, must-win follow-up, waiting items, Salesforce actions, critical questions, time-blocked plan.",
-        sales: "Prepare Sales Follow-up: customer snapshot, last interaction, opportunity, risk, next action, email draft.",
-        portfolio: "Prepare DCA Today: allocation truth, timing lens, risk note, buy/wait decision using mock MVP data only.",
-        document: "Prepare Document Review: requirement summary, layout plan, quality gate, revision notes.",
-        life: "Prepare Life & Balance brief: family, reminders, energy, timing suggestion, practical action.",
-        quality: "Quality Gate: review this output for context, accuracy, action, risk, format, privacy, and memory/update rules. Return Pass or Needs Revision.",
-        evening: "Prepare Evening Debrief: completed today, pending/waiting, follow-up needed, risks, tomorrow top 3 priorities, and Save-to-Drive recommendation.",
-        weekly: "Prepare Weekly Sales Report: management summary, customer visits, opportunities, follow-up status, issues/blockers, Salesforce update draft, next week plan."
-        ,
-        drive: "Google Drive Setup: use root folder 'Ou AI Command Office - Private Data Vault'. Save real customer, portfolio, family, astrology, and final document outputs to Drive only. MVP v1 uses manual upload; future integration needs OAuth/Drive API or Google Apps Script."
+      const workflowTemplates = {
+        morning: {
+          agent: "chief",
+          title: "Morning Engine",
+          command: "Chief of Staff, prepare Morning Engine for Ou today.",
+          sections: ["Today Schedule", "Top 3 Priorities", "Must-Win Follow-up", "Push / Waiting Items", "Salesforce Actions", "Customer Risks / Blockers", "Critical Questions (max 5)", "Time-blocked Plan", "Finish-Before-6 PM Plan"],
+          saveTo: "00_Command_Center/Daily Brief/"
+        },
+        sales: {
+          agent: "follow",
+          title: "Sales Follow-up",
+          command: "Customer Follow-up Agent, prepare a customer follow-up package from the latest meeting context.",
+          sections: ["Customer Snapshot", "Situation / Background", "Pain Point", "Opportunity", "Product Fit", "Risk / Concern", "Recommended Next Action", "Follow-up Email Draft", "Salesforce Update Draft"],
+          saveTo: "02_Sales_ProXES/Follow-up Emails/"
+        },
+        portfolio: {
+          agent: "portfolio",
+          title: "DCA Today",
+          command: "Portfolio Agent, prepare today's DCA decision using allocation truth first and live timing as a separate check.",
+          sections: ["Portfolio Truth Source", "Target Gap", "Timing Lens", "Whole-share Feasibility", "Buy / Wait / Hold Cash", "Risk Note", "Next Action"],
+          saveTo: "04_Investment/DCA Logs/"
+        },
+        document: {
+          agent: "document",
+          title: "Document Review",
+          command: "Document Studio Agent, review or prepare the document output and run a print/readiness quality gate.",
+          sections: ["Requirement Summary", "Layout / Format Plan", "Generated File or Draft", "Quality Check", "Revision Notes", "Save-to-Drive Step"],
+          saveTo: "05_Documents_Studio/"
+        },
+        life: {
+          agent: "life",
+          title: "Life & Balance",
+          command: "Life & Balance Agent, prepare a private-safe planning brief for Ou.",
+          sections: ["Overall Energy", "Work & Career", "Money & Investment Mood", "Family & Relationship", "Health / Energy", "Timing Suggestion", "Color / Element Support", "Risk / Avoid", "Practical Action", "Confidence Note"],
+          saveTo: "06_Life_Astrology/Daily Reading/"
+        },
+        quality: {
+          agent: "chief",
+          title: "Quality Gate",
+          command: "Chief of Staff, review this output before Ou uses it.",
+          sections: ["Context Check", "Accuracy Check", "Action Clarity", "Tone / Professionalism", "Privacy Risk", "Missing Data", "Pass or Needs Revision"],
+          saveTo: "00_Command_Center/Decision Log/"
+        },
+        evening: {
+          agent: "chief",
+          title: "Evening Debrief",
+          command: "Chief of Staff, prepare Ou's Evening Debrief.",
+          sections: ["Completed Today", "Pending / Waiting", "Follow-up Needed", "Risks", "Tomorrow Top 3 Priorities", "Save-to-Drive Recommendation"],
+          saveTo: "00_Command_Center/Daily Brief/"
+        },
+        weekly: {
+          agent: "asm",
+          title: "Weekly Sales Report",
+          command: "ASM Sales Agent, prepare Ou's weekly ProXES sales management report.",
+          sections: ["Management Summary", "Customer Visits", "Opportunities", "Follow-up Status", "Issues / Blockers", "Salesforce Update Draft", "Next Week Plan"],
+          saveTo: "02_Sales_ProXES/Weekly Reports/"
+        },
+        drive: {
+          agent: "memory",
+          title: "Drive Save Workflow",
+          command: "Memory Steward, decide where this output should be saved and protect private data.",
+          sections: ["Public vs Private Classification", "Correct Drive Folder", "Suggested File Name", "GitHub-safe Template Needed?", "Do-not-commit Check", "Next Storage Action"],
+          saveTo: "99_Archive/"
+        }
       };
 
       const tasks = [
@@ -1322,6 +1412,8 @@
       const drivePath = document.querySelector("#drivePath");
       const driveFileName = document.querySelector("#driveFileName");
       let currentDriveUrl = DRIVE_VAULT_URL;
+      let currentAgent = agents.chief;
+      let currentPromptText = "";
 
       function todayStamp() {
         return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Bangkok" });
@@ -1340,18 +1432,65 @@
         return `${todayStamp()}_${slug(agent.name)}_${slug(folder)}.md`;
       }
 
+      function escapeHtml(text) {
+        return String(text).replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          "\"": "&quot;",
+          "'": "&#39;"
+        })[char]);
+      }
+
       function setDriveRoute(agent) {
+        currentAgent = agent;
         drivePath.textContent = agent.saveTo;
         driveFileName.textContent = suggestedFileName(agent);
         currentDriveUrl = DRIVE_FOLDER_URLS[agent.saveTo] || DRIVE_VAULT_URL;
       }
 
+      function promptText(agent, command, sections) {
+        return [
+          command,
+          "",
+          "Context:",
+          "- Ou is Area Sales Manager at ProXES.",
+          "- Use mock/public-safe data only inside the dashboard.",
+          "- If real customer, portfolio, family, astrology, or confidential detail is needed, ask Ou to provide it in ChatGPT or save it in Google Drive.",
+          "",
+          "Required Output Format:",
+          ...sections.map((section, index) => `${index + 1}. ${section}`),
+          "",
+          `Save to Google Drive folder: ${agent.saveTo}`,
+          `Suggested file name: ${suggestedFileName(agent)}`,
+          "",
+          "Quality Gate:",
+          "- Be clear, practical, and action-oriented.",
+          "- Do not invent private facts.",
+          "- Do not send email or make financial decisions automatically.",
+          "- Ou gives final approval."
+        ].join("\n");
+      }
+
+      function renderOutput(title, agent, command, sections) {
+        currentPromptText = promptText(agent, command, sections);
+        activeOutput.innerHTML = `
+          <h3>${title}</h3>
+          <p><strong>Owner:</strong> ${agent.name}<br><strong>Save to:</strong> ${agent.saveTo}<br><strong>File:</strong> ${suggestedFileName(agent)}</p>
+          <div class="output-actions">
+            <button type="button" data-copy-current="prompt">Copy Prompt</button>
+            <button type="button" data-copy-current="summary">Copy Save Info</button>
+          </div>
+          <pre class="prompt-preview">${escapeHtml(currentPromptText)}</pre>
+        `;
+      }
+
       async function copyText(text, label) {
         try {
           await navigator.clipboard.writeText(text);
-          activeOutput.innerHTML = `<h3>${label} Copied</h3><p>${text}</p>`;
+          activeOutput.innerHTML = `<h3>${escapeHtml(label)} Copied</h3><p>${escapeHtml(text)}</p>`;
         } catch {
-          activeOutput.innerHTML = `<h3>${label}</h3><p>Select and copy manually:<br>${text}</p>`;
+          activeOutput.innerHTML = `<h3>${escapeHtml(label)}</h3><p>Select and copy manually:<br>${escapeHtml(text)}</p>`;
         }
       }
 
@@ -1378,10 +1517,7 @@
             </ul>
           </div>
         `;
-        activeOutput.innerHTML = `
-          <h3>Active Workflow</h3>
-          <p><strong>${agent.name}</strong><br>${agent.output}<br><strong>Save to:</strong> ${agent.saveTo}</p>
-        `;
+        renderOutput("Active Workflow", agent, `Use ${agent.name}: ${agent.role}`, agent.workflow);
       }
 
       document.querySelectorAll("[data-agent]").forEach((node) => {
@@ -1390,30 +1526,25 @@
 
       document.querySelectorAll("[data-template]").forEach((node) => {
         node.addEventListener("click", () => {
-          const route = {
-            morning: "chief",
-            sales: "follow",
-            portfolio: "portfolio",
-            document: "document",
-            life: "life",
-            quality: "chief",
-            evening: "chief",
-            weekly: "asm",
-            drive: "memory"
-          };
-          selectAgent(route[node.dataset.template] || "chief");
-          commandText.value = templates[node.dataset.template];
+          const template = workflowTemplates[node.dataset.template];
+          selectAgent(template.agent);
+          const agent = { ...agents[template.agent], saveTo: template.saveTo };
+          setDriveRoute(agent);
+          commandText.value = template.command;
+          renderOutput(template.title, agent, template.command, template.sections);
         });
       });
 
       document.querySelector("#sendCommand").addEventListener("click", () => {
-        const active = document.querySelector(".agent-card.active")?.dataset.agent || "chief";
-        const agent = agents[active];
-        activeOutput.innerHTML = `
-          <h3>Command Accepted</h3>
-          <p><strong>${agent.name}</strong><br>${commandText.value}<br><strong>Save to:</strong> ${agent.saveTo}<br><strong>File:</strong> ${suggestedFileName(agent)}</p>
-        `;
-        commandText.value = `${agent.name} accepted: ${commandText.value}`;
+        renderOutput("Command Accepted", currentAgent, commandText.value, currentAgent.workflow);
+        commandText.value = `${currentAgent.name} accepted: ${commandText.value}`;
+      });
+
+      activeOutput.addEventListener("click", (event) => {
+        const button = event.target.closest("[data-copy-current]");
+        if (!button) return;
+        const saveInfo = `Save to: ${drivePath.textContent}\nFile: ${driveFileName.textContent}\nDrive: ${currentDriveUrl}`;
+        copyText(button.dataset.copyCurrent === "prompt" ? currentPromptText : saveInfo, button.textContent.trim());
       });
 
       document.querySelector("#copyDrivePath").addEventListener("click", () => copyText(drivePath.textContent, "Drive Path"));
