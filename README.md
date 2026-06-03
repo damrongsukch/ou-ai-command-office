@@ -130,3 +130,23 @@ Output Top 3 priorities, task list, risk, and finish-before-6 PM plan.
 Open `index.html` in a browser, or use the GitHub Pages URL after Pages is enabled.
 
 For the public dashboard, use mock data only. For real work, copy the prompt template into ChatGPT, attach the real source files there if needed, then save final outputs manually to Google Drive.
+
+## Backend Mock
+
+`functions/api/command.js` is the first backend step.
+
+- It receives dashboard commands through `POST /api/command`.
+- It routes the command to a mock agent.
+- It returns a mock output, suggested room, and Drive folder.
+- It does not call OpenAI yet.
+- It does not read or write Google Drive.
+- It does not store private data.
+
+GitHub Pages cannot run this backend function, so the dashboard falls back to local/manual mode there. Cloudflare Pages or `wrangler pages dev` can run the `/api/command` mock endpoint.
+
+Next backend phases:
+
+1. Add server-side OpenAI API calls.
+2. Add approval status endpoint.
+3. Add private task/output database.
+4. Add Google Drive save after Ou approval.

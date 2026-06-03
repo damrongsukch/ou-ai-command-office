@@ -851,6 +851,20 @@
       .status-chip.saved { background: var(--cyan); }
       .status-chip.pending { background: var(--purple); color: #f3efff; }
 
+      .backend-note {
+        display: inline-flex;
+        width: fit-content;
+        margin-top: 8px;
+        padding: 4px 7px;
+        border: 1px solid rgba(88, 217, 255, 0.24);
+        border-radius: 6px;
+        color: #bfefff;
+        background: rgba(32, 220, 255, 0.08);
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
       .drive-vault {
         margin-top: 13px;
         padding: 12px;
@@ -1519,6 +1533,7 @@
       let currentAgent = agents.chief;
       let currentPromptText = "";
       let currentWorkflowTitle = "Active Workflow";
+      let latestBackendResult = null;
 
       function todayStamp() {
         return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Bangkok" });
@@ -1671,6 +1686,43 @@
         ].join("\n");
       }
 
+      function backendAvailableForCurrentHost() {
+        return location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.hostname.endsWith(".pages.dev");
+      }
+
+      async function sendToBackend(command, agent) {
+        if (!backendAvailableForCurrentHost()) return null;
+
+        const response = await fetch("./api/command", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            command,
+            agent: agent.name,
+            saveTo: agent.saveTo,
+            fileName: suggestedFileName(agent)
+          })
+        });
+
+        if (!response.ok) throw new Error(`Backend returned ${response.status}`);
+        return response.json();
+      }
+
+      function renderBackendResult(result) {
+        latestBackendResult = result;
+        currentPromptText = result.output;
+        activeOutput.innerHTML = `
+          <h3>Backend Mock Response</h3>
+          <p><strong>Owner:</strong> ${escapeHtml(result.route.agentName)}<br><strong>Room:</strong> ${escapeHtml(result.route.room)}<br><strong>Save to:</strong> ${escapeHtml(result.route.saveTo)}</p>
+          <span class="backend-note">Mock backend · no OpenAI yet</span>
+          <div class="output-actions">
+            <button type="button" data-copy-current="prompt">Copy Backend Output</button>
+            <button type="button" data-copy-current="summary">Copy Save Info</button>
+          </div>
+          <pre class="prompt-preview">${escapeHtml(result.output)}</pre>
+        `;
+      }
+
       async function copyText(text, label) {
         try {
           await navigator.clipboard.writeText(text);
@@ -1721,10 +1773,22 @@
         });
       });
 
-      document.querySelector("#sendCommand").addEventListener("click", () => {
-        renderOutput("Command Accepted", currentAgent, commandText.value, currentAgent.workflow);
+      document.querySelector("#sendCommand").addEventListener("click", async () => {
+        const originalCommand = commandText.value;
+        activeOutput.innerHTML = "<h3>Command Sending</h3><p>Trying backend mock first. GitHub Pages will fall back to local manual mode.</p>";
+        try {
+          const backendResult = await sendToBackend(originalCommand, currentAgent);
+          if (backendResult?.ok) {
+            renderBackendResult(backendResult);
+          } else {
+            renderOutput("Command Accepted", currentAgent, originalCommand, currentAgent.workflow);
+          }
+        } catch (error) {
+          renderOutput("Command Accepted", currentAgent, originalCommand, currentAgent.workflow);
+          activeOutput.insertAdjacentHTML("beforeend", `<span class="backend-note">Local fallback · ${escapeHtml(error.message)}</span>`);
+        }
         saveCurrentTask("Draft");
-        commandText.value = `${currentAgent.name} accepted: ${commandText.value}`;
+        commandText.value = `${currentAgent.name} accepted: ${originalCommand}`;
       });
 
       activeOutput.addEventListener("click", (event) => {
