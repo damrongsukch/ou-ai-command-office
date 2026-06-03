@@ -733,6 +733,62 @@
         line-height: 1.45;
       }
 
+      .drive-vault {
+        margin-top: 13px;
+        padding: 12px;
+        border: 1px solid rgba(77, 229, 166, 0.22);
+        border-radius: 8px;
+        background: rgba(77, 229, 166, 0.06);
+      }
+
+      .drive-vault h3 {
+        color: var(--green);
+        font-size: 13px;
+        text-transform: uppercase;
+      }
+
+      .drive-vault p,
+      .drive-vault small {
+        color: #b7d3c8;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .drive-field {
+        margin-top: 9px;
+        padding: 9px;
+        border: 1px solid rgba(132, 169, 190, 0.18);
+        border-radius: 7px;
+        background: rgba(4, 13, 25, 0.58);
+      }
+
+      .drive-field strong {
+        display: block;
+        margin-bottom: 4px;
+        color: #eef8ff;
+        font-size: 11px;
+        text-transform: uppercase;
+      }
+
+      .drive-actions {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 7px;
+        margin-top: 10px;
+      }
+
+      .drive-actions button {
+        min-height: 34px;
+        color: #dffaf0;
+        font-size: 11px;
+        font-weight: 800;
+      }
+
+      .privacy-note {
+        margin-top: 9px;
+        color: #91a9bf;
+      }
+
       .tabs {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -1098,6 +1154,24 @@
           <div id="recentOutputs"></div>
           <button class="view-all">View All Outputs</button>
           <section class="active-output" id="activeOutput"></section>
+          <section class="drive-vault" id="driveVault">
+            <h3>Drive Vault</h3>
+            <p>Manual save mode. Real files stay in Google Drive, not GitHub Pages.</p>
+            <div class="drive-field">
+              <strong>Current Folder</strong>
+              <small id="drivePath">00_Command_Center/Daily Brief/</small>
+            </div>
+            <div class="drive-field">
+              <strong>Suggested File Name</strong>
+              <small id="driveFileName">2026-06-03_Command_Room_Daily_Brief.md</small>
+            </div>
+            <div class="drive-actions">
+              <button id="copyDrivePath" type="button">Copy Path</button>
+              <button id="copyDriveName" type="button">Copy Name</button>
+              <button id="openDriveVault" type="button">Open Drive</button>
+            </div>
+            <small class="privacy-note">Drive link opens the private vault only. This dashboard never reads private Drive files in MVP v1.</small>
+          </section>
         </aside>
       </main>
 
@@ -1110,6 +1184,8 @@
     </div>
 
     <script>
+      const DRIVE_VAULT_URL = "https://drive.google.com/drive/folders/13X1QfD1WJh2OEDh47JkWSW9FvuSBTgJZ?usp=drive_link";
+
       const agents = {
         chief: {
           name: "Chief of Staff",
@@ -1217,6 +1293,39 @@
       const commandText = document.querySelector("#commandText");
       const workflowConsole = document.querySelector("#workflowConsole");
       const activeOutput = document.querySelector("#activeOutput");
+      const drivePath = document.querySelector("#drivePath");
+      const driveFileName = document.querySelector("#driveFileName");
+
+      function todayStamp() {
+        return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Bangkok" });
+      }
+
+      function slug(text) {
+        return text
+          .replace(/&/g, "and")
+          .replace(/[^a-zA-Z0-9]+/g, "_")
+          .replace(/^_+|_+$/g, "")
+          .slice(0, 56);
+      }
+
+      function suggestedFileName(agent) {
+        const folder = agent.saveTo.split("/").filter(Boolean).slice(-1)[0] || agent.name;
+        return `${todayStamp()}_${slug(agent.name)}_${slug(folder)}.md`;
+      }
+
+      function setDriveRoute(agent) {
+        drivePath.textContent = agent.saveTo;
+        driveFileName.textContent = suggestedFileName(agent);
+      }
+
+      async function copyText(text, label) {
+        try {
+          await navigator.clipboard.writeText(text);
+          activeOutput.innerHTML = `<h3>${label} Copied</h3><p>${text}</p>`;
+        } catch {
+          activeOutput.innerHTML = `<h3>${label}</h3><p>Select and copy manually:<br>${text}</p>`;
+        }
+      }
 
       function updateClock() {
         const now = new Date();
@@ -1226,6 +1335,7 @@
       function selectAgent(id) {
         document.querySelectorAll("[data-agent]").forEach((node) => node.classList.toggle("active", node.dataset.agent === id));
         const agent = agents[id];
+        setDriveRoute(agent);
         commandText.value = `Use ${agent.name}: ${agent.role}`;
         workflowConsole.innerHTML = `
           <div class="workflow-section">
@@ -1273,9 +1383,15 @@
         const agent = agents[active];
         activeOutput.innerHTML = `
           <h3>Command Accepted</h3>
-          <p><strong>${agent.name}</strong><br>${commandText.value}</p>
+          <p><strong>${agent.name}</strong><br>${commandText.value}<br><strong>Save to:</strong> ${agent.saveTo}<br><strong>File:</strong> ${suggestedFileName(agent)}</p>
         `;
         commandText.value = `${agent.name} accepted: ${commandText.value}`;
+      });
+
+      document.querySelector("#copyDrivePath").addEventListener("click", () => copyText(drivePath.textContent, "Drive Path"));
+      document.querySelector("#copyDriveName").addEventListener("click", () => copyText(driveFileName.textContent, "File Name"));
+      document.querySelector("#openDriveVault").addEventListener("click", () => {
+        window.open(DRIVE_VAULT_URL, "_blank", "noopener,noreferrer");
       });
 
       document.querySelector("#taskQueue").innerHTML = tasks.map((task, index) => `
