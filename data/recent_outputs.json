@@ -1,0 +1,29 @@
+[
+  {
+    "id": "output_001",
+    "title": "Morning Engine - Mock",
+    "agent": "Chief of Staff Agent",
+    "type": "summary",
+    "created_at": "2026-06-03T08:01:00+07:00",
+    "save_to": "00_Command_Center/Daily Brief/",
+    "privacy": "public-safe mock"
+  },
+  {
+    "id": "output_002",
+    "title": "Client Follow-up Email - Mock Customer",
+    "agent": "Customer Follow-up Agent",
+    "type": "email_draft",
+    "created_at": "2026-06-03T08:10:00+07:00",
+    "save_to": "02_Sales_ProXES/Follow-up Emails/",
+    "privacy": "public-safe mock"
+  },
+  {
+    "id": "output_003",
+    "title": "DCA Recommendation - Mock",
+    "agent": "Portfolio Agent",
+    "type": "report",
+    "created_at": "2026-06-03T08:15:00+07:00",
+    "save_to": "04_Investment/DCA Logs/",
+    "privacy": "public-safe mock"
+  }
+]

@@ -4,8 +4,9 @@
     "name": "Chief of Staff Agent",
     "room": "Command Room",
     "status": "online",
-    "role": "Prioritize tasks, route work, summarize action plans",
-    "main_tasks": ["Daily brief", "Task routing", "Quality gate"],
+    "role": "Prioritize tasks, route work, summarize action plans, and run the quality gate.",
+    "main_tasks": ["Morning Engine", "Task routing", "Daily brief", "Evening debrief", "Quality gate"],
+    "output_format": ["Daily Summary", "Top 3 Priorities", "Waiting / Follow-up", "Risk / Watchout", "Recommended Action Today"],
     "prompt_file": "prompts/chief_of_staff.md"
   },
   {
@@ -13,8 +14,9 @@
     "name": "ASM Sales Agent",
     "room": "Sales Room",
     "status": "online",
-    "role": "Prepare ProXES sales briefs, opportunity summaries, and weekly sales support",
-    "main_tasks": ["Visit brief", "Opportunity analysis", "Weekly report"],
+    "role": "Prepare ProXES sales briefs, opportunity summaries, customer visit plans, proposals, and weekly reports.",
+    "main_tasks": ["Visit brief", "Opportunity analysis", "Proposal support", "Weekly report"],
+    "output_format": ["Customer Snapshot", "Situation / Background", "Pain Point", "Opportunity", "Product Fit", "Risk / Concern", "Recommended Next Action"],
     "prompt_file": "prompts/asm_sales.md"
   },
   {
@@ -22,36 +24,79 @@
     "name": "Customer Follow-up Agent",
     "room": "Sales Room",
     "status": "online",
-    "role": "Prepare follow-up queue, email drafts, and Salesforce update drafts",
-    "main_tasks": ["Follow-up email", "Next action", "CRM draft"],
+    "role": "Prepare follow-up queue, email drafts, next actions, and Salesforce update drafts.",
+    "main_tasks": ["Follow-up email", "Next action", "CRM draft", "Waiting item tracking"],
+    "output_format": ["Customer / Contact", "Last Interaction", "Open Item", "Recommended Follow-up Message", "Next Action", "Due Date", "Salesforce Update Draft"],
     "prompt_file": "prompts/customer_follow_up.md"
+  },
+  {
+    "id": "product_knowledge",
+    "name": "Product Knowledge Agent",
+    "room": "Sales Room",
+    "status": "online",
+    "role": "Match customer needs to ProXES technologies and prepare technical notes for sales conversations.",
+    "main_tasks": ["Product fit", "Technical FAQ", "Application notes", "Objection handling"],
+    "output_format": ["Customer Need", "Recommended Technology", "Application Fit", "Technical Notes", "Limitations / Risks", "Questions to Ask"],
+    "prompt_file": "prompts/product_knowledge.md"
   },
   {
     "id": "portfolio",
     "name": "Portfolio Agent",
     "room": "Portfolio Room",
     "status": "mock-only",
-    "role": "Analyze allocation, DCA candidates, risk, and buy/wait/cash decisions",
-    "main_tasks": ["DCA decision", "Allocation gap", "Risk note"],
+    "role": "Analyze allocation, DCA candidates, timing, risk, and buy/wait/hold-cash decisions.",
+    "main_tasks": ["DCA decision", "Allocation gap", "Risk note", "Portfolio review"],
+    "output_format": ["Market Snapshot", "Allocation Snapshot", "Candidate Table", "Final Buy / Wait / Hold Cash Recommendation", "Risk Note", "Next Check Date"],
     "prompt_file": "prompts/portfolio_agent.md"
+  },
+  {
+    "id": "risk_manager",
+    "name": "Risk Manager Agent",
+    "room": "Portfolio Room",
+    "status": "online",
+    "role": "Check drawdown, concentration risk, market regime, confidential-data risk, and decision trade-offs.",
+    "main_tasks": ["Portfolio risk", "Business risk", "Privacy risk", "Decision watchout"],
+    "output_format": ["Risk Level", "Watchouts", "Avoid / Delay", "Mitigation", "Decision Owner"],
+    "prompt_file": "prompts/risk_manager.md"
   },
   {
     "id": "document_studio",
     "name": "Document Studio Agent",
     "room": "Document Studio",
     "status": "online",
-    "role": "Prepare PDF, Excel, PPT, infographic, and document review outputs",
-    "main_tasks": ["PDF", "Excel", "Quality check"],
+    "role": "Prepare PDF, Excel, PPT, infographic, artwork, and document review outputs.",
+    "main_tasks": ["PDF", "Excel", "Presentation", "Quality check", "File comparison"],
+    "output_format": ["Requirement Summary", "Layout / Format Plan", "Generated File or Path", "Quality Check", "Revision Notes", "Export / Print Readiness"],
     "prompt_file": "prompts/document_studio.md"
+  },
+  {
+    "id": "linkedin_email",
+    "name": "LinkedIn & Email Agent",
+    "room": "Document Studio",
+    "status": "online",
+    "role": "Write business English, customer emails, LinkedIn posts, captions, and tone variants.",
+    "main_tasks": ["Customer email", "LinkedIn post", "Caption", "Tone rewrite"],
+    "output_format": ["Purpose", "Audience", "Draft", "Tone Notes", "Risk / Approval Check", "Final Version"],
+    "prompt_file": "prompts/linkedin_email.md"
   },
   {
     "id": "life_astrology",
     "name": "Life & Astrology Agent",
     "room": "Life Room",
     "status": "private-safe",
-    "role": "Support life planning, reminders, family planning, and astrology lens",
-    "main_tasks": ["Daily reading", "Timing", "Practical action"],
+    "role": "Support life planning, reminders, family planning, and astrology as a planning lens only.",
+    "main_tasks": ["Daily reading", "Weekly reading", "Timing", "Reminder", "Family planning"],
+    "output_format": ["Overall Energy", "Work & Career", "Money & Investment", "Family & Relationship", "Health / Energy", "Good Timing", "Risk / Avoid", "Practical Action", "Confidence Note"],
     "prompt_file": "prompts/life_astrology.md"
+  },
+  {
+    "id": "memory_data_steward",
+    "name": "Memory & Data Steward",
+    "room": "Data Vault",
+    "status": "online",
+    "role": "Keep mock data, prompt templates, naming rules, source index, and public/private data separation clean.",
+    "main_tasks": ["Data classification", "Naming rules", "Folder routing", "Privacy check", "Reusable template update"],
+    "output_format": ["Data Type", "Save Location", "Naming Convention", "Privacy Status", "Next Storage Action"],
+    "prompt_file": "prompts/memory_data_steward.md"
   }
 ]
-

@@ -3,28 +3,77 @@
     "id": "task_001",
     "title": "Prepare Morning Engine",
     "agent": "Chief of Staff Agent",
-    "status": "pending",
+    "status": "in_progress",
     "priority": "high",
-    "due_date": "2026-06-02",
-    "output_type": "daily_brief"
+    "due_date": "2026-06-03",
+    "time": "08:00",
+    "output_type": "daily_brief",
+    "save_to": "00_Command_Center/Daily Brief/"
   },
   {
     "id": "task_002",
-    "title": "Prepare customer follow-up",
-    "agent": "Customer Follow-up Agent",
-    "status": "in_progress",
+    "title": "Client Visit Brief - Mock Customer",
+    "agent": "ASM Sales Agent",
+    "status": "pending",
     "priority": "high",
-    "due_date": "2026-06-02",
-    "output_type": "email_draft"
+    "due_date": "2026-06-03",
+    "time": "10:00",
+    "output_type": "visit_brief",
+    "save_to": "02_Sales_ProXES/Visit Briefs/"
   },
   {
     "id": "task_003",
-    "title": "Mock Portfolio DCA decision",
+    "title": "Prepare Customer Follow-up Email",
+    "agent": "Customer Follow-up Agent",
+    "status": "pending",
+    "priority": "high",
+    "due_date": "2026-06-03",
+    "time": "11:30",
+    "output_type": "email_draft",
+    "save_to": "02_Sales_ProXES/Follow-up Emails/"
+  },
+  {
+    "id": "task_004",
+    "title": "Mock Portfolio DCA Decision",
     "agent": "Portfolio Agent",
-    "status": "waiting",
+    "status": "waiting_for_latest_data",
     "priority": "medium",
-    "due_date": "2026-06-02",
-    "output_type": "dca_recommendation"
+    "due_date": "2026-06-03",
+    "time": "20:30",
+    "output_type": "dca_recommendation",
+    "save_to": "04_Investment/DCA Logs/"
+  },
+  {
+    "id": "task_005",
+    "title": "Document Review / PDF A4",
+    "agent": "Document Studio Agent",
+    "status": "pending",
+    "priority": "medium",
+    "due_date": "2026-06-03",
+    "time": "15:00",
+    "output_type": "document_qc",
+    "save_to": "05_Documents_Studio/PDF/"
+  },
+  {
+    "id": "task_006",
+    "title": "Weekly Sales Report Draft",
+    "agent": "ASM Sales Agent",
+    "status": "scheduled",
+    "priority": "low",
+    "due_date": "2026-06-05",
+    "time": "17:00",
+    "output_type": "weekly_report",
+    "save_to": "02_Sales_ProXES/Weekly Reports/"
+  },
+  {
+    "id": "task_007",
+    "title": "Life Checklist & Astrology Planning Lens",
+    "agent": "Life & Astrology Agent",
+    "status": "pending",
+    "priority": "low",
+    "due_date": "2026-06-03",
+    "time": "21:00",
+    "output_type": "life_brief",
+    "save_to": "06_Life_Astrology/Daily Reading/"
   }
 ]
-

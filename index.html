@@ -691,6 +691,7 @@
       .risk { right: 3%; top: 66%; }
       .product { left: 33%; bottom: 13%; }
       .document { right: 25%; bottom: 14%; }
+      .comm { right: 18%; bottom: 29%; }
       .life { right: 0.8%; bottom: 7%; }
       .memory { left: 42%; bottom: 3%; width: 260px; }
       .chief {
@@ -877,12 +878,12 @@
       <header class="topbar">
         <div class="brand">
           <h1>Ou AI Command Office <span class="badge"><span class="dot"></span> Live Dashboard</span></h1>
-          <p>Your Personal AI Team • Work Smarter, Decide Better, Live Balanced</p>
+          <p>Your Personal AI Team - Work Smarter, Decide Better, Live Balanced</p>
         </div>
         <div class="status-strip">
           <div class="status-item"><small>Tue 03 Jun 2026</small><strong id="clock">08:45 <small>AM BKK</small></strong></div>
           <div class="status-item"><small>System Status</small><strong class="ok"><span class="dot"></span> All Systems Operational</strong></div>
-          <div class="status-item"><small>Agents Online</small><strong class="ok"><span class="dot"></span> 9 / 9</strong></div>
+          <div class="status-item"><small>Agents Online</small><strong class="ok"><span class="dot"></span> 10 / 10</strong></div>
           <div class="status-item"><small>Data Sync</small><strong class="ok"><span class="dot"></span> 2m ago</strong></div>
         </div>
         <div class="user-card">
@@ -893,31 +894,34 @@
 
       <main class="main">
         <aside class="panel left">
-          <div class="panel-head"><span>Command Panel</span><span>⌄</span></div>
+          <div class="panel-head"><span>Command Panel</span><span>v</span></div>
           <section class="command-card">
             <label for="commandText">Send Command to AI Office</label>
             <div class="command-row">
               <textarea id="commandText" placeholder="Type your command...">Prepare Morning Engine for today.</textarea>
-              <button class="send-btn" id="sendCommand" aria-label="Send command">›</button>
+              <button class="send-btn" id="sendCommand" aria-label="Send command">&gt;</button>
             </div>
           </section>
 
-          <div class="section-label">⚡ Quick Actions</div>
+          <div class="section-label">Quick Actions</div>
           <div class="actions">
-            <button class="action gold" data-template="morning"><span class="icon">☀</span><span><strong>Morning Engine</strong><small>Daily Command Center</small></span></button>
-            <button class="action green" data-template="sales"><span class="icon">👥</span><span><strong>Sales Follow-up</strong><small>Customer & Opportunity</small></span></button>
-            <button class="action purple" data-template="portfolio"><span class="icon">↗</span><span><strong>DCA Today</strong><small>Investment Decision</small></span></button>
-            <button class="action blue" data-template="document"><span class="icon">▣</span><span><strong>Document Review</strong><small>Create / Check / Approve</small></span></button>
-            <button class="action pink" data-template="life"><span class="icon">♥</span><span><strong>Life & Balance</strong><small>Family, Astrology, Reminder</small></span></button>
+            <button class="action gold" data-template="morning"><span class="icon">ME</span><span><strong>Morning Engine</strong><small>Daily Command Center</small></span></button>
+            <button class="action green" data-template="sales"><span class="icon">SF</span><span><strong>Sales Follow-up</strong><small>Customer & Opportunity</small></span></button>
+            <button class="action purple" data-template="portfolio"><span class="icon">DC</span><span><strong>DCA Today</strong><small>Investment Decision</small></span></button>
+            <button class="action blue" data-template="document"><span class="icon">DR</span><span><strong>Document Review</strong><small>Create / Check / Approve</small></span></button>
+            <button class="action pink" data-template="life"><span class="icon">LB</span><span><strong>Life & Balance</strong><small>Family, Astrology, Reminder</small></span></button>
+            <button class="action blue" data-template="quality"><span class="icon">QC</span><span><strong>Quality Gate</strong><small>Check before use</small></span></button>
+            <button class="action green" data-template="evening"><span class="icon">ED</span><span><strong>Evening Debrief</strong><small>Completed / Pending / Tomorrow</small></span></button>
+            <button class="action gold" data-template="weekly"><span class="icon">WR</span><span><strong>Weekly Report</strong><small>Sales management summary</small></span></button>
           </div>
 
-          <div class="section-label">▣ Office Navigation</div>
+          <div class="section-label">Office Navigation</div>
           <div class="rooms">
-            <button class="room green" data-agent="chief"><span class="icon">⌘</span><span><strong>Command Room</strong><small>Overview & Priorities</small></span></button>
-            <button class="room blue" data-agent="asm"><span class="icon">●</span><span><strong>Sales Room</strong><small>ProXES Sales Operations</small></span></button>
-            <button class="room green" data-agent="portfolio"><span class="icon">▣</span><span><strong>Portfolio Room</strong><small>Investments & DCA</small></span></button>
-            <button class="room blue" data-agent="document"><span class="icon">▤</span><span><strong>Document Studio</strong><small>Docs, Excel, PDF, Design</small></span></button>
-            <button class="room pink" data-agent="life"><span class="icon">♥</span><span><strong>Life Room</strong><small>Family, Life, Astrology</small></span></button>
+            <button class="room green" data-agent="chief"><span class="icon">CR</span><span><strong>Command Room</strong><small>Overview & Priorities</small></span></button>
+            <button class="room blue" data-agent="asm"><span class="icon">SR</span><span><strong>Sales Room</strong><small>ProXES Sales Operations</small></span></button>
+            <button class="room green" data-agent="portfolio"><span class="icon">PR</span><span><strong>Portfolio Room</strong><small>Investments & DCA</small></span></button>
+            <button class="room blue" data-agent="document"><span class="icon">DS</span><span><strong>Document Studio</strong><small>Docs, Excel, PDF, Design</small></span></button>
+            <button class="room pink" data-agent="life"><span class="icon">LR</span><span><strong>Life Room</strong><small>Family, Life, Astrology</small></span></button>
           </div>
 
           <div class="quote">
@@ -960,7 +964,11 @@
             </button>
             <button class="agent-card document" data-agent="document">
               <span class="character document-char"><span class="face"></span><span class="body"></span><span class="doc-icon"></span></span>
-              <span class="agent-copy"><strong>Document Studio</strong><span>Create • Check • Design</span><small><span class="dot"></span> Online</small></span>
+              <span class="agent-copy"><strong>Document Studio</strong><span>Create - Check - Design</span><small><span class="dot"></span> Online</small></span>
+            </button>
+            <button class="agent-card comm" data-agent="comm">
+              <span class="character document-char"><span class="face"></span><span class="body"></span><span class="headset"></span></span>
+              <span class="agent-copy"><strong>LinkedIn & Email</strong><span>Posts, captions, customer tone</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card life" data-agent="life">
               <span class="character life-char"><span class="face"></span><span class="body"></span><span class="spark"></span></span>
@@ -1002,55 +1010,71 @@
           name: "Chief of Staff",
           role: "Daily command, priority routing, quality gate.",
           output: "Daily Summary, Top 3 Priorities, Waiting Items, Risk Watch, Recommended Actions.",
-          workflow: ["Collect room signals", "Rank top priorities", "Route work to agents", "Publish daily decision brief"]
+          saveTo: "00_Command_Center/Daily Brief/",
+          workflow: ["Collect room signals", "Rank top priorities", "Route work to agents", "Quality Gate", "Publish daily decision brief"]
         },
         asm: {
           name: "ASM Sales Agent",
           role: "Visit plan, opportunity analysis, proposal support.",
           output: "Customer Snapshot, Pain Point, Opportunity, Product Fit, Next Action.",
-          workflow: ["Review customer context", "Prepare visit brief", "Map opportunity to product", "Draft follow-up plan"]
+          saveTo: "02_Sales_ProXES/Visit Briefs/",
+          workflow: ["Review customer context", "Prepare visit brief", "Map opportunity to product", "Draft follow-up plan", "Prepare Salesforce update draft"]
         },
         follow: {
           name: "Customer Follow-up",
           role: "Email follow-up, relationship note, Salesforce draft.",
           output: "Follow-up Email, Salesforce Update, Due Date, Owner, Risk Note.",
-          workflow: ["Read last meeting note", "Extract open items", "Draft customer message", "Prepare CRM update"]
+          saveTo: "02_Sales_ProXES/Follow-up Emails/",
+          workflow: ["Read last meeting note", "Extract open items", "Draft customer message", "Prepare CRM update", "Quality Gate before sending"]
         },
         portfolio: {
           name: "Portfolio Agent",
           role: "DCA decision, allocation check, risk-aware timing.",
           output: "Buy / Wait Decision, Allocation Gap, Timing Note, Risk Warning.",
-          workflow: ["Check target allocation", "Review market timing", "Apply whole-share limits", "Recommend buy/wait"]
+          saveTo: "04_Investment/DCA Logs/",
+          workflow: ["Check portfolio_plan/allocation truth", "Refresh live timing outside MVP mock data", "Apply whole-share limits", "Recommend buy/wait/hold cash"]
         },
         risk: {
           name: "Risk Manager",
           role: "Portfolio protection, concentration, drawdown watch.",
           output: "Risk Level, Concentration Flag, Drawdown Watch, Avoid List.",
-          workflow: ["Scan exposure", "Flag overweights", "Check volatility", "Write protection note"]
+          saveTo: "04_Investment/Risk Notes/",
+          workflow: ["Scan exposure", "Flag overweights", "Check volatility", "Check privacy risk", "Write protection note"]
         },
         product: {
           name: "Product Knowledge",
           role: "Solutions fit, technical detail, proposal Q&A.",
           output: "Product Fit, Technical Notes, Objection Handling, Proposal Inputs.",
-          workflow: ["Identify customer need", "Match product capability", "Prepare evidence", "Draft technical answer"]
+          saveTo: "03_Product_Knowledge/Application Notes/",
+          workflow: ["Identify customer need", "Match product capability", "Prepare evidence", "Draft technical answer", "List missing questions"]
         },
         document: {
           name: "Document Studio",
           role: "PDF, Excel, presentation, artwork, quality check.",
           output: "Requirement Summary, Layout Plan, Generated File Placeholder, QC Notes.",
-          workflow: ["Clarify format", "Build structure", "Generate draft", "Run quality gate"]
+          saveTo: "05_Documents_Studio/",
+          workflow: ["Clarify format", "Build structure", "Generate draft", "Run quality gate", "Save final file to Drive"]
+        },
+        comm: {
+          name: "LinkedIn & Email Agent",
+          role: "Business English, customer emails, LinkedIn posts, captions, and tone variants.",
+          output: "Purpose, Audience, Draft, Tone Notes, Risk / Approval Check, Final Version.",
+          saveTo: "05_Documents_Studio/Templates/ or 02_Sales_ProXES/Follow-up Emails/",
+          workflow: ["Clarify audience", "Draft message", "Check tone", "Run privacy/approval gate", "Prepare final version"]
         },
         life: {
           name: "Life & Balance",
           role: "Family, reminder, astrology lens, practical planning.",
           output: "Energy, Family, Money, Timing, Color/Element Support, Practical Action.",
-          workflow: ["Check personal context", "Read timing lens", "Balance work/family", "Set next reminder"]
+          saveTo: "06_Life_Astrology/Daily Reading/",
+          workflow: ["Check private-safe context", "Use astrology as planning lens", "Balance work/family", "Set next reminder", "Add confidence note"]
         },
         memory: {
           name: "Memory Steward",
           role: "Data vault, naming rules, public/private separation.",
           output: "Data Location, Naming Rule, Privacy Status, Next Storage Action.",
-          workflow: ["Classify public/private", "Check folder rule", "Update mock index", "Protect private data"]
+          saveTo: "GitHub mock data or Google Drive private vault",
+          workflow: ["Classify public/private", "Check folder rule", "Update mock index", "Protect private data", "Recommend GitHub or Drive"]
         }
       };
 
@@ -1059,14 +1083,17 @@
         sales: "Prepare Sales Follow-up: customer snapshot, last interaction, opportunity, risk, next action, email draft.",
         portfolio: "Prepare DCA Today: allocation truth, timing lens, risk note, buy/wait decision using mock MVP data only.",
         document: "Prepare Document Review: requirement summary, layout plan, quality gate, revision notes.",
-        life: "Prepare Life & Balance brief: family, reminders, energy, timing suggestion, practical action."
+        life: "Prepare Life & Balance brief: family, reminders, energy, timing suggestion, practical action.",
+        quality: "Quality Gate: review this output for context, accuracy, action, risk, format, privacy, and memory/update rules. Return Pass or Needs Revision.",
+        evening: "Prepare Evening Debrief: completed today, pending/waiting, follow-up needed, risks, tomorrow top 3 priorities, and Save-to-Drive recommendation.",
+        weekly: "Prepare Weekly Sales Report: management summary, customer visits, opportunities, follow-up status, issues/blockers, Salesforce update draft, next week plan."
       };
 
       const tasks = [
         ["Prepare Morning Engine", "08:00", "high", "In Progress"],
-        ["Client Visit - KRS (Rayong)", "10:00", "high", "Pending"],
-        ["Proposal - Oil & Gas Project", "13:30", "medium", "Pending"],
-        ["Follow-up - Thai Polycons", "15:00", "medium", "Pending"],
+        ["Client Visit - Mock Customer", "10:00", "high", "Pending"],
+        ["Proposal - Mock Project", "13:30", "medium", "Pending"],
+        ["Follow-up - Mock Customer", "15:00", "medium", "Pending"],
         ["DCA Decision - Today", "20:30", "high", "Pending"],
         ["Weekly Sales Report", "17:00", "low", "Pending"],
         ["Life Checklist & Astrology", "21:00", "low", "Pending"]
@@ -1074,7 +1101,7 @@
 
       const outputs = [
         ["ME", "Morning Engine - 03/06", "Summary", "08:01"],
-        ["CF", "Client Follow-up Email (KRS)", "Email Draft", "08:10"],
+        ["CF", "Client Follow-up Email (Mock)", "Email Draft", "08:10"],
         ["DC", "DCA Recommendation", "Report", "08:15"],
         ["SR", "Weekly Sales Report (Draft)", "Excel", "Yesterday"],
         ["LI", "LinkedIn Post Draft", "Post Draft", "Yesterday"]
@@ -1098,6 +1125,7 @@
             <h2>${agent.name}</h2>
             <p>${agent.role}</p>
             <p><strong>Output:</strong> ${agent.output}</p>
+            <p><strong>Save to:</strong> ${agent.saveTo}</p>
           </div>
           <div class="workflow-section">
             <ul class="workflow-list">
@@ -1107,7 +1135,7 @@
         `;
         activeOutput.innerHTML = `
           <h3>Active Workflow</h3>
-          <p><strong>${agent.name}</strong><br>${agent.output}</p>
+          <p><strong>${agent.name}</strong><br>${agent.output}<br><strong>Save to:</strong> ${agent.saveTo}</p>
         `;
       }
 
@@ -1122,7 +1150,10 @@
             sales: "follow",
             portfolio: "portfolio",
             document: "document",
-            life: "life"
+            life: "life",
+            quality: "chief",
+            evening: "chief",
+            weekly: "asm"
           };
           selectAgent(route[node.dataset.template] || "chief");
           commandText.value = templates[node.dataset.template];
@@ -1170,3 +1201,4 @@
     </script>
   </body>
 </html>
+

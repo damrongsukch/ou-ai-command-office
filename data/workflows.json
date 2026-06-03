@@ -1,0 +1,66 @@
+{
+  "operating_model": {
+    "github": "Code, dashboard, prompt templates, mock data, schemas, README, and public-safe examples.",
+    "google_drive": "Real files, real customer data, meeting notes, portfolio exports, private context, and final outputs.",
+    "chatgpt": "Daily command and agent work interface.",
+    "codex": "Builds, fixes, and deploys the GitHub dashboard."
+  },
+  "command_routing": [
+    "Ou sends command",
+    "Chief of Staff classifies the work",
+    "Chief of Staff routes to the relevant agent",
+    "Agent prepares draft, summary, recommendation, or document plan",
+    "Quality Gate checks context, facts, risk, format, and privacy",
+    "Ou approves, edits, uses, or requests revision",
+    "Final output is saved to Google Drive, outputs/, or private_context according to sensitivity"
+  ],
+  "command_formula": "[Agent] + [work needed] + [supporting context] + [desired output format] + [deadline or next action]",
+  "daily_routine": {
+    "morning": "Chief of Staff runs Morning Engine.",
+    "during_day": "Sales agents prepare meeting summary, follow-up email, visit brief, and Salesforce update draft.",
+    "before_sending": "Quality Gate checks tone, completeness, risk, and private-data exposure.",
+    "evening": "Chief of Staff runs Evening Debrief.",
+    "friday": "ASM Sales Agent prepares Weekly Sales Report."
+  },
+  "google_drive_root": "Ou AI Command Office - Private Data Vault",
+  "drive_folders": [
+    "00_Command_Center/Daily Brief/",
+    "00_Command_Center/Weekly Review/",
+    "00_Command_Center/Decision Log/",
+    "01_Profile_Private/Ou Profile/",
+    "01_Profile_Private/Career Context/",
+    "01_Profile_Private/Family Context/",
+    "01_Profile_Private/Astrology Profile/",
+    "02_Sales_ProXES/Customer CRM/",
+    "02_Sales_ProXES/Meeting Logs/",
+    "02_Sales_ProXES/Visit Briefs/",
+    "02_Sales_ProXES/Follow-up Emails/",
+    "02_Sales_ProXES/Proposals/",
+    "02_Sales_ProXES/Weekly Reports/",
+    "03_Product_Knowledge/VE Vacuum Deaerator/",
+    "03_Product_Knowledge/MK Corundum Stone Mill/",
+    "03_Product_Knowledge/ProxxD/",
+    "03_Product_Knowledge/Application Notes/",
+    "04_Investment/Portfolio Plan/",
+    "04_Investment/DCA Logs/",
+    "04_Investment/Weekly Portfolio Review/",
+    "04_Investment/Risk Notes/",
+    "05_Documents_Studio/PDF/",
+    "05_Documents_Studio/Excel/",
+    "05_Documents_Studio/PowerPoint/",
+    "05_Documents_Studio/Flyers/",
+    "05_Documents_Studio/Templates/",
+    "06_Life_Astrology/Daily Reading/",
+    "06_Life_Astrology/Weekly Reading/",
+    "06_Life_Astrology/Auspicious Timing/",
+    "06_Life_Astrology/Family Planning/",
+    "99_Archive/"
+  ],
+  "privacy_rules": [
+    "Use mock data only in GitHub Pages MVP v1.",
+    "Do not commit real private_context/ data.",
+    "Dashboard must not display real private_context data.",
+    "If a file contains real customer, financial, family, astrology, or confidential information, store it in Google Drive only.",
+    "MVP v1 uses manual save/upload to Google Drive. No automatic sync yet."
+  ]
+}

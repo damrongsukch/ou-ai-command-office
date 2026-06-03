@@ -1,7 +1,18 @@
 private_context/
 .env
+.dev.vars
+.wrangler/
 *.local
 secrets.json
 real_customer_data/
 real_portfolio_export/
+real_portfolio_exports/
+node_modules/
+dist/
+.DS_Store
 
+# Out of scope for static MVP v1. Re-enable intentionally for backend/Cloudflare phase.
+.dev.vars.example
+functions/
+migrations/
+wrangler.toml
