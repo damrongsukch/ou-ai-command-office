@@ -107,9 +107,13 @@
       }
 
       .chief-photo img {
-        width: 174px;
-        height: 174px;
+        width: min(100%, 230px);
+        max-height: 260px;
         object-fit: contain;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: #f7fbff;
+        box-shadow: 0 14px 28px rgba(17, 50, 94, 0.1);
       }
 
       .chief-photo h2,
@@ -204,7 +208,7 @@
 
       .team-card {
         display: grid;
-        grid-template-columns: 84px minmax(0, 1fr);
+        grid-template-columns: minmax(98px, 0.42fr) minmax(0, 1fr);
         gap: 12px;
         padding: 12px;
         border-color: color-mix(in srgb, var(--group-color) 60%, #ffffff);
@@ -212,12 +216,12 @@
       }
 
       .team-card img {
-        width: 84px;
-        height: 84px;
+        width: 100%;
+        max-height: 178px;
         object-fit: contain;
         border: 1px solid var(--line);
-        border-radius: 12px;
-        background: var(--soft);
+        border-radius: 14px;
+        background: #f7fbff;
       }
 
       .team-card h3 {
@@ -313,8 +317,8 @@
         .chief-card { grid-template-columns: 1fr; padding: 16px; }
         .info-row { grid-template-columns: 1fr; gap: 4px; }
         .team-board, .pipe-grid { grid-template-columns: 1fr; }
-        .team-card { grid-template-columns: 72px minmax(0, 1fr); }
-        .team-card img { width: 72px; height: 72px; }
+        .team-card { grid-template-columns: minmax(92px, 0.38fr) minmax(0, 1fr); }
+        .team-card img { max-height: 150px; }
       }
     </style>
   </head>
@@ -334,7 +338,7 @@
 
       <section class="chief-card">
         <div class="chief-photo">
-          <img src="assets/avatars/nova-chief.svg" alt="Nova Chief avatar" />
+          <img src="assets/avatars-drive/nova-chief.png" alt="Nova Chief avatar" />
           <h2>Nova Chief</h2>
         </div>
         <div class="info-list">
@@ -374,7 +378,7 @@
             {
               name: "Ace Sales",
               position: "ASM Sales Agent",
-              avatar: "assets/avatars/ace-sales.svg",
+              avatar: "assets/avatars-drive/ace-sales.png",
               personality: "Proactive • Persuasive • Energetic",
               duty: "Manage leads, sales pipeline, proposals, deal progress, visit plans, and weekly sales reports.",
               skills: "CRM • Lead Qualification • Proposal Support • Pipeline Tracking",
@@ -384,7 +388,7 @@
             {
               name: "Mina Care",
               position: "Customer Follow-up",
-              avatar: "assets/avatars/mina-care.svg",
+              avatar: "assets/avatars-drive/mina-care.png",
               personality: "Warm • Patient • Caring",
               duty: "Nurture clients, follow up open items, maintain relationship notes, and support retention.",
               skills: "Communication • Reminder System • Retention • CRM Updates",
@@ -394,7 +398,7 @@
             {
               name: "Lina Voice",
               position: "LinkedIn & Email",
-              avatar: "assets/avatars/lina-voice.svg",
+              avatar: "assets/avatars-drive/lina-voice.png",
               personality: "Creative • Articulate • Brand-savvy",
               duty: "Write posts, emails, captions, customer-facing copy, and tone variants.",
               skills: "Copywriting • Tone of Voice • Social Content • Email Content",
@@ -410,7 +414,7 @@
             {
               name: "Atlas Invest",
               position: "Portfolio Agent",
-              avatar: "assets/avatars/atlas-invest.svg",
+              avatar: "assets/avatars-drive/atlas-invest.png",
               personality: "Analytical • Disciplined • Objective",
               duty: "DCA deals, asset allocation, portfolio summary, rebalancing, and investment monitoring.",
               skills: "Allocation Strategy • DCA Planning • Budgeting • Dashboarding",
@@ -420,7 +424,7 @@
             {
               name: "Vera Shield",
               position: "Risk Manager",
-              avatar: "assets/avatars/vera-shield.svg",
+              avatar: "assets/avatars-drive/vera-shield.png",
               personality: "Cautious • Vigilant • Protective",
               duty: "Assess risk, downside protection, compliance checks, and safeguards.",
               skills: "Risk Scoring • Hedge Logic • Checklist • Safeguards",
@@ -430,7 +434,7 @@
             {
               name: "Keno Expert",
               position: "Product Knowledge",
-              avatar: "assets/avatars/keno-expert.svg",
+              avatar: "assets/avatars-drive/keno-expert.png",
               personality: "Curious • Precise • Solution-oriented",
               duty: "Explain products, match needs to solutions, and prepare technical support.",
               skills: "Product Specs • Comparison • Solution Mapping • Technical Q&A",
@@ -446,7 +450,7 @@
             {
               name: "Dara Docs",
               position: "Document Studio",
-              avatar: "assets/avatars/dara-docs.svg",
+              avatar: "assets/avatars-drive/dara-docs.png",
               personality: "Organized • Detail-focused • Polished",
               duty: "Create, check, refine documents, slides, sheets, PDF, forms, and layouts.",
               skills: "Writing • Formatting • QA • Design • Print Readiness",
@@ -462,7 +466,7 @@
             {
               name: "Luna Balance",
               position: "Life Room",
-              avatar: "assets/avatars/luna-balance.svg",
+              avatar: "assets/avatars-drive/luna-balance.png",
               personality: "Gentle • Intuitive • Supportive",
               duty: "Family planning, reminders, routines, timing, work-life balance, and astrology lens.",
               skills: "Scheduling • Reflection • Life Planning • Wellbeing",
@@ -472,7 +476,7 @@
             {
               name: "Nimo Vault",
               position: "Memory Steward",
-              avatar: "assets/avatars/nimo-vault.svg",
+              avatar: "assets/avatars-drive/nimo-vault.png",
               personality: "Reliable • Meticulous • Discreet",
               duty: "Manage data vault, memory files, retrieval, long-term knowledge, and archive rules.",
               skills: "Tagging • Archive • Retrieval • Versioning",
