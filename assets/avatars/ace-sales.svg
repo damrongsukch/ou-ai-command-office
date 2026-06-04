@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Ace Sales avatar">
+  <rect width="240" height="240" rx="36" fill="#f5fff8"/>
+  <circle cx="120" cy="104" r="72" fill="#158f46"/>
+  <circle cx="120" cy="104" r="49" fill="#dff8e8"/>
+  <path d="M82 137c12-22 64-22 76 0v34H82z" fill="#0d6331"/>
+  <circle cx="120" cy="93" r="31" fill="#f4c99c"/>
+  <path d="M91 87c9-24 46-31 64-5-15-4-28-5-46 4z" fill="#083d24"/>
+  <text x="120" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="900" fill="#0d6331">ACE SALES</text>
+</svg>

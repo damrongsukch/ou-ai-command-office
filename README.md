@@ -42,6 +42,7 @@ The MVP v1 goal is simple:
 ## Folder Structure
 
 - `index.html` - main command-office dashboard
+- `team.html` - agent team photo-card guide with roles, skills, and pipelines
 - `styles.css` - simple fallback/static dashboard styles
 - `app.js` - simple fallback/static dashboard interactions
 - `assets/` - public-safe visual assets

@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ou AI Command Office - Agent Team</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #0b2a63;
+        --muted: #55708f;
+        --line: #c9d7ee;
+        --soft: #f5f9ff;
+        --green: #198f52;
+        --blue: #1763c7;
+        --purple: #6742ad;
+        --olive: #6c9f39;
+        --cyan: #087894;
+        --shadow: 0 18px 45px rgba(12, 39, 86, 0.12);
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        color: var(--ink);
+        background:
+          linear-gradient(180deg, rgba(255,255,255,0.94), rgba(244,248,255,0.96)),
+          radial-gradient(circle at 16% 8%, rgba(21,99,196,0.12), transparent 34%);
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+      }
+
+      a { color: inherit; text-decoration: none; }
+
+      .page {
+        width: min(1440px, calc(100% - 28px));
+        margin: 0 auto;
+        padding: 24px 0 28px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 22px;
+        align-items: start;
+        padding: 18px 0 20px;
+        border-bottom: 3px solid var(--ink);
+      }
+
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(34px, 5.4vw, 74px);
+        line-height: 0.95;
+        letter-spacing: 0;
+      }
+
+      .hero p {
+        max-width: 760px;
+        margin: 12px 0 0;
+        color: var(--cyan);
+        font-size: clamp(15px, 1.8vw, 22px);
+        font-weight: 800;
+      }
+
+      .nav {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 9px;
+      }
+
+      .nav a {
+        padding: 10px 13px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: white;
+        box-shadow: 0 8px 20px rgba(12,39,86,0.06);
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      .chief-card,
+      .pipeline,
+      .team-card,
+      .team-group {
+        background: rgba(255,255,255,0.9);
+        border: 2px solid var(--ink);
+        border-radius: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      .chief-card {
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr);
+        gap: 24px;
+        margin: 24px auto 18px;
+        padding: 22px;
+        width: min(820px, 100%);
+      }
+
+      .chief-photo {
+        display: grid;
+        gap: 12px;
+        align-content: start;
+        justify-items: center;
+        text-align: center;
+      }
+
+      .chief-photo img {
+        width: 174px;
+        height: 174px;
+        object-fit: contain;
+      }
+
+      .chief-photo h2,
+      .team-card h3 {
+        margin: 0;
+        font-size: 27px;
+      }
+
+      .info-list {
+        display: grid;
+        gap: 11px;
+      }
+
+      .info-row {
+        display: grid;
+        grid-template-columns: 110px minmax(0, 1fr);
+        gap: 12px;
+        align-items: start;
+        font-size: 14px;
+        line-height: 1.45;
+      }
+
+      .info-row b {
+        color: var(--cyan);
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+
+      .mini-pipeline {
+        padding: 10px 12px;
+        border: 1px solid #9bb7dd;
+        border-radius: 9px;
+        background: #f7fbff;
+        font-weight: 800;
+      }
+
+      .nova-rule {
+        width: min(820px, 100%);
+        margin: 0 auto 18px;
+        padding: 13px 16px;
+        border: 2px solid var(--ink);
+        border-radius: 10px;
+        background: white;
+        text-align: center;
+        font-weight: 900;
+      }
+
+      .team-board {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .team-group {
+        overflow: hidden;
+        border-color: var(--group-color);
+      }
+
+      .group-head {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 66px;
+        padding: 12px 14px;
+        color: white;
+        background: var(--group-color);
+      }
+
+      .group-head span {
+        display: grid;
+        place-items: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background: white;
+        color: var(--group-color);
+        font-weight: 950;
+      }
+
+      .group-head h2 {
+        margin: 0;
+        font-size: 20px;
+        line-height: 1.05;
+        text-transform: uppercase;
+      }
+
+      .group-body {
+        display: grid;
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .team-card {
+        display: grid;
+        grid-template-columns: 84px minmax(0, 1fr);
+        gap: 12px;
+        padding: 12px;
+        border-color: color-mix(in srgb, var(--group-color) 60%, #ffffff);
+        box-shadow: none;
+      }
+
+      .team-card img {
+        width: 84px;
+        height: 84px;
+        object-fit: contain;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--soft);
+      }
+
+      .team-card h3 {
+        color: var(--group-color);
+        font-size: 20px;
+      }
+
+      .team-card dl {
+        display: grid;
+        gap: 7px;
+        margin: 8px 0 0;
+      }
+
+      .team-card dt {
+        color: var(--group-color);
+        font-size: 11px;
+        font-weight: 950;
+        text-transform: uppercase;
+      }
+
+      .team-card dd {
+        margin: 2px 0 0;
+        color: #17325e;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .team-card .wide {
+        grid-column: 1 / -1;
+      }
+
+      .pipeline {
+        margin-top: 20px;
+        padding: 18px;
+      }
+
+      .pipeline h2 {
+        margin: 0 0 14px;
+        text-align: center;
+        font-size: 30px;
+        letter-spacing: 2px;
+      }
+
+      .pipe-grid {
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .pipe-step {
+        display: grid;
+        gap: 8px;
+        justify-items: center;
+        padding: 12px 8px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--soft);
+        text-align: center;
+      }
+
+      .pipe-icon {
+        display: grid;
+        place-items: center;
+        width: 58px;
+        height: 58px;
+        border: 3px solid var(--cyan);
+        border-radius: 50%;
+        background: white;
+        color: var(--ink);
+        font-size: 24px;
+        font-weight: 950;
+      }
+
+      .pipe-step strong {
+        font-size: 14px;
+      }
+
+      .pipe-step small {
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.3;
+      }
+
+      @media (max-width: 1180px) {
+        .team-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .pipe-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      }
+
+      @media (max-width: 720px) {
+        .page { width: min(100% - 18px, 1440px); padding-top: 14px; }
+        .hero { grid-template-columns: 1fr; }
+        .nav { justify-content: flex-start; }
+        .chief-card { grid-template-columns: 1fr; padding: 16px; }
+        .info-row { grid-template-columns: 1fr; gap: 4px; }
+        .team-board, .pipe-grid { grid-template-columns: 1fr; }
+        .team-card { grid-template-columns: 72px minmax(0, 1fr); }
+        .team-card img { width: 72px; height: 72px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div>
+          <h1>Ou AI Command Office</h1>
+          <p>Organization Chart • Character Guide • Skills • Workflow</p>
+        </div>
+        <nav class="nav" aria-label="Team navigation">
+          <a href="./">Dashboard</a>
+          <a href="./docs/nova_orchestration_sop.md">Nova SOP</a>
+          <a href="./docs/telegram_nova_setup.md">Telegram Setup</a>
+        </nav>
+      </header>
+
+      <section class="chief-card">
+        <div class="chief-photo">
+          <img src="assets/avatars/nova-chief.svg" alt="Nova Chief avatar" />
+          <h2>Nova Chief</h2>
+        </div>
+        <div class="info-list">
+          <div class="info-row"><b>Position</b><span>Chief of Staff</span></div>
+          <div class="info-row"><b>Personality</b><span>Strategic • Decisive • Calm</span></div>
+          <div class="info-row"><b>Duty</b><span>Prioritize tasks, route commands, coordinate agents, approve final direction.</span></div>
+          <div class="info-row"><b>Skills</b><span>Planning, routing, synthesis, escalation, QC, Drive storage coordination, audit logging.</span></div>
+          <div class="info-row"><b>Pipeline</b><span class="mini-pipeline">Receive from Ou → Prioritize → Assign Sub Agents → Review Results → Quality Check → Store to Google Drive → Log → Send to Ou</span></div>
+          <div class="info-row"><b>Workflow</b><span>Nova receives Ou's request, classifies and prioritizes it, dispatches to the right sub agents, consolidates outputs, performs a quality check, stores approved files to Google Drive, writes a log entry, and sends the final output back to Ou.</span></div>
+        </div>
+      </section>
+
+      <div class="nova-rule">All sub-agent outputs return to Nova for review before storage and delivery.</div>
+
+      <section class="team-board" id="teamBoard"></section>
+
+      <section class="pipeline">
+        <h2>GLOBAL COMMAND PIPELINE</h2>
+        <div class="pipe-grid">
+          <div class="pipe-step"><span class="pipe-icon">OU</span><strong>Ou Input</strong><small>Command or task request</small></div>
+          <div class="pipe-step"><span class="pipe-icon">NC</span><strong>Nova Chief</strong><small>Classify and prioritize</small></div>
+          <div class="pipe-step"><span class="pipe-icon">AG</span><strong>Specialist Agents</strong><small>Relevant agents execute</small></div>
+          <div class="pipe-step"><span class="pipe-icon">QC</span><strong>Nova Review / QC</strong><small>Correct, complete, clear</small></div>
+          <div class="pipe-step"><span class="pipe-icon">GD</span><strong>Google Drive</strong><small>Approved output vault</small></div>
+          <div class="pipe-step"><span class="pipe-icon">LG</span><strong>Log Entry</strong><small>Audit trail metadata</small></div>
+          <div class="pipe-step"><span class="pipe-icon">OK</span><strong>Send to Ou</strong><small>Final action-ready result</small></div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const groups = [
+        {
+          title: "Sales & Relationship",
+          color: "#199653",
+          agents: [
+            {
+              name: "Ace Sales",
+              position: "ASM Sales Agent",
+              avatar: "assets/avatars/ace-sales.svg",
+              personality: "Proactive • Persuasive • Energetic",
+              duty: "Manage leads, sales pipeline, proposals, deal progress, visit plans, and weekly sales reports.",
+              skills: "CRM • Lead Qualification • Proposal Support • Pipeline Tracking",
+              pipeline: "Receive from Nova → Review objective → Prepare sales recommendation → Return to Nova",
+              workflow: "Capture lead context, qualify opportunity, prepare offer or follow-up plan, and send results to Nova."
+            },
+            {
+              name: "Mina Care",
+              position: "Customer Follow-up",
+              avatar: "assets/avatars/mina-care.svg",
+              personality: "Warm • Patient • Caring",
+              duty: "Nurture clients, follow up open items, maintain relationship notes, and support retention.",
+              skills: "Communication • Reminder System • Retention • CRM Updates",
+              pipeline: "Receive from Nova → Review customer context → Draft next step → Return to Nova",
+              workflow: "Connect customer context, check open items, update relationship notes, and send results to Nova."
+            },
+            {
+              name: "Lina Voice",
+              position: "LinkedIn & Email",
+              avatar: "assets/avatars/lina-voice.svg",
+              personality: "Creative • Articulate • Brand-savvy",
+              duty: "Write posts, emails, captions, customer-facing copy, and tone variants.",
+              skills: "Copywriting • Tone of Voice • Social Content • Email Content",
+              pipeline: "Receive from Nova → Draft content → Tone check → Return to Nova",
+              workflow: "Brief, draft, edit, check customer tone, prepare options, and send results to Nova."
+            }
+          ]
+        },
+        {
+          title: "Finance & Risk",
+          color: "#1763c7",
+          agents: [
+            {
+              name: "Atlas Invest",
+              position: "Portfolio Agent",
+              avatar: "assets/avatars/atlas-invest.svg",
+              personality: "Analytical • Disciplined • Objective",
+              duty: "DCA deals, asset allocation, portfolio summary, rebalancing, and investment monitoring.",
+              skills: "Allocation Strategy • DCA Planning • Budgeting • Dashboarding",
+              pipeline: "Receive from Nova → Analyze portfolio truth → Recommend action → Return to Nova",
+              workflow: "Review holdings, check DCA logic, identify target gaps, and send investment view to Nova."
+            },
+            {
+              name: "Vera Shield",
+              position: "Risk Manager",
+              avatar: "assets/avatars/vera-shield.svg",
+              personality: "Cautious • Vigilant • Protective",
+              duty: "Assess risk, downside protection, compliance checks, and safeguards.",
+              skills: "Risk Scoring • Hedge Logic • Checklist • Safeguards",
+              pipeline: "Receive from Nova → Review plan → Flag issues → Return to Nova",
+              workflow: "Input plan, run risk check, flag issues, suggest protection, and send results to Nova."
+            },
+            {
+              name: "Keno Expert",
+              position: "Product Knowledge",
+              avatar: "assets/avatars/keno-expert.svg",
+              personality: "Curious • Precise • Solution-oriented",
+              duty: "Explain products, match needs to solutions, and prepare technical support.",
+              skills: "Product Specs • Comparison • Solution Mapping • Technical Q&A",
+              pipeline: "Receive from Nova → Match solution → Explain answer → Return to Nova",
+              workflow: "Identify customer need, match product capability, prepare evidence, and send results to Nova."
+            }
+          ]
+        },
+        {
+          title: "Content & Documents",
+          color: "#6742ad",
+          agents: [
+            {
+              name: "Dara Docs",
+              position: "Document Studio",
+              avatar: "assets/avatars/dara-docs.svg",
+              personality: "Organized • Detail-focused • Polished",
+              duty: "Create, check, refine documents, slides, sheets, PDF, forms, and layouts.",
+              skills: "Writing • Formatting • QA • Design • Print Readiness",
+              pipeline: "Receive from Nova → Draft → Check → Refine → Return to Nova",
+              workflow: "Review brief, structure content, create draft, check formatting, and send document output to Nova."
+            }
+          ]
+        },
+        {
+          title: "Life & Memory",
+          color: "#6c9f39",
+          agents: [
+            {
+              name: "Luna Balance",
+              position: "Life Room",
+              avatar: "assets/avatars/luna-balance.svg",
+              personality: "Gentle • Intuitive • Supportive",
+              duty: "Family planning, reminders, routines, timing, work-life balance, and astrology lens.",
+              skills: "Scheduling • Reflection • Life Planning • Wellbeing",
+              pipeline: "Receive from Nova → Prioritize life context → Advice/reminder → Return to Nova",
+              workflow: "Review personal input, prioritize reminders or advice, create balance plan, and send results to Nova."
+            },
+            {
+              name: "Nimo Vault",
+              position: "Memory Steward",
+              avatar: "assets/avatars/nimo-vault.svg",
+              personality: "Reliable • Meticulous • Discreet",
+              duty: "Manage data vault, memory files, retrieval, long-term knowledge, and archive rules.",
+              skills: "Tagging • Archive • Retrieval • Versioning",
+              pipeline: "Receive from Nova → Tag → Store/Retrieve → Return to Nova",
+              workflow: "Capture information, tag and index it, store or retrieve content, and send memory summary to Nova."
+            }
+          ]
+        }
+      ];
+
+      const teamBoard = document.querySelector("#teamBoard");
+
+      teamBoard.innerHTML = groups.map((group, index) => `
+        <section class="team-group" style="--group-color:${group.color}">
+          <header class="group-head">
+            <span>${index + 1}</span>
+            <h2>${group.title}</h2>
+          </header>
+          <div class="group-body">
+            ${group.agents.map((agent) => `
+              <article class="team-card">
+                <img src="${agent.avatar}" alt="${agent.name} avatar" />
+                <div>
+                  <h3>${agent.name}</h3>
+                  <dl>
+                    <div><dt>Position</dt><dd>${agent.position}</dd></div>
+                    <div><dt>Personality</dt><dd>${agent.personality}</dd></div>
+                  </dl>
+                </div>
+                <dl class="wide">
+                  <div><dt>Duty</dt><dd>${agent.duty}</dd></div>
+                  <div><dt>Skills</dt><dd>${agent.skills}</dd></div>
+                  <div><dt>Pipeline</dt><dd>${agent.pipeline}</dd></div>
+                  <div><dt>Workflow</dt><dd>${agent.workflow}</dd></div>
+                </dl>
+              </article>
+            `).join("")}
+          </div>
+        </section>
+      `).join("");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Luna Balance avatar">
+  <rect width="240" height="240" rx="36" fill="#fbfff4"/>
+  <circle cx="120" cy="104" r="72" fill="#74a943"/>
+  <circle cx="120" cy="97" r="31" fill="#f0c79f"/>
+  <path d="M80 172c9-35 71-35 80 0z" fill="#477421"/>
+  <path d="M92 91c10-28 48-29 58 0-17-8-37-8-58 0z" fill="#43372c"/>
+  <path d="M75 137c28 0 43 15 45 42 2-27 17-42 45-42-24-10-38-25-45-48-7 23-21 38-45 48z" fill="#fff" opacity=".95"/>
+  <text x="120" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="900" fill="#477421">LUNA BALANCE</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" role="img" aria-label="Keno Expert avatar">
+  <rect width="240" height="240" rx="36" fill="#f4fbff"/>
+  <circle cx="120" cy="104" r="72" fill="#0d6aa3"/>
+  <circle cx="120" cy="97" r="31" fill="#f0c79f"/>
+  <path d="M80 172c9-35 71-35 80 0z" fill="#084b75"/>
+  <path d="M92 91c7-27 48-30 60-2-19-8-38-8-60 2z" fill="#17384a"/>
+  <rect x="76" y="132" width="88" height="38" rx="8" fill="#ddf7ff" stroke="#40d6ff" stroke-width="4"/>
+  <path d="M91 151h58M100 140v22M120 140v22M140 140v22" stroke="#0d6aa3" stroke-width="4"/>
+  <text x="120" y="205" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" font-weight="900" fill="#0d6aa3">KENO EXPERT</text>
+</svg>
