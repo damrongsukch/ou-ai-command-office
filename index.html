@@ -1791,6 +1791,298 @@
         font-size: 15px;
       }
 
+      @media (min-width: 1381px) {
+        body {
+          height: 100vh;
+          overflow: hidden;
+          background: #030b16;
+        }
+
+        .page {
+          height: 100vh;
+          min-height: 0;
+          padding: 0;
+          gap: 0;
+          grid-template-rows: 68px minmax(0, 1fr) 64px;
+          background:
+            radial-gradient(circle at 38% 12%, rgba(32, 220, 255, 0.08), transparent 32%),
+            linear-gradient(180deg, #06111f, #030b16);
+        }
+
+        .topbar {
+          padding: 0 18px 0 24px;
+          border-bottom: 1px solid rgba(132, 169, 190, 0.16);
+          background: rgba(5, 13, 24, 0.82);
+          grid-template-columns: minmax(360px, 1fr) auto 190px;
+        }
+
+        .brand h1 {
+          font-size: 23px;
+          text-transform: none;
+        }
+
+        .brand p,
+        .page-links {
+          display: none;
+        }
+
+        .badge {
+          padding: 5px 9px;
+          border-radius: 999px;
+          font-size: 11px;
+        }
+
+        .status-strip {
+          box-shadow: none;
+          border-radius: 10px;
+        }
+
+        .status-item {
+          min-width: 132px;
+          padding: 7px 12px;
+        }
+
+        .status-item strong {
+          font-size: 16px;
+        }
+
+        .status-item:nth-child(1) {
+          min-width: 168px;
+        }
+
+        .status-item:nth-child(4) {
+          display: none;
+        }
+
+        .user-card {
+          grid-template-columns: 42px 1fr;
+          padding: 8px 10px;
+          box-shadow: none;
+        }
+
+        .user-avatar {
+          width: 42px;
+          height: 42px;
+        }
+
+        .main {
+          min-height: 0;
+          grid-template-columns: 204px minmax(0, 1fr) 336px;
+          gap: 0;
+        }
+
+        .panel,
+        .stage-wrap,
+        .footer {
+          border-radius: 0;
+          box-shadow: none;
+        }
+
+        .panel {
+          padding: 14px 12px;
+          overflow: hidden;
+        }
+
+        .panel.left {
+          border-left: 0;
+          border-top: 0;
+          border-bottom: 0;
+          background: rgba(4, 12, 24, 0.92);
+        }
+
+        .panel.right {
+          border-right: 0;
+          border-top: 0;
+          border-bottom: 0;
+          padding: 14px;
+          background: rgba(4, 12, 24, 0.92);
+        }
+
+        .os-logo {
+          margin-bottom: 18px;
+          font-size: 27px;
+        }
+
+        .os-logo span:first-child {
+          width: 32px;
+          height: 32px;
+        }
+
+        .os-nav {
+          gap: 8px;
+          margin-bottom: 16px;
+        }
+
+        .os-nav button {
+          min-height: 40px;
+          padding: 8px 12px;
+          border-radius: 9px;
+        }
+
+        .system-card,
+        .brief-card {
+          margin-top: 12px;
+          padding: 13px;
+          border-radius: 10px;
+        }
+
+        .command-card,
+        .guide-card,
+        .actions,
+        .rooms,
+        .quote,
+        .section-label,
+        .panel.left > .panel-head {
+          display: none;
+        }
+
+        .stage-wrap {
+          min-height: 0;
+          border-top: 0;
+          border-bottom: 0;
+          overflow: hidden;
+        }
+
+        .stage {
+          inset: 0;
+          background: #06101e;
+        }
+
+        .office-bg {
+          object-fit: cover;
+          object-position: center;
+          filter: saturate(1.1) contrast(1.06) brightness(0.9);
+          opacity: 0.92;
+        }
+
+        .stage::after {
+          background:
+            linear-gradient(90deg, rgba(4, 10, 20, 0.22), transparent 13%, transparent 87%, rgba(4, 10, 20, 0.22)),
+            linear-gradient(180deg, rgba(3, 8, 15, 0.02), rgba(3, 8, 15, 0.10));
+        }
+
+        .stage::before {
+          top: 25%;
+          font-size: 18px;
+        }
+
+        .agent-card {
+          width: 150px;
+          min-height: 45px;
+          padding: 7px 9px 7px 50px;
+          border-radius: 8px;
+          background: rgba(5, 16, 28, 0.76);
+        }
+
+        .agent-card strong {
+          font-size: 11px;
+        }
+
+        .agent-copy > span,
+        .agent-card small {
+          display: none;
+        }
+
+        .agent-mini {
+          left: 8px;
+          bottom: 3px;
+          width: 42px;
+          height: 54px;
+        }
+
+        .chief {
+          top: 43%;
+          width: 150px;
+          min-height: 48px;
+          padding: 7px 10px;
+          text-align: center;
+        }
+
+        .chief .agent-mini {
+          top: -112px;
+          width: 132px;
+          height: 148px;
+        }
+
+        .asm { left: 7%; top: 24%; }
+        .follow { left: 24%; top: 19%; }
+        .portfolio { left: 54%; top: 15%; }
+        .risk { right: 10%; top: 24%; }
+        .product { right: 10%; top: 44%; }
+        .document { left: 8%; bottom: 24%; }
+        .comm { left: 18%; bottom: 38%; }
+        .life { left: 42%; bottom: 10%; }
+        .memory { right: 8%; bottom: 14%; width: 160px; }
+
+        .room-label {
+          font-size: 14px;
+          padding: 7px 12px;
+          border-radius: 7px;
+          text-transform: none;
+        }
+
+        .room-label.sales { left: 19%; top: 8%; }
+        .room-label.portfolio { left: 58%; top: 6%; }
+        .room-label.document { left: 11%; top: 41%; }
+        .room-label.life { left: 45%; bottom: 31%; }
+
+        .coordination-card {
+          max-height: 54vh;
+          overflow: hidden;
+        }
+
+        .feed-item {
+          grid-template-columns: 42px 1fr 42px;
+          gap: 9px;
+          padding-bottom: 9px;
+        }
+
+        .feed-item img {
+          width: 42px;
+          height: 42px;
+        }
+
+        .feed-item p {
+          font-size: 11px;
+        }
+
+        .tabs,
+        #taskQueue,
+        #recentOutputs {
+          max-height: 132px;
+          overflow: hidden;
+        }
+
+        .active-output,
+        .history-panel,
+        .drive-vault,
+        .view-all,
+        .panel.right .panel-head:nth-of-type(n+3) {
+          display: none;
+        }
+
+        .team-board {
+          display: none;
+        }
+
+        .footer {
+          padding: 0 22px;
+          border-left: 0;
+          border-right: 0;
+          border-bottom: 0;
+          grid-template-columns: minmax(170px, 1fr) repeat(4, 170px) minmax(250px, 1fr);
+          background: rgba(4, 12, 24, 0.96);
+        }
+
+        .footer div {
+          min-height: 0;
+          padding: 0 14px;
+          border: 0;
+          background: transparent;
+          font-size: 11px;
+        }
+      }
+
       @media (max-width: 1380px) {
         .main { grid-template-columns: 1fr; }
         .panel.left, .panel.right { max-height: none; }
