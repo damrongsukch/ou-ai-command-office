@@ -32,7 +32,7 @@ The MVP v1 goal is simple:
 
 - No login system
 - No database server
-- No OpenAI API integration
+- OpenAI API runs server-side only through Cloudflare Pages Functions when `OPENAI_API_KEY` is configured
 - No calendar/email integration
 - No real stock price API
 - No automatic email sending
@@ -128,31 +128,32 @@ Output Top 3 priorities, task list, risk, and finish-before-6 PM plan.
 
 ## Start
 
-Open `index.html` in a browser, use the Cloudflare Pages URL for backend mock testing, or use the GitHub Pages URL for static fallback mode.
+Open `index.html` in a browser, use the Cloudflare Pages URL for AI backend testing, or use the GitHub Pages URL for static fallback mode.
 
-For the public dashboard, use mock data only. For real work, copy the prompt template into ChatGPT, attach the real source files there if needed, then save final outputs manually to Google Drive.
+For the public dashboard, use mock data only. For real work, provide the required source truth in the command or attach it in a private workflow, then save final approved outputs manually to Google Drive.
 
-## Backend Mock
+## Cloudflare Backend
 
 `functions/api/command.js` is the first backend step.
 
 Cloudflare Pages deployment:
 
 - Production dashboard: https://ou-ai-command-office-ceo.pages.dev/
-- Mock command endpoint: https://ou-ai-command-office-ceo.pages.dev/api/command
+- Command endpoint: https://ou-ai-command-office-ceo.pages.dev/api/command
 
 - It receives dashboard commands through `POST /api/command`.
-- It routes the command to a mock agent.
-- It returns a mock output, suggested room, and Drive folder.
-- It does not call OpenAI yet.
+- It routes the command to the right agent room.
+- It calls the OpenAI Responses API server-side when `OPENAI_API_KEY` is configured.
+- It falls back to public-safe mock output if OpenAI is not configured or the API call fails.
 - It does not read or write Google Drive.
 - It does not store private data.
+- It must never expose `private_context` data in the UI.
 
-GitHub Pages cannot run this backend function, so the dashboard falls back to local/manual mode there. Cloudflare Pages or `wrangler pages dev` can run the `/api/command` mock endpoint.
+GitHub Pages cannot run this backend function, so the dashboard falls back to local/manual mode there. Cloudflare Pages or `wrangler pages dev` can run the `/api/command` endpoint.
 
 Next backend phases:
 
-1. Add server-side OpenAI API calls.
-2. Add approval status endpoint.
-3. Add private task/output database.
-4. Add Google Drive save after Ou approval.
+1. Add approval status endpoint.
+2. Add private task/output database.
+3. Add Google Drive save after Ou approval.
+4. Add optional calendar/email connectors after privacy rules are settled.

@@ -1375,9 +1375,9 @@
 
       <footer class="footer">
         <div><strong>Data Source</strong> Mock Data + Local History</div>
-        <div><strong>Backend</strong> Cloudflare mock on pages.dev</div>
+        <div><strong>Backend</strong> Cloudflare AI or safe mock fallback</div>
         <div><strong>GitHub Pages</strong> Local fallback mode</div>
-        <div><strong>Tip</strong> Click Run on Cloudflare to test backend mock.</div>
+        <div><strong>Tip</strong> Click Run on Cloudflare to test the agent backend.</div>
       </footer>
     </div>
 
@@ -1738,7 +1738,7 @@
 
       function updateBackendStatus() {
         if (backendAvailableForCurrentHost()) {
-          backendStatus.innerHTML = '<span class="dot"></span> Mock Online';
+          backendStatus.innerHTML = '<span class="dot"></span> Backend Ready';
           return;
         }
         backendStatus.innerHTML = '<span class="dot"></span> Local Fallback';
@@ -1765,10 +1765,13 @@
       function renderBackendResult(result) {
         latestBackendResult = result;
         currentPromptText = result.output;
+        const isAi = result.mode === "ai";
+        const modeLabel = isAi ? "OpenAI backend" : result.mode === "mock_fallback" ? "AI fallback to mock" : "Mock backend";
+        const heading = isAi ? "AI Agent Response" : "Agent Response";
         activeOutput.innerHTML = `
-          <h3>Agent Response</h3>
+          <h3>${heading}</h3>
           <p><strong>Owner:</strong> ${escapeHtml(result.route.agentName)}<br><strong>Room:</strong> ${escapeHtml(result.route.room)}<br><strong>Save to:</strong> ${escapeHtml(result.route.saveTo)}</p>
-          <span class="backend-note">Backend mock - no OpenAI yet</span>
+          <span class="backend-note">${escapeHtml(modeLabel)} - ${escapeHtml(result.backendNote || "Ready for review")}</span>
           <div class="output-actions">
             <button type="button" data-copy-current="prompt">Copy Result</button>
             <button type="button" data-copy-current="summary">Copy Drive Info</button>
@@ -1829,7 +1832,7 @@
 
       document.querySelector("#sendCommand").addEventListener("click", async () => {
         const originalCommand = commandText.value;
-        activeOutput.innerHTML = "<h3>Command Sending</h3><p>Trying backend mock first. GitHub Pages will fall back to local manual mode.</p>";
+        activeOutput.innerHTML = "<h3>Command Sending</h3><p>Sending to the Cloudflare backend. If OpenAI is configured, the agent will draft a real answer; otherwise it will use safe mock fallback.</p>";
         try {
           const backendResult = await sendToBackend(originalCommand, currentAgent);
           if (backendResult?.ok) {
