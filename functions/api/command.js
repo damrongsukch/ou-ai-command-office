@@ -63,6 +63,7 @@ const AGENT_RULES = {
 
 function inferAgent(command = "", requestedAgent = "") {
   const value = `${requestedAgent} ${command}`.toLowerCase();
+  if (value.includes("nova") || value.includes("chief")) return "chief";
   if (value.includes("risk") || value.includes("vera") || value.includes("shield") || value.includes("downside")) return "risk";
   if (value.includes("product") || value.includes("technical") || value.includes("keno") || value.includes("solution")) return "product";
   if (value.includes("portfolio") || value.includes("dca") || value.includes("allocation") || value.includes("atlas")) return "portfolio";
