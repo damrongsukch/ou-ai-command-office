@@ -1,5 +1,15 @@
 import { onRequestPost as handleCommandRequest } from "../command.js";
 
+export async function onRequestGet() {
+  return Response.json({
+    ok: true,
+    service: "Nova Telegram webhook",
+    endpoint: "/api/telegram/webhook",
+    commands: ["/start", "/whoami", "/nova <command>"],
+    setup_required: ["set Telegram webhook", "set TELEGRAM_ALLOWED_CHAT_ID", "set TELEGRAM_WEBHOOK_SECRET"]
+  });
+}
+
 function getMessage(update) {
   return update?.message || update?.edited_message || null;
 }
@@ -34,7 +44,16 @@ function formatCommandResult(result) {
 
 async function sendTelegramMessage(env, chatId, text) {
   if (!env.TELEGRAM_BOT_TOKEN) {
-    return { ok: false, description: "Missing TELEGRAM_BOT_TOKEN" };
+    return {
+      ok: false,
+      directReply: {
+        method: "sendMessage",
+        chat_id: chatId,
+        text: text.slice(0, 3900),
+        disable_web_page_preview: true
+      },
+      description: "Missing TELEGRAM_BOT_TOKEN; use webhook direct reply."
+    };
   }
 
   const response = await fetch(`https://api.telegram.org/bot${env.TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -48,6 +67,21 @@ async function sendTelegramMessage(env, chatId, text) {
   });
 
   return response.json().catch(() => ({ ok: false, description: `Telegram returned ${response.status}` }));
+}
+
+function telegramDirectReply(chatId, text) {
+  return Response.json({
+    method: "sendMessage",
+    chat_id: chatId,
+    text: text.slice(0, 3900),
+    disable_web_page_preview: true
+  });
+}
+
+async function replyToTelegram(env, chatId, text) {
+  const result = await sendTelegramMessage(env, chatId, text);
+  if (result.directReply) return telegramDirectReply(chatId, text);
+  return Response.json({ ok: true, telegram: result.ok === true });
 }
 
 async function runNovaCommand(command, env) {
@@ -89,38 +123,26 @@ export async function onRequestPost(context) {
   }
 
   if (text === "/start") {
-    await sendTelegramMessage(context.env, chatId, "Nova Chief is online. Send /whoami first, then set TELEGRAM_ALLOWED_CHAT_ID in Cloudflare before using commands.");
-    return Response.json({ ok: true });
+    return replyToTelegram(context.env, chatId, "Nova Chief is online. Send /whoami first, then set TELEGRAM_ALLOWED_CHAT_ID in Cloudflare before using commands.");
   }
 
   if (text === "/whoami") {
-    await sendTelegramMessage(context.env, chatId, `Your Telegram chat id is: ${chatId}`);
-    return Response.json({ ok: true, chatId });
+    return replyToTelegram(context.env, chatId, `Your Telegram chat id is: ${chatId}`);
   }
 
   if (!isAllowedChat(chatId, context.env)) {
-    await sendTelegramMessage(context.env, chatId, "This Nova Chief bot is locked. Ask Ou to add this chat id to TELEGRAM_ALLOWED_CHAT_ID.");
-    return Response.json({ ok: true, locked: true });
+    return replyToTelegram(context.env, chatId, "This Nova Chief bot is locked. Ask Ou to add this chat id to TELEGRAM_ALLOWED_CHAT_ID.");
   }
 
   if (!text) {
-    await sendTelegramMessage(context.env, chatId, "Please send a text command. File/audio handling will be added later.");
-    return Response.json({ ok: true, ignored: "No text command." });
+    return replyToTelegram(context.env, chatId, "Please send a text command. File/audio handling will be added later.");
   }
 
   const command = text.startsWith("/nova") ? text.replace(/^\/nova\s*/i, "").trim() : text;
   if (!command) {
-    await sendTelegramMessage(context.env, chatId, "Send /nova followed by your command, or send the command directly.");
-    return Response.json({ ok: true });
+    return replyToTelegram(context.env, chatId, "Send /nova followed by your command, or send the command directly.");
   }
 
   const result = await runNovaCommand(command, context.env);
-  await sendTelegramMessage(context.env, chatId, formatCommandResult(result));
-
-  return Response.json({
-    ok: true,
-    mode: result.mode,
-    route: result.route,
-    logEntry: result.logEntry
-  });
+  return replyToTelegram(context.env, chatId, formatCommandResult(result));
 }
