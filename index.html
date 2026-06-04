@@ -210,6 +210,14 @@
         background: rgba(4, 13, 25, 0.7);
       }
 
+      .helper-text {
+        margin-top: -3px;
+        margin-bottom: 9px;
+        color: #94acbf;
+        font-size: 11px;
+        line-height: 1.35;
+      }
+
       label {
         display: block;
         margin-bottom: 7px;
@@ -220,7 +228,7 @@
 
       .command-row {
         display: grid;
-        grid-template-columns: 1fr 38px;
+        grid-template-columns: 1fr 68px;
         gap: 7px;
       }
 
@@ -751,6 +759,31 @@
         font-weight: 900;
       }
 
+      .guide-card {
+        margin-top: 10px;
+        padding: 10px;
+        border: 1px solid rgba(77, 229, 166, 0.22);
+        border-radius: 8px;
+        background: rgba(77, 229, 166, 0.06);
+      }
+
+      .guide-card strong {
+        display: block;
+        color: var(--green);
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      .guide-card ol {
+        display: grid;
+        gap: 6px;
+        margin: 8px 0 0;
+        padding-left: 18px;
+        color: #c7d9e5;
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
       .prompt-preview {
         margin-top: 10px;
         max-height: 220px;
@@ -1201,14 +1234,24 @@
         <aside class="panel left">
           <div class="panel-head"><span>Command Panel</span><span>v</span></div>
           <section class="command-card">
-            <label for="commandText">Send Command to AI Office</label>
+            <label for="commandText">Command</label>
+            <p class="helper-text">Pick a quick action or type your own request, then click Run.</p>
             <div class="command-row">
               <textarea id="commandText" placeholder="Type your command...">Prepare Morning Engine for today.</textarea>
               <button class="send-btn" id="sendCommand" aria-label="Run command">Run</button>
             </div>
           </section>
 
-          <div class="section-label">Quick Actions</div>
+          <section class="guide-card">
+            <strong>Start Here</strong>
+            <ol>
+              <li>Choose a workflow below.</li>
+              <li>Click Run to test the agent backend.</li>
+              <li>Review, approve, then save final work to Drive.</li>
+            </ol>
+          </section>
+
+          <div class="section-label">Common Workflows</div>
           <div class="actions">
             <button class="action gold" data-template="morning"><span class="icon">ME</span><span><strong>Morning Engine</strong><small>Daily Command Center</small></span></button>
             <button class="action green" data-template="sales"><span class="icon">SF</span><span><strong>Sales Follow-up</strong><small>Customer & Opportunity</small></span></button>
@@ -1290,28 +1333,28 @@
         </section>
 
         <aside class="panel right">
-          <div class="panel-head"><span>Task Queue</span><span class="badge">7</span></div>
+          <div class="panel-head"><span>Today</span><span class="badge">7</span></div>
           <div class="tabs"><button class="active">Today</button><button>Upcoming</button><button>Waiting</button></div>
           <div id="taskQueue"></div>
           <button class="view-all">View All Tasks</button>
 
-          <div class="panel-head" style="margin-top:18px"><span>Recent Outputs</span></div>
+          <div class="panel-head" style="margin-top:18px"><span>Latest Outputs</span></div>
           <div id="recentOutputs"></div>
           <button class="view-all">View All Outputs</button>
           <section class="active-output" id="activeOutput"></section>
           <section class="history-panel">
             <h3>Local Task History</h3>
-            <p>Saved only in this browser. Use it to track draft prompts before copying final outputs to Google Drive.</p>
+            <p>Saved only in this browser. Track draft work before moving final outputs to Google Drive.</p>
             <div class="history-actions">
-              <button id="saveLatestTask" type="button">Save Latest</button>
+              <button id="saveLatestTask" type="button">Save Result</button>
               <button id="copyLatestTask" type="button">Copy Latest</button>
-              <button id="clearHistory" type="button">Clear</button>
+              <button id="clearHistory" type="button">Clear History</button>
             </div>
             <div class="history-list" id="historyList"></div>
           </section>
           <section class="drive-vault" id="driveVault">
             <h3>Drive Vault</h3>
-            <p>Manual save mode. Real files stay in Google Drive, not the public dashboard.</p>
+            <p>Private files stay in Google Drive. This public dashboard only stores safe task notes.</p>
             <div class="drive-field">
               <strong>Current Folder</strong>
               <small id="drivePath">00_Command_Center/Daily Brief/</small>
@@ -1603,7 +1646,7 @@
           <p><strong>Owner:</strong> ${agent.name}<br><strong>Save to:</strong> ${agent.saveTo}<br><strong>File:</strong> ${suggestedFileName(agent)}</p>
           <div class="output-actions">
             <button type="button" data-copy-current="prompt">Copy Prompt</button>
-            <button type="button" data-copy-current="summary">Copy Save Info</button>
+            <button type="button" data-copy-current="summary">Copy Drive Info</button>
           </div>
           <pre class="prompt-preview">${escapeHtml(currentPromptText)}</pre>
         `;
@@ -1633,14 +1676,14 @@
       function renderHistory() {
         const items = readHistory();
         if (!items.length) {
-          historyList.innerHTML = `<p>No local history yet. Click Send Command or Save Latest to create the first entry.</p>`;
+          historyList.innerHTML = `<p>No local history yet. Click Run or Save Result to create the first entry.</p>`;
           return;
         }
 
         historyList.innerHTML = items.map((item) => `
           <article class="history-item">
             <strong>${escapeHtml(item.title)}</strong>
-            <small>${escapeHtml(item.agent)} · ${escapeHtml(item.createdAt)}</small>
+            <small>${escapeHtml(item.agent)} - ${escapeHtml(item.createdAt)}</small>
             <span class="status-chip ${statusClass(item.status)}">${escapeHtml(item.status)}</span>
             <small>${escapeHtml(item.fileName)}</small>
             <div class="history-status">
@@ -1723,12 +1766,12 @@
         latestBackendResult = result;
         currentPromptText = result.output;
         activeOutput.innerHTML = `
-          <h3>Backend Mock Response</h3>
+          <h3>Agent Response</h3>
           <p><strong>Owner:</strong> ${escapeHtml(result.route.agentName)}<br><strong>Room:</strong> ${escapeHtml(result.route.room)}<br><strong>Save to:</strong> ${escapeHtml(result.route.saveTo)}</p>
-          <span class="backend-note">Mock backend · no OpenAI yet</span>
+          <span class="backend-note">Backend mock - no OpenAI yet</span>
           <div class="output-actions">
-            <button type="button" data-copy-current="prompt">Copy Backend Output</button>
-            <button type="button" data-copy-current="summary">Copy Save Info</button>
+            <button type="button" data-copy-current="prompt">Copy Result</button>
+            <button type="button" data-copy-current="summary">Copy Drive Info</button>
           </div>
           <pre class="prompt-preview">${escapeHtml(result.output)}</pre>
         `;
@@ -1796,7 +1839,7 @@
           }
         } catch (error) {
           renderOutput("Command Accepted", currentAgent, originalCommand, currentAgent.workflow);
-          activeOutput.insertAdjacentHTML("beforeend", `<span class="backend-note">Local fallback · ${escapeHtml(error.message)}</span>`);
+          activeOutput.insertAdjacentHTML("beforeend", `<span class="backend-note">Local fallback - ${escapeHtml(error.message)}</span>`);
         }
         saveCurrentTask("Draft");
         commandText.value = `${currentAgent.name} accepted: ${originalCommand}`;
