@@ -1,4 +1,4 @@
-# Memory & Data Steward Prompt
+# Nimo Vault Prompt
 
 Classify where this information or output should be stored.
 

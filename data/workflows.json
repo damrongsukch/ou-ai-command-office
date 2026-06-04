@@ -6,22 +6,25 @@
     "codex": "Builds, fixes, and deploys the GitHub dashboard."
   },
   "command_routing": [
-    "Ou sends command",
-    "Chief of Staff classifies the work",
-    "Chief of Staff routes to the relevant agent",
-    "Agent prepares draft, summary, recommendation, or document plan",
-    "Quality Gate checks context, facts, risk, format, and privacy",
-    "Ou approves, edits, uses, or requests revision",
-    "Final output is saved to Google Drive, outputs/, or private_context according to sensitivity"
+    "Ou sends command to Nova Chief",
+    "Nova Chief classifies the work and determines priority",
+    "Nova Chief selects only the relevant sub agents",
+    "Selected sub agents execute their assigned work",
+    "All sub-agent outputs return to Nova Chief",
+    "Nova Chief consolidates and runs QC for correctness, completeness, clarity, consistency, and actionability",
+    "If QC fails, Nova sends the work back to the relevant sub agents for revision",
+    "If QC passes, Nova stores the final output to Google Drive and writes the activity log",
+    "Nova Chief sends the approved final response back to Ou"
   ],
   "command_formula": "[Agent] + [work needed] + [supporting context] + [desired output format] + [deadline or next action]",
   "daily_routine": {
-    "morning": "Chief of Staff runs Morning Engine.",
+    "morning": "Nova Chief runs Morning Engine.",
     "during_day": "Sales agents prepare meeting summary, follow-up email, visit brief, and Salesforce update draft.",
-    "before_sending": "Quality Gate checks tone, completeness, risk, and private-data exposure.",
-    "evening": "Chief of Staff runs Evening Debrief.",
-    "friday": "ASM Sales Agent prepares Weekly Sales Report."
+    "before_sending": "Nova Chief runs the Quality Gate before anything is sent to Ou or used externally.",
+    "evening": "Nova Chief runs Evening Debrief.",
+    "friday": "Nova Chief routes the Weekly Sales Report to Ace Sales, Mina Care, and Keno Expert as needed."
   },
+  "nova_orchestration_flow": "Ou Input -> Nova Chief -> Specialist Sub Agents -> Return to Nova -> Nova Review/QC -> Google Drive Storage -> Log Entry -> Final Delivery to Ou",
   "google_drive_root": "Ou AI Command Office - Private Data Vault",
   "drive_folders": [
     "00_Command_Center/Daily Brief/",

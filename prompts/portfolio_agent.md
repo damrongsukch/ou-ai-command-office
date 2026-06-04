@@ -1,4 +1,4 @@
-# Portfolio Agent Prompt
+# Atlas Invest Prompt
 
 Prepare a Portfolio/DCA decision.
 
@@ -15,4 +15,3 @@ Output:
 4. Final Buy / Wait / Hold Cash Recommendation
 5. Risk Note
 6. Next Check Date
-

@@ -1095,6 +1095,37 @@
         align-content: start;
       }
 
+      .orchestration-flow {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 7px;
+        padding-top: 2px;
+      }
+
+      .flow-node {
+        min-height: 52px;
+        padding: 9px;
+        border: 1px solid rgba(255, 209, 95, 0.22);
+        border-radius: 8px;
+        background: rgba(255, 209, 95, 0.06);
+      }
+
+      .flow-node strong {
+        display: block;
+        color: var(--gold);
+        font-size: 11px;
+        text-transform: uppercase;
+      }
+
+      .flow-node small {
+        display: block;
+        margin-top: 4px;
+        color: #d6cda9;
+        font-size: 10px;
+        line-height: 1.3;
+      }
+
       .detail-card,
       .pipeline-card {
         padding: 13px;
@@ -1287,6 +1318,7 @@
         .panel.right { order: 3; }
         .team-board { grid-template-columns: 1fr; }
         .team-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .orchestration-flow { grid-template-columns: repeat(4, minmax(0, 1fr)); }
       }
 
       @media (max-width: 760px) {
@@ -1310,7 +1342,8 @@
 
         .status-strip,
         .footer,
-        .team-grid {
+        .team-grid,
+        .orchestration-flow {
           grid-template-columns: 1fr;
         }
 
@@ -1486,7 +1519,7 @@
             <button class="action green" data-template="sales"><span class="icon">SF</span><span><strong>Sales Follow-up</strong><small>Customer & Opportunity</small></span></button>
             <button class="action purple" data-template="portfolio"><span class="icon">DC</span><span><strong>DCA Today</strong><small>Investment Decision</small></span></button>
             <button class="action blue" data-template="document"><span class="icon">DR</span><span><strong>Document Review</strong><small>Create / Check / Approve</small></span></button>
-            <button class="action pink" data-template="life"><span class="icon">LB</span><span><strong>Life & Balance</strong><small>Family, Astrology, Reminder</small></span></button>
+            <button class="action pink" data-template="life"><span class="icon">LB</span><span><strong>Luna Balance</strong><small>Family, Astrology, Reminder</small></span></button>
             <button class="action blue" data-template="quality"><span class="icon">QC</span><span><strong>Quality Gate</strong><small>Check before use</small></span></button>
             <button class="action green" data-template="evening"><span class="icon">ED</span><span><strong>Evening Debrief</strong><small>Completed / Pending / Tomorrow</small></span></button>
             <button class="action gold" data-template="weekly"><span class="icon">WR</span><span><strong>Weekly Report</strong><small>Sales management summary</small></span></button>
@@ -1518,43 +1551,43 @@
 
             <button class="agent-card chief active" data-agent="chief">
               <span class="character robot-char"><span class="face"></span><span class="body"></span><span class="memory-core"></span></span>
-              <span class="agent-copy"><strong>Chief of Staff</strong><span>Daily command, priority routing</span><small><span class="dot"></span> Online</small></span>
+              <span class="agent-copy"><strong>Nova Chief</strong><span>Daily command, priority routing</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card asm" data-agent="asm">
               <span class="character sales-char"><span class="face"></span><span class="body"></span><span class="headset"></span></span>
-              <span class="agent-copy"><strong>ASM Sales Agent</strong><span>ProXES Sales Lead</span><small><span class="dot"></span> Online</small></span>
+              <span class="agent-copy"><strong>Ace Sales</strong><span>ProXES Sales Lead</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card follow" data-agent="follow">
               <span class="character follow-char"><span class="face"></span><span class="body"></span><span class="headset"></span><span class="tablet"></span></span>
-              <span class="agent-copy"><strong>Customer Follow-up</strong><span>Follow-up & Relationship</span><small><span class="dot"></span> Online</small></span>
+              <span class="agent-copy"><strong>Mina Care</strong><span>Follow-up & Relationship</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card portfolio" data-agent="portfolio">
               <span class="character portfolio-char"><span class="face"></span><span class="body"></span><span class="glasses"></span></span>
-              <span class="agent-copy"><strong>Portfolio Agent</strong><span>DCA & Allocation</span><small><span class="dot"></span> Online</small></span>
+              <span class="agent-copy"><strong>Atlas Invest</strong><span>DCA & Allocation</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card risk" data-agent="risk">
               <span class="character risk-char"><span class="face"></span><span class="body"></span><span class="glasses"></span><span class="shield"></span></span>
-              <span class="agent-copy"><strong>Risk Manager</strong><span>Risk & Protection</span><small><span class="dot"></span> Online</small></span>
+              <span class="agent-copy"><strong>Vera Shield</strong><span>Risk & Protection</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card product" data-agent="product">
               <span class="character product-char"><span class="face"></span><span class="body"></span><span class="tablet"></span></span>
-              <span class="agent-copy"><strong>Product Knowledge</strong><span>Solutions & Technical</span><small><span class="dot"></span> Online</small></span>
+              <span class="agent-copy"><strong>Keno Expert</strong><span>Solutions & Technical</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card document" data-agent="document">
               <span class="character document-char"><span class="face"></span><span class="body"></span><span class="doc-icon"></span></span>
-              <span class="agent-copy"><strong>Document Studio</strong><span>Create - Check - Design</span><small><span class="dot"></span> Online</small></span>
+              <span class="agent-copy"><strong>Dara Docs</strong><span>Create - Check - Design</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card comm" data-agent="comm">
               <span class="character document-char"><span class="face"></span><span class="body"></span><span class="headset"></span></span>
-              <span class="agent-copy"><strong>LinkedIn & Email</strong><span>Posts, captions, customer tone</span><small><span class="dot"></span> Online</small></span>
+              <span class="agent-copy"><strong>Lina Voice</strong><span>Posts, captions, customer tone</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card life" data-agent="life">
               <span class="character life-char"><span class="face"></span><span class="body"></span><span class="spark"></span></span>
-              <span class="agent-copy"><strong>Life Room</strong><span>Family, timing, balance</span><small><span class="dot"></span> Online</small></span>
+              <span class="agent-copy"><strong>Luna Balance</strong><span>Family, timing, balance</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card memory" data-agent="memory">
               <span class="character robot-char"><span class="face"></span><span class="body"></span><span class="memory-core"></span></span>
-              <span class="agent-copy"><strong>Memory Steward</strong><span>Data Vault & Long-term Memory</span><small><span class="dot"></span> Online</small></span>
+              <span class="agent-copy"><strong>Nimo Vault</strong><span>Data Vault & Long-term Memory</span><small><span class="dot"></span> Online</small></span>
             </button>
 
             <section class="workflow-console" id="workflowConsole" aria-live="polite"></section>
@@ -1606,12 +1639,12 @@
         <div class="team-head">
           <div>
             <h2>Agent Team Studio</h2>
-            <p>Team grid and pipeline flow for Ou AI Office. Click an agent to flip its working card, route the command panel, and see how the output should move to Google Drive.</p>
+            <p>Nova Chief receives every request first, routes only the relevant sub agents, reviews/QCs their output, then stores final work to Drive and logs the activity.</p>
           </div>
           <div class="team-meta">
             <span>Team Grid</span>
             <span>Pipeline Flow</span>
-            <span>Quality Gate</span>
+            <span>Return to Nova</span>
           </div>
         </div>
         <div class="team-grid" id="agentTeamGrid"></div>
@@ -1621,6 +1654,15 @@
             <h3>Pipeline Flow</h3>
             <div class="pipeline-list" id="agentPipeline"></div>
           </section>
+        </div>
+        <div class="orchestration-flow" aria-label="Nova orchestration flow">
+          <div class="flow-node"><strong>Ou Input</strong><small>Request enters Nova first</small></div>
+          <div class="flow-node"><strong>Nova Triage</strong><small>Classify and prioritize</small></div>
+          <div class="flow-node"><strong>Sub Agents</strong><small>Only relevant agents execute</small></div>
+          <div class="flow-node"><strong>Return Nova</strong><small>All outputs come back</small></div>
+          <div class="flow-node"><strong>QC Review</strong><small>Correct, complete, clear</small></div>
+          <div class="flow-node"><strong>Drive + Log</strong><small>Store approved output</small></div>
+          <div class="flow-node"><strong>Ou Delivery</strong><small>Final action-ready answer</small></div>
         </div>
       </section>
 
@@ -1663,74 +1705,74 @@
 
       const agents = {
         chief: {
-          name: "Chief of Staff",
-          role: "Daily command, priority routing, quality gate.",
-          output: "Daily Summary, Top 3 Priorities, Waiting Items, Risk Watch, Recommended Actions.",
+          name: "Nova Chief",
+          role: "Central command, task classification, priority routing, sub-agent assignment, QC, approval.",
+          output: "Request Summary, Task Type, Priority, Assigned Agents, QC Result, Final Response to Ou.",
           saveTo: "00_Command_Center/Daily Brief/",
-          workflow: ["Collect room signals", "Rank top priorities", "Route work to agents", "Quality Gate", "Publish daily decision brief"]
+          workflow: ["Receive request from Ou", "Classify objective and priority", "Assign only relevant sub agents", "Consolidate returned outputs", "Run QC and approve", "Store to Drive and write log", "Send final response to Ou"]
         },
         asm: {
-          name: "ASM Sales Agent",
+          name: "Ace Sales",
           role: "Visit plan, opportunity analysis, proposal support.",
           output: "Customer Snapshot, Pain Point, Opportunity, Product Fit, Next Action.",
           saveTo: "02_Sales_ProXES/Visit Briefs/",
-          workflow: ["Review customer context", "Prepare visit brief", "Map opportunity to product", "Draft follow-up plan", "Prepare Salesforce update draft"]
+          workflow: ["Receive assignment from Nova", "Review sales objective", "Check lead or opportunity status", "Prepare sales recommendation", "Update pipeline or proposal", "Return result to Nova"]
         },
         follow: {
-          name: "Customer Follow-up",
+          name: "Mina Care",
           role: "Email follow-up, relationship note, Salesforce draft.",
           output: "Follow-up Email, Salesforce Update, Due Date, Owner, Risk Note.",
           saveTo: "02_Sales_ProXES/Follow-up Emails/",
-          workflow: ["Read last meeting note", "Extract open items", "Draft customer message", "Prepare CRM update", "Quality Gate before sending"]
+          workflow: ["Receive assignment from Nova", "Review customer context", "Draft follow-up action", "Prepare message, reminder, and next step", "Update relationship notes", "Return result to Nova"]
         },
         portfolio: {
-          name: "Portfolio Agent",
+          name: "Atlas Invest",
           role: "DCA decision, allocation check, risk-aware timing.",
           output: "Buy / Wait Decision, Allocation Gap, Timing Note, Risk Warning.",
           saveTo: "04_Investment/DCA Logs/",
-          workflow: ["Check portfolio_plan/allocation truth", "Refresh live timing outside MVP mock data", "Apply whole-share limits", "Recommend buy/wait/hold cash"]
+          workflow: ["Receive assignment from Nova", "Review portfolio truth source", "Analyze allocation", "Suggest DCA, rebalance, or monitoring action", "Summarize investment view", "Return result to Nova"]
         },
         risk: {
-          name: "Risk Manager",
+          name: "Vera Shield",
           role: "Portfolio protection, concentration, drawdown watch.",
           output: "Risk Level, Concentration Flag, Drawdown Watch, Avoid List.",
           saveTo: "04_Investment/Risk Notes/",
-          workflow: ["Scan exposure", "Flag overweights", "Check volatility", "Check privacy risk", "Write protection note"]
+          workflow: ["Receive assignment from Nova", "Review plan or recommendation", "Identify risks", "Flag issues", "Suggest protection or revision", "Return risk review to Nova"]
         },
         product: {
-          name: "Product Knowledge",
+          name: "Keno Expert",
           role: "Solutions fit, technical detail, proposal Q&A.",
           output: "Product Fit, Technical Notes, Objection Handling, Proposal Inputs.",
           saveTo: "02_Sales_ProXES/Proposals/",
-          workflow: ["Identify customer need", "Match product capability", "Prepare evidence", "Draft technical answer", "List missing questions"]
+          workflow: ["Receive assignment from Nova", "Identify product or technical need", "Match product to customer requirement", "Explain benefits and limitations", "Prepare technical support answer", "Return result to Nova"]
         },
         document: {
-          name: "Document Studio",
+          name: "Dara Docs",
           role: "PDF, Excel, presentation, artwork, quality check.",
           output: "Requirement Summary, Layout Plan, Generated File Placeholder, QC Notes.",
           saveTo: "05_Documents_Studio/",
-          workflow: ["Clarify format", "Build structure", "Generate draft", "Run quality gate", "Save final file to Drive"]
+          workflow: ["Receive assignment from Nova", "Review document objective", "Draft structure", "Create or refine content", "Check formatting and clarity", "Return document output to Nova"]
         },
         comm: {
-          name: "LinkedIn & Email Agent",
+          name: "Lina Voice",
           role: "Business English, customer emails, LinkedIn posts, captions, and tone variants.",
           output: "Purpose, Audience, Draft, Tone Notes, Risk / Approval Check, Final Version.",
           saveTo: "05_Documents_Studio/Templates/",
-          workflow: ["Clarify audience", "Draft message", "Check tone", "Run privacy/approval gate", "Prepare final version"]
+          workflow: ["Receive assignment from Nova", "Review audience and tone", "Draft content", "Adjust wording and brand voice", "Prepare final copy options", "Return result to Nova"]
         },
         life: {
-          name: "Life & Balance",
+          name: "Luna Balance",
           role: "Family, reminder, astrology lens, practical planning.",
           output: "Energy, Family, Money, Timing, Color/Element Support, Practical Action.",
           saveTo: "06_Life_Astrology/Daily Reading/",
-          workflow: ["Check private-safe context", "Use astrology as planning lens", "Balance work/family", "Set next reminder", "Add confidence note"]
+          workflow: ["Receive assignment from Nova", "Review private-safe context", "Prioritize life, family, or timing needs", "Suggest reminders or practical advice", "Create balance plan", "Return result to Nova"]
         },
         memory: {
-          name: "Memory Steward",
+          name: "Nimo Vault",
           role: "Data vault, naming rules, public/private separation.",
           output: "Data Location, Naming Rule, Privacy Status, Next Storage Action.",
           saveTo: "99_Archive/",
-          workflow: ["Classify public/private", "Check folder rule", "Update mock index", "Protect private data", "Recommend GitHub or Drive"]
+          workflow: ["Receive assignment from Nova", "Classify public or private data", "Tag, index, store, or retrieve content", "Prepare memory summary", "Recommend GitHub or Drive", "Return result to Nova"]
         }
       };
 
@@ -1738,63 +1780,63 @@
         morning: {
           agent: "chief",
           title: "Morning Engine",
-          command: "Chief of Staff, prepare Morning Engine for Ou today.",
+          command: "Nova Chief, prepare Morning Engine for Ou today. Classify priorities, assign only relevant sub agents, then prepare the Nova-approved daily brief.",
           sections: ["Today Schedule", "Top 3 Priorities", "Must-Win Follow-up", "Push / Waiting Items", "Salesforce Actions", "Customer Risks / Blockers", "Critical Questions (max 5)", "Time-blocked Plan", "Finish-Before-6 PM Plan"],
           saveTo: "00_Command_Center/Daily Brief/"
         },
         sales: {
           agent: "follow",
           title: "Sales Follow-up",
-          command: "Customer Follow-up Agent, prepare a customer follow-up package from the latest meeting context.",
+          command: "Nova Chief, route this customer follow-up task to Mina Care and Ace Sales if needed. Return outputs to Nova for QC before final delivery.",
           sections: ["Customer Snapshot", "Situation / Background", "Pain Point", "Opportunity", "Product Fit", "Risk / Concern", "Recommended Next Action", "Follow-up Email Draft", "Salesforce Update Draft"],
           saveTo: "02_Sales_ProXES/Follow-up Emails/"
         },
         portfolio: {
           agent: "portfolio",
           title: "DCA Today",
-          command: "Portfolio Agent, prepare today's DCA decision using allocation truth first and live timing as a separate check.",
+          command: "Nova Chief, route today's DCA decision to Atlas Invest and Vera Shield. Use allocation truth first and live timing as a separate check.",
           sections: ["Portfolio Truth Source", "Target Gap", "Timing Lens", "Whole-share Feasibility", "Buy / Wait / Hold Cash", "Risk Note", "Next Action"],
           saveTo: "04_Investment/DCA Logs/"
         },
         document: {
           agent: "document",
           title: "Document Review",
-          command: "Document Studio Agent, review or prepare the document output and run a print/readiness quality gate.",
+          command: "Nova Chief, route this document task to Dara Docs and return the result to Nova for print/readiness QC.",
           sections: ["Requirement Summary", "Layout / Format Plan", "Generated File or Draft", "Quality Check", "Revision Notes", "Save-to-Drive Step"],
           saveTo: "05_Documents_Studio/"
         },
         life: {
           agent: "life",
-          title: "Life & Balance",
-          command: "Life & Balance Agent, prepare a private-safe planning brief for Ou.",
+          title: "Luna Balance",
+          command: "Nova Chief, route this private-safe life planning brief to Luna Balance and return to Nova for final QC.",
           sections: ["Overall Energy", "Work & Career", "Money & Investment Mood", "Family & Relationship", "Health / Energy", "Timing Suggestion", "Color / Element Support", "Risk / Avoid", "Practical Action", "Confidence Note"],
           saveTo: "06_Life_Astrology/Daily Reading/"
         },
         quality: {
           agent: "chief",
           title: "Quality Gate",
-          command: "Chief of Staff, review this output before Ou uses it.",
+          command: "Nova Chief, review this output before Ou uses it. Check correctness, completeness, clarity, consistency, actionability, and privacy.",
           sections: ["Context Check", "Accuracy Check", "Action Clarity", "Tone / Professionalism", "Privacy Risk", "Missing Data", "Pass or Needs Revision"],
           saveTo: "00_Command_Center/Decision Log/"
         },
         evening: {
           agent: "chief",
           title: "Evening Debrief",
-          command: "Chief of Staff, prepare Ou's Evening Debrief.",
+          command: "Nova Chief, prepare Ou's Evening Debrief and log completed, pending, risk, and tomorrow priority items.",
           sections: ["Completed Today", "Pending / Waiting", "Follow-up Needed", "Risks", "Tomorrow Top 3 Priorities", "Save-to-Drive Recommendation"],
           saveTo: "00_Command_Center/Daily Brief/"
         },
         weekly: {
           agent: "asm",
           title: "Weekly Sales Report",
-          command: "ASM Sales Agent, prepare Ou's weekly ProXES sales management report.",
+          command: "Nova Chief, route weekly ProXES sales report work to Ace Sales, Mina Care, and Keno Expert if needed, then consolidate for Ou.",
           sections: ["Management Summary", "Customer Visits", "Opportunities", "Follow-up Status", "Issues / Blockers", "Salesforce Update Draft", "Next Week Plan"],
           saveTo: "02_Sales_ProXES/Weekly Reports/"
         },
         drive: {
           agent: "memory",
           title: "Drive Save Workflow",
-          command: "Memory Steward, decide where this output should be saved and protect private data.",
+          command: "Nova Chief, route this storage task to Nimo Vault. Decide where the output should be saved and protect private data.",
           sections: ["Public vs Private Classification", "Correct Drive Folder", "Suggested File Name", "GitHub-safe Template Needed?", "Do-not-commit Check", "Next Storage Action"],
           saveTo: "99_Archive/"
         }

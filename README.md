@@ -1,6 +1,6 @@
 # Ou AI Command Office
 
-Static MVP v1 dashboard for Ou Personal Agent Office.
+Static MVP v1 dashboard plus Cloudflare backend mock/AI-ready routing for Ou Personal Agent Office.
 
 Live preview:
 
@@ -32,7 +32,7 @@ The MVP v1 goal is simple:
 
 - No login system
 - No database server
-- OpenAI API runs server-side only through Cloudflare Pages Functions when `OPENAI_API_KEY` is configured
+- No browser-side OpenAI API calls; AI calls run server-side only through Cloudflare Pages Functions when `OPENAI_API_KEY` is configured
 - No calendar/email integration
 - No real stock price API
 - No automatic email sending
@@ -54,6 +54,8 @@ The MVP v1 goal is simple:
 - `data/portfolio_plan.json` - mock portfolio rules only
 - `data/customer_crm.csv` - mock customer data only
 - `prompts/` - reusable agent prompt templates
+- `prompts/nova_orchestration_system.md` - core Nova Chief orchestration system prompt
+- `docs/nova_orchestration_sop.md` - SOP for Nova Chief, sub agents, QC, Drive storage, and audit logging
 - `outputs/` - placeholder for generated public-safe examples
 - `private_context.example/` - placeholder templates only
 - `private_context/` - local only, ignored by git

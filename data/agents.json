@@ -1,17 +1,17 @@
 [
   {
     "id": "chief_of_staff",
-    "name": "Chief of Staff Agent",
+    "name": "Nova Chief",
     "room": "Command Room",
     "status": "online",
-    "role": "Prioritize tasks, route work, summarize action plans, and run the quality gate.",
+    "role": "Central command, task classification, priority routing, sub-agent assignment, output consolidation, quality control, final approval, Drive storage coordination, and activity logging.",
     "main_tasks": ["Morning Engine", "Task routing", "Daily brief", "Evening debrief", "Quality gate"],
     "output_format": ["Daily Summary", "Top 3 Priorities", "Waiting / Follow-up", "Risk / Watchout", "Recommended Action Today"],
     "prompt_file": "prompts/chief_of_staff.md"
   },
   {
     "id": "asm_sales",
-    "name": "ASM Sales Agent",
+    "name": "Ace Sales",
     "room": "Sales Room",
     "status": "online",
     "role": "Prepare ProXES sales briefs, opportunity summaries, customer visit plans, proposals, and weekly reports.",
@@ -21,7 +21,7 @@
   },
   {
     "id": "customer_follow_up",
-    "name": "Customer Follow-up Agent",
+    "name": "Mina Care",
     "room": "Sales Room",
     "status": "online",
     "role": "Prepare follow-up queue, email drafts, next actions, and Salesforce update drafts.",
@@ -31,7 +31,7 @@
   },
   {
     "id": "product_knowledge",
-    "name": "Product Knowledge Agent",
+    "name": "Keno Expert",
     "room": "Sales Room",
     "status": "online",
     "role": "Match customer needs to ProXES technologies and prepare technical notes for sales conversations.",
@@ -41,7 +41,7 @@
   },
   {
     "id": "portfolio",
-    "name": "Portfolio Agent",
+    "name": "Atlas Invest",
     "room": "Portfolio Room",
     "status": "mock-only",
     "role": "Analyze allocation, DCA candidates, timing, risk, and buy/wait/hold-cash decisions.",
@@ -51,7 +51,7 @@
   },
   {
     "id": "risk_manager",
-    "name": "Risk Manager Agent",
+    "name": "Vera Shield",
     "room": "Portfolio Room",
     "status": "online",
     "role": "Check drawdown, concentration risk, market regime, confidential-data risk, and decision trade-offs.",
@@ -61,7 +61,7 @@
   },
   {
     "id": "document_studio",
-    "name": "Document Studio Agent",
+    "name": "Dara Docs",
     "room": "Document Studio",
     "status": "online",
     "role": "Prepare PDF, Excel, PPT, infographic, artwork, and document review outputs.",
@@ -71,7 +71,7 @@
   },
   {
     "id": "linkedin_email",
-    "name": "LinkedIn & Email Agent",
+    "name": "Lina Voice",
     "room": "Document Studio",
     "status": "online",
     "role": "Write business English, customer emails, LinkedIn posts, captions, and tone variants.",
@@ -81,7 +81,7 @@
   },
   {
     "id": "life_astrology",
-    "name": "Life & Astrology Agent",
+    "name": "Luna Balance",
     "room": "Life Room",
     "status": "private-safe",
     "role": "Support life planning, reminders, family planning, and astrology as a planning lens only.",
@@ -91,7 +91,7 @@
   },
   {
     "id": "memory_data_steward",
-    "name": "Memory & Data Steward",
+    "name": "Nimo Vault",
     "room": "Data Vault",
     "status": "online",
     "role": "Keep mock data, prompt templates, naming rules, source index, and public/private data separation clean.",

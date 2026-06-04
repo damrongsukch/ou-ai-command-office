@@ -1,42 +1,60 @@
 const AGENT_RULES = {
   chief: {
-    name: "Chief of Staff",
+    name: "Nova Chief",
     route: "Command Room",
     saveTo: "00_Command_Center/Daily Brief/",
-    sections: ["Daily Summary", "Top 3 Priorities", "Waiting Items", "Risk Watch", "Recommended Actions"]
+    sections: ["Request Summary", "Task Type", "Priority", "Assigned Agents", "QC Result", "Final Response to Ou"]
   },
   asm: {
-    name: "ASM Sales Agent",
+    name: "Ace Sales",
     route: "Sales Room",
     saveTo: "02_Sales_ProXES/Visit Briefs/",
     sections: ["Customer Snapshot", "Objective", "Opportunity", "Product Fit", "Next Action"]
   },
   follow: {
-    name: "Customer Follow-up",
+    name: "Mina Care",
     route: "Sales Room",
     saveTo: "02_Sales_ProXES/Follow-up Emails/",
     sections: ["Customer Context", "Open Items", "Email Draft", "Salesforce Update", "Follow-up Date"]
   },
   portfolio: {
-    name: "Portfolio Agent",
+    name: "Atlas Invest",
     route: "Portfolio Room",
     saveTo: "04_Investment/DCA Logs/",
     sections: ["Portfolio Truth Source", "Allocation Gap", "Timing Lens", "Buy / Wait / Hold Cash", "Risk Note"]
   },
+  risk: {
+    name: "Vera Shield",
+    route: "Portfolio Room",
+    saveTo: "04_Investment/Risk Notes/",
+    sections: ["Risk Level", "Watchouts", "Avoid / Delay", "Mitigation", "Decision Owner"]
+  },
+  product: {
+    name: "Keno Expert",
+    route: "Sales Room",
+    saveTo: "02_Sales_ProXES/Proposals/",
+    sections: ["Product Fit", "Technical Notes", "Objection Handling", "Questions to Ask", "Proposal Inputs"]
+  },
   document: {
-    name: "Document Studio",
+    name: "Dara Docs",
     route: "Document Studio",
     saveTo: "05_Documents_Studio/",
     sections: ["Requirement Summary", "Layout Plan", "Draft Output", "Quality Check", "Revision Notes"]
   },
+  comm: {
+    name: "Lina Voice",
+    route: "Document Studio",
+    saveTo: "05_Documents_Studio/Templates/",
+    sections: ["Purpose", "Audience", "Draft", "Tone Notes", "Risk / Approval Check", "Final Version"]
+  },
   life: {
-    name: "Life & Balance",
+    name: "Luna Balance",
     route: "Life Room",
     saveTo: "06_Life_Astrology/Daily Reading/",
     sections: ["Overall Energy", "Work", "Family", "Money", "Timing", "Practical Action"]
   },
   memory: {
-    name: "Memory Steward",
+    name: "Nimo Vault",
     route: "Data Vault",
     saveTo: "99_Archive/",
     sections: ["Public vs Private", "Correct Folder", "File Name", "Do-not-commit Check", "Next Storage Action"]
@@ -45,12 +63,16 @@ const AGENT_RULES = {
 
 function inferAgent(command = "", requestedAgent = "") {
   const value = `${requestedAgent} ${command}`.toLowerCase();
-  if (value.includes("portfolio") || value.includes("dca") || value.includes("allocation")) return "portfolio";
-  if (value.includes("follow") || value.includes("email") || value.includes("salesforce")) return "follow";
-  if (value.includes("weekly") || value.includes("visit") || value.includes("proposal")) return "asm";
-  if (value.includes("document") || value.includes("pdf") || value.includes("excel") || value.includes("review")) return "document";
-  if (value.includes("life") || value.includes("family") || value.includes("astrology")) return "life";
-  if (value.includes("drive") || value.includes("memory") || value.includes("private")) return "memory";
+  if (value.includes("risk") || value.includes("vera") || value.includes("shield") || value.includes("downside")) return "risk";
+  if (value.includes("product") || value.includes("technical") || value.includes("keno") || value.includes("solution")) return "product";
+  if (value.includes("portfolio") || value.includes("dca") || value.includes("allocation") || value.includes("atlas")) return "portfolio";
+  if (value.includes("follow") || value.includes("mina") || value.includes("salesforce")) return "follow";
+  if (value.includes("linkedin") || value.includes("caption") || value.includes("lina") || value.includes("tone")) return "comm";
+  if (value.includes("email") && !value.includes("follow")) return "comm";
+  if (value.includes("weekly") || value.includes("visit") || value.includes("proposal") || value.includes("sales") || value.includes("ace")) return "asm";
+  if (value.includes("document") || value.includes("dara") || value.includes("pdf") || value.includes("excel") || value.includes("review")) return "document";
+  if (value.includes("life") || value.includes("luna") || value.includes("family") || value.includes("astrology")) return "life";
+  if (value.includes("drive") || value.includes("memory") || value.includes("nimo") || value.includes("private") || value.includes("vault")) return "memory";
   return "chief";
 }
 
@@ -58,9 +80,10 @@ function buildMockOutput(command, agent) {
   return [
     `Mock backend response from ${agent.name}.`,
     "",
-    "Status: backend mock only. No OpenAI API call yet.",
+    "Status: safe mock fallback. OpenAI runs only when the Cloudflare secret is configured and the API call succeeds.",
     "What happened:",
     "- Command was received by /api/command.",
+    "- Nova Chief remains the final review/QC owner.",
     `- Work was routed to ${agent.route}.`,
     `- Suggested Drive folder is ${agent.saveTo}.`,
     "- Ou still gives final approval before real use.",
@@ -69,7 +92,6 @@ function buildMockOutput(command, agent) {
     ...agent.sections.map((section, index) => `${index + 1}. ${section}: draft placeholder for "${command.slice(0, 90)}"`),
     "",
     "Next backend phase:",
-    "- Add OpenAI API server-side.",
     "- Add approval endpoint.",
     "- Add Google Drive save after approval."
   ].join("\n");
@@ -78,6 +100,7 @@ function buildMockOutput(command, agent) {
 function buildAgentInstructions(agent) {
   return [
     "You are one agent inside Ou AI Command Office.",
+    "Nova Chief is the single command center. All specialist outputs return to Nova for consolidation and QC before Ou receives the final result.",
     "Answer as a practical executive assistant for Ou. Be concise, specific, and action-oriented.",
     "Never claim you accessed Google Drive, Salesforce, email, live market data, or private files unless that data is provided in the user command.",
     "If current portfolio, customer, family, astrology, or confidential data is missing, clearly ask Ou to attach or provide the source of truth.",
@@ -86,6 +109,7 @@ function buildAgentInstructions(agent) {
     `Room: ${agent.route}`,
     `Suggested Drive save folder: ${agent.saveTo}`,
     `Required output sections: ${agent.sections.join(", ")}`,
+    "Always include whether this is a draft for Nova review or a final Nova-approved response.",
     "End with: Next Action for Ou."
   ].join("\n");
 }
