@@ -130,6 +130,10 @@ function slug(text = "") {
     .slice(0, 48) || "command";
 }
 
+function isDraftMode(mode = "") {
+  return mode === "ai" || mode === "local_draft" || mode === "local_fallback";
+}
+
 function buildLogEntry({ command, agentId, agent, mode, now, output }) {
   const date = now.slice(0, 10);
   const taskType = inferTaskType(command, agentId);
@@ -144,35 +148,194 @@ function buildLogEntry({ command, agentId, agent, mode, now, output }) {
     task_type: taskType,
     priority: inferPriority(command),
     assigned_agents: assignedAgents,
-    status: mode === "ai" ? "draft_ready" : "mock_ready",
+    status: isDraftMode(mode) ? "draft_ready" : "mock_ready",
     qc_status: "pending_review",
     google_drive_path: agent.saveTo,
     suggested_output_file: `${date}_${slug(agent.name)}_${slug(taskType)}.md`,
     suggested_log_file: `${date}_COMMAND_LOG_${slug(taskType)}.json`,
     final_output_summary: output.split("\n").find((line) => line.trim())?.slice(0, 140) || "",
-    next_action: mode === "ai" ? "Nova reviews and Ou approves before saving to Drive." : "Review mock output; configure OpenAI secret for live AI drafts.",
+    next_action: isDraftMode(mode) ? "Nova reviews and Ou approves before saving to Drive." : "Review mock output; configure OpenAI secret for live AI drafts.",
     sent_back_to_ou: true
   };
 }
 
-function buildMockOutput(command, agent) {
+function hasAny(value = "", terms = []) {
+  return terms.some((term) => value.includes(term));
+}
+
+function buildSmartLocalOutput(command, agent, agentId) {
+  const value = command.toLowerCase();
+  const taskType = inferTaskType(command, agentId);
+  const priority = inferPriority(command);
+  const assignedAgents = inferAssignedAgents(command, agentId);
+  const assigned = assignedAgents.length ? assignedAgents.join(", ") : agent.name;
+
+  if (command.trim().length < 8 || hasAny(value, ["hi", "hello", "test"]) && command.trim().length < 16) {
+    return [
+      "Nova Chief - Smart Local Draft",
+      "",
+      "I received your message, but it is too short to turn into a real task.",
+      "",
+      "Please send one clear command, for example:",
+      "- Nova Chief, prepare Morning Engine today.",
+      "- Ace Sales, prepare visit brief for [customer].",
+      "- Mina Care, draft follow-up email for [customer].",
+      "- Atlas Invest, prepare today's DCA decision using portfolio truth first.",
+      "",
+      "Next Action for Ou: send the task plus any source data or customer/portfolio context."
+    ].join("\n");
+  }
+
+  const header = [
+    `${agent.name} - Smart Local Draft`,
+    "",
+    `Room: ${agent.route}`,
+    `Priority: ${priority}`,
+    `Assigned agents: ${assigned}`,
+    `Suggested Drive folder: ${agent.saveTo}`,
+    "",
+    `Request Summary: ${command}`
+  ];
+
+  if (hasAny(value, ["morning engine", "daily brief", "today", "วันนี้"])) {
+    return [
+      ...header,
+      "",
+      "Morning Engine Draft:",
+      "1. Today Schedule: list fixed appointments, customer visits, calls, and personal constraints.",
+      "2. Top 3 Priorities: choose only the three items that move sales, portfolio, or life balance forward today.",
+      "3. Must-Win Follow-up: identify customer follow-ups that should not slip today.",
+      "4. Push / Waiting Items: separate what Ou controls from what is waiting for others.",
+      "5. Salesforce Actions: prepare visit note, opportunity update, next step, and follow-up date.",
+      "6. Customer Risks / Blockers: flag missing information, delayed replies, pricing gaps, and proposal blockers.",
+      "7. Critical Questions: prepare up to five questions Ou should answer before noon.",
+      "8. Time-Blocked Plan: morning focus, afternoon customer work, evening review.",
+      "9. Finish-Before-6 PM Plan: define the minimum useful finish line for today.",
+      "",
+      "Nova QC:",
+      "- This is a local draft. It does not read calendar, Drive, Salesforce, or live data yet.",
+      "- Attach today's schedule/customer notes for a sharper final brief.",
+      "",
+      "Next Action for Ou: send today's appointments and top pending customers, then Nova will turn this into a ready-to-use daily plan."
+    ].join("\n");
+  }
+
+  if (taskType === "customer_follow_up") {
+    return [
+      ...header,
+      "",
+      "Customer Follow-up Workflow:",
+      "1. Customer Context: confirm customer name, last discussion, decision maker, and open issue.",
+      "2. Open Items: list what Ou owes, what customer owes, and what is waiting.",
+      "3. Recommended Next Action: decide call, email, visit, proposal, or Salesforce update.",
+      "4. Follow-up Email Draft: prepare a polite, concise email with clear next step.",
+      "5. Salesforce Update: draft stage, next activity, due date, and note.",
+      "",
+      "Email Draft Skeleton:",
+      "Subject: Follow-up on [topic / project]",
+      "Dear [Name],",
+      "Thank you for your time. I would like to follow up on [topic]. The next step from our side is [action]. Could you please confirm [question]?",
+      "Best regards,",
+      "Ou",
+      "",
+      "Nova QC: customer name, meeting note, and real deadline are missing unless included in the command.",
+      "Next Action for Ou: send the customer name and latest meeting note."
+    ].join("\n");
+  }
+
+  if (taskType === "investment" || agentId === "portfolio") {
+    return [
+      ...header,
+      "",
+      "Portfolio / DCA Workflow:",
+      "1. Portfolio Truth Source: use portfolio_plan.json, dashboard export, or latest sheet as allocation truth first.",
+      "2. Allocation Gap: compare current weight vs target weight before naming any buy.",
+      "3. Timing Lens: check live market/chart separately after allocation truth is known.",
+      "4. Decision Rule: Buy only when allocation gap, price setup, RSI/EMA/VIX, and order-size feasibility agree.",
+      "5. Risk Note: Vera Shield should veto stretched, overweight, or incomplete-data decisions.",
+      "",
+      "Current Decision: WAIT FOR SOURCE TRUTH.",
+      "Reason: this command did not include current holdings/allocation or live timing data.",
+      "",
+      "Next Action for Ou: attach portfolio_plan.json, dashboard screenshot/export, or today allocation table."
+    ].join("\n");
+  }
+
+  if (taskType === "sales" || agentId === "asm") {
+    return [
+      ...header,
+      "",
+      "Sales Workflow Draft:",
+      "1. Customer Snapshot: customer, industry, application, location, current status.",
+      "2. Objective: define visit/proposal/follow-up goal.",
+      "3. Opportunity: size, urgency, pain point, and decision path.",
+      "4. Product Fit: involve Keno Expert if product or technical matching is needed.",
+      "5. Next Action: prepare visit brief, email, proposal input, or weekly report section.",
+      "",
+      "Nova QC: customer context is required before this becomes customer-ready.",
+      "Next Action for Ou: send customer name, project/application, and latest discussion."
+    ].join("\n");
+  }
+
+  if (taskType === "document" || taskType === "content") {
+    return [
+      ...header,
+      "",
+      "Document / Content Workflow:",
+      "1. Requirement Summary: identify output type, audience, language, size, and deadline.",
+      "2. Structure Plan: outline sections, tables, visuals, and approval points.",
+      "3. Draft: create text/layout/content first.",
+      "4. Quality Check: verify spelling, spacing, tone, print readiness, and privacy.",
+      "5. Revision Notes: list what Ou should confirm before final use.",
+      "",
+      "Nova QC: no real file is attached in this command, so this is a preparation workflow only.",
+      "Next Action for Ou: attach the source file, image, PDF, Excel, or text to transform."
+    ].join("\n");
+  }
+
+  if (taskType === "life") {
+    return [
+      ...header,
+      "",
+      "Life & Astrology Workflow:",
+      "1. Overall Energy: summarize the planning lens for the day/week.",
+      "2. Work & Career: connect advice to ProXES workload and decision timing.",
+      "3. Money & Investment: use astrology only as mood/risk awareness, not as portfolio truth.",
+      "4. Family & Relationship: define practical reminder or support action.",
+      "5. Timing / Color / Element Support: provide if Ou asks for daily/weekly astrology.",
+      "6. Confidence Note: astrology is a planning lens, not a replacement for real-world facts or Ou's final decision.",
+      "",
+      "Next Action for Ou: specify daily reading, weekly reading, timing, family plan, or reminder."
+    ].join("\n");
+  }
+
+  if (taskType === "memory") {
+    return [
+      ...header,
+      "",
+      "Memory / Drive Storage Workflow:",
+      "1. Classify Data: public-safe, private, customer, portfolio, family, astrology, or archive.",
+      "2. Correct Folder: choose GitHub for code/mock/templates, Google Drive for real/private outputs.",
+      "3. File Name: use date + room + clear task slug.",
+      "4. Do-not-commit Check: never move private_context, real customer data, or real portfolio export into GitHub.",
+      "5. Retrieval Note: add a short summary so Nova can find it later.",
+      "",
+      "Next Action for Ou: tell Nova what file/output should be stored and whether it is private."
+    ].join("\n");
+  }
+
   return [
-    `Mock backend response from ${agent.name}.`,
+    ...header,
     "",
-    "Status: safe mock fallback. OpenAI runs only when the Cloudflare secret is configured and the API call succeeds.",
-    "What happened:",
-    "- Command was received by /api/command.",
-    "- Nova Chief remains the final review/QC owner.",
-    `- Work was routed to ${agent.route}.`,
-    `- Suggested Drive folder is ${agent.saveTo}.`,
-    "- Ou still gives final approval before real use.",
+    "Command Routing Draft:",
+    "1. Nova Chief received the command.",
+    `2. Task Type: ${taskType}`,
+    `3. Main Owner: ${agent.name}`,
+    `4. Sub Agents: ${assigned}`,
+    "5. QC Gate: check correctness, completeness, clarity, privacy, and next action.",
+    "6. Delivery: return final draft to Ou before saving or external use.",
     "",
-    "Draft output structure:",
-    ...agent.sections.map((section, index) => `${index + 1}. ${section}: draft placeholder for "${command.slice(0, 90)}"`),
-    "",
-    "Next backend phase:",
-    "- Add approval endpoint.",
-    "- Add Google Drive save after approval."
+    "Next Action for Ou: add source context, deadline, and desired output format so Nova can produce a useful final answer."
   ].join("\n");
 }
 
@@ -254,9 +417,9 @@ export async function onRequestPost(context) {
   const agent = AGENT_RULES[agentId];
   const now = new Date().toISOString();
   const hasOpenAiKey = Boolean(context.env?.OPENAI_API_KEY);
-  let mode = "mock";
-  let output = buildMockOutput(command, agent);
-  let backendNote = "OpenAI key is not configured yet; returned mock output.";
+  let mode = "local_draft";
+  let output = buildSmartLocalOutput(command, agent, agentId);
+  let backendNote = "Returned a smart local draft. OpenAI is optional and only runs when the Cloudflare secret is configured and the API call succeeds.";
 
   if (hasOpenAiKey) {
     try {
@@ -264,8 +427,9 @@ export async function onRequestPost(context) {
       mode = "ai";
       backendNote = "Generated by OpenAI Responses API through Cloudflare Pages Functions.";
     } catch (error) {
-      mode = "mock_fallback";
-      backendNote = `OpenAI call failed; returned mock output. ${error.message}`;
+      mode = "local_fallback";
+      output = buildSmartLocalOutput(command, agent, agentId);
+      backendNote = `OpenAI call failed; returned smart local fallback. ${error.message}`;
     }
   }
 
@@ -286,9 +450,9 @@ export async function onRequestPost(context) {
     backendNote,
     logEntry,
     nextActions: [
-      mode === "ai" ? "Review the AI draft in the dashboard." : "Review the mock output in the dashboard.",
+      mode === "ai" ? "Review the AI draft in the dashboard." : "Review the smart local draft in the dashboard.",
       "Mark Approved or Saved only after Ou confirms.",
-      mode === "ai" ? "Save final work to the correct Google Drive folder." : "Configure OPENAI_API_KEY in Cloudflare to enable real AI answers."
+      mode === "ai" ? "Save final work to the correct Google Drive folder." : "Attach source data or configure OPENAI_API_KEY for deeper AI-generated drafts."
     ]
   });
 }

@@ -2160,7 +2160,15 @@
         currentPromptText = result.output;
         currentLogText = result.logEntry ? JSON.stringify(result.logEntry, null, 2) : "";
         const isAi = result.mode === "ai";
-        const modeLabel = isAi ? "OpenAI backend" : result.mode === "mock_fallback" ? "AI fallback to mock" : "Mock backend";
+        const modeLabel = isAi
+          ? "OpenAI backend"
+          : result.mode === "local_fallback"
+            ? "AI fallback to smart local"
+            : result.mode === "local_draft"
+              ? "Smart local backend"
+              : result.mode === "mock_fallback"
+                ? "AI fallback to mock"
+                : "Mock backend";
         const heading = isAi ? "AI Agent Response" : "Agent Response";
         activeOutput.innerHTML = `
           <h3>${heading}</h3>
