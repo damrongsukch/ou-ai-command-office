@@ -19,5 +19,8 @@ functions/*
 !functions/api/
 functions/api/*
 !functions/api/command.js
+!functions/api/telegram/
+functions/api/telegram/*
+!functions/api/telegram/webhook.js
 migrations/
 wrangler.toml

@@ -57,6 +57,7 @@ The MVP v1 goal is simple:
 - `prompts/` - reusable agent prompt templates
 - `prompts/nova_orchestration_system.md` - core Nova Chief orchestration system prompt
 - `docs/nova_orchestration_sop.md` - SOP for Nova Chief, sub agents, QC, Drive storage, and audit logging
+- `docs/telegram_nova_setup.md` - Telegram command inbox setup for Nova Chief
 - `outputs/` - placeholder for generated public-safe examples
 - `private_context.example/` - placeholder templates only
 - `private_context/` - local only, ignored by git
@@ -88,6 +89,20 @@ Use Google Drive for:
 MVP v1 uses manual save/upload to Drive. Do not auto-sync private Drive content into GitHub Pages.
 
 ## Google Drive Integration Roadmap
+
+## Telegram Command Inbox
+
+Telegram can send mobile commands to Nova through:
+
+`/api/telegram/webhook`
+
+Required Cloudflare secrets:
+
+- `TELEGRAM_BOT_TOKEN`
+- `TELEGRAM_ALLOWED_CHAT_ID`
+- `TELEGRAM_WEBHOOK_SECRET`
+
+Security rule: do not commit bot tokens or real Telegram chat IDs unless they are intentionally public-safe examples. See `docs/telegram_nova_setup.md`.
 
 Level 1 - Manual vault, current MVP:
 
