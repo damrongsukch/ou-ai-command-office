@@ -4,7 +4,8 @@ Static MVP v1 dashboard for Ou Personal Agent Office.
 
 Live preview:
 
-- GitHub Pages: https://damrongsukch.github.io/ou-ai-command-office/
+- Primary Cloudflare dashboard: https://ou-ai-command-office-ceo.pages.dev/
+- GitHub Pages fallback: https://damrongsukch.github.io/ou-ai-command-office/
 
 ## Purpose
 
@@ -127,7 +128,7 @@ Output Top 3 priorities, task list, risk, and finish-before-6 PM plan.
 
 ## Start
 
-Open `index.html` in a browser, or use the GitHub Pages URL after Pages is enabled.
+Open `index.html` in a browser, use the Cloudflare Pages URL for backend mock testing, or use the GitHub Pages URL for static fallback mode.
 
 For the public dashboard, use mock data only. For real work, copy the prompt template into ChatGPT, attach the real source files there if needed, then save final outputs manually to Google Drive.
 

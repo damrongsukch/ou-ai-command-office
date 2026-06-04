@@ -253,7 +253,9 @@
         place-items: center;
         min-height: 56px;
         color: #dffaff;
-        font-size: 20px;
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
       }
 
       .section-label {
@@ -1187,7 +1189,7 @@
           <div class="status-item"><small>Tue 03 Jun 2026</small><strong id="clock">08:45 <small>AM BKK</small></strong></div>
           <div class="status-item"><small>System Status</small><strong class="ok"><span class="dot"></span> All Systems Operational</strong></div>
           <div class="status-item"><small>Agents Online</small><strong class="ok"><span class="dot"></span> 10 / 10</strong></div>
-          <div class="status-item"><small>Data Sync</small><strong class="ok"><span class="dot"></span> 2m ago</strong></div>
+          <div class="status-item"><small>Backend</small><strong class="ok" id="backendStatus"><span class="dot"></span> Checking</strong></div>
         </div>
         <div class="user-card">
           <div class="user-avatar" aria-hidden="true"></div>
@@ -1202,7 +1204,7 @@
             <label for="commandText">Send Command to AI Office</label>
             <div class="command-row">
               <textarea id="commandText" placeholder="Type your command...">Prepare Morning Engine for today.</textarea>
-              <button class="send-btn" id="sendCommand" aria-label="Send command">&gt;</button>
+              <button class="send-btn" id="sendCommand" aria-label="Run command">Run</button>
             </div>
           </section>
 
@@ -1309,7 +1311,7 @@
           </section>
           <section class="drive-vault" id="driveVault">
             <h3>Drive Vault</h3>
-            <p>Manual save mode. Real files stay in Google Drive, not GitHub Pages.</p>
+            <p>Manual save mode. Real files stay in Google Drive, not the public dashboard.</p>
             <div class="drive-field">
               <strong>Current Folder</strong>
               <small id="drivePath">00_Command_Center/Daily Brief/</small>
@@ -1329,10 +1331,10 @@
       </main>
 
       <footer class="footer">
-        <div><strong>Data Source</strong> Mock Data (MVP v1)</div>
-        <div><strong>Last Update</strong> 03 Jun 2026 08:43 AM</div>
-        <div><strong>Next Sync</strong> in 5 min</div>
-        <div><strong>Tip</strong> Use left panel or click any agent to start workflow.</div>
+        <div><strong>Data Source</strong> Mock Data + Local History</div>
+        <div><strong>Backend</strong> Cloudflare mock on pages.dev</div>
+        <div><strong>GitHub Pages</strong> Local fallback mode</div>
+        <div><strong>Tip</strong> Click Run on Cloudflare to test backend mock.</div>
       </footer>
     </div>
 
@@ -1528,6 +1530,7 @@
       const drivePath = document.querySelector("#drivePath");
       const driveFileName = document.querySelector("#driveFileName");
       const historyList = document.querySelector("#historyList");
+      const backendStatus = document.querySelector("#backendStatus");
       const HISTORY_KEY = "ouAiCommandOffice.history.v1";
       let currentDriveUrl = DRIVE_VAULT_URL;
       let currentAgent = agents.chief;
@@ -1688,6 +1691,14 @@
 
       function backendAvailableForCurrentHost() {
         return location.hostname === "localhost" || location.hostname === "127.0.0.1" || location.hostname.endsWith(".pages.dev");
+      }
+
+      function updateBackendStatus() {
+        if (backendAvailableForCurrentHost()) {
+          backendStatus.innerHTML = '<span class="dot"></span> Mock Online';
+          return;
+        }
+        backendStatus.innerHTML = '<span class="dot"></span> Local Fallback';
       }
 
       async function sendToBackend(command, agent) {
@@ -1865,6 +1876,7 @@
       setInterval(updateClock, 30000);
       selectAgent("chief");
       renderHistory();
+      updateBackendStatus();
     </script>
   </body>
 </html>
