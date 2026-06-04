@@ -77,6 +77,84 @@ function inferAgent(command = "", requestedAgent = "") {
   return "chief";
 }
 
+function inferTaskType(command = "", agentId = "chief") {
+  const value = command.toLowerCase();
+  if (value.includes("dca") || value.includes("portfolio") || value.includes("allocation")) return "investment";
+  if (value.includes("risk") || value.includes("downside") || agentId === "risk") return "risk_review";
+  if (value.includes("follow") || value.includes("salesforce")) return "customer_follow_up";
+  if (value.includes("sales") || value.includes("visit") || value.includes("proposal") || value.includes("weekly")) return "sales";
+  if (value.includes("product") || value.includes("technical")) return "product_knowledge";
+  if (value.includes("document") || value.includes("pdf") || value.includes("excel") || value.includes("ppt")) return "document";
+  if (value.includes("linkedin") || value.includes("email") || value.includes("caption")) return "content";
+  if (value.includes("life") || value.includes("family") || value.includes("astrology")) return "life";
+  if (value.includes("drive") || value.includes("memory") || value.includes("vault")) return "memory";
+  return agentId === "chief" ? "command" : AGENT_RULES[agentId].route.toLowerCase().replace(/\s+/g, "_");
+}
+
+function inferPriority(command = "") {
+  const value = command.toLowerCase();
+  if (value.includes("urgent") || value.includes("asap") || value.includes("today") || value.includes("critical")) return "urgent";
+  if (value.includes("high") || value.includes("client") || value.includes("customer") || value.includes("proposal")) return "high";
+  if (value.includes("weekly") || value.includes("review") || value.includes("plan")) return "medium";
+  return "low";
+}
+
+function inferAssignedAgents(command = "", routedAgentId = "chief") {
+  const value = command.toLowerCase();
+  const selected = new Set();
+
+  if (value.includes("sales") || value.includes("visit") || value.includes("proposal") || value.includes("weekly")) selected.add("asm");
+  if (value.includes("follow") || value.includes("customer") || value.includes("salesforce")) selected.add("follow");
+  if (value.includes("product") || value.includes("technical") || value.includes("solution")) selected.add("product");
+  if (value.includes("portfolio") || value.includes("dca") || value.includes("allocation")) selected.add("portfolio");
+  if (value.includes("risk") || value.includes("downside") || value.includes("shield")) selected.add("risk");
+  if (value.includes("document") || value.includes("pdf") || value.includes("excel") || value.includes("ppt")) selected.add("document");
+  if (value.includes("linkedin") || value.includes("email") || value.includes("caption") || value.includes("tone")) selected.add("comm");
+  if (value.includes("life") || value.includes("family") || value.includes("astrology")) selected.add("life");
+  if (value.includes("drive") || value.includes("memory") || value.includes("vault") || value.includes("log")) selected.add("memory");
+
+  if (routedAgentId !== "chief") selected.add(routedAgentId);
+  if (!selected.size) selected.add(routedAgentId);
+
+  return Array.from(selected)
+    .filter((id) => id !== "chief")
+    .map((id) => AGENT_RULES[id]?.name)
+    .filter(Boolean);
+}
+
+function slug(text = "") {
+  return text
+    .replace(/&/g, "and")
+    .replace(/[^a-zA-Z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 48) || "command";
+}
+
+function buildLogEntry({ command, agentId, agent, mode, now, output }) {
+  const date = now.slice(0, 10);
+  const taskType = inferTaskType(command, agentId);
+  const assignedAgents = inferAssignedAgents(command, agentId);
+  const logTitle = command.slice(0, 72);
+
+  return {
+    date,
+    request_from: "Ou",
+    received_by: "Nova Chief",
+    task_title: logTitle,
+    task_type: taskType,
+    priority: inferPriority(command),
+    assigned_agents: assignedAgents,
+    status: mode === "ai" ? "draft_ready" : "mock_ready",
+    qc_status: "pending_review",
+    google_drive_path: agent.saveTo,
+    suggested_output_file: `${date}_${slug(agent.name)}_${slug(taskType)}.md`,
+    suggested_log_file: `${date}_COMMAND_LOG_${slug(taskType)}.json`,
+    final_output_summary: output.split("\n").find((line) => line.trim())?.slice(0, 140) || "",
+    next_action: mode === "ai" ? "Nova reviews and Ou approves before saving to Drive." : "Review mock output; configure OpenAI secret for live AI drafts.",
+    sent_back_to_ou: true
+  };
+}
+
 function buildMockOutput(command, agent) {
   return [
     `Mock backend response from ${agent.name}.`,
@@ -191,6 +269,8 @@ export async function onRequestPost(context) {
     }
   }
 
+  const logEntry = buildLogEntry({ command, agentId, agent, mode, now, output });
+
   return Response.json({
     ok: true,
     mode,
@@ -204,6 +284,7 @@ export async function onRequestPost(context) {
     },
     output,
     backendNote,
+    logEntry,
     nextActions: [
       mode === "ai" ? "Review the AI draft in the dashboard." : "Review the mock output in the dashboard.",
       "Mark Approved or Saved only after Ou confirms.",

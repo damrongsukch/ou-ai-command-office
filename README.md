@@ -48,6 +48,7 @@ The MVP v1 goal is simple:
 - `data/agents.json` - agent definitions and output formats
 - `data/tasks.json` - public-safe mock task queue
 - `data/workflows.json` - command routing, operating model, Drive rules
+- `data/audit_log_schema.json` - Nova activity log metadata schema
 - `data/recent_outputs.json` - public-safe mock output history
 - `data/google_drive_structure.md` - recommended private Drive folder structure
 - `data/ou_profile.md` - public-safe mock Ou profile

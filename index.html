@@ -1882,6 +1882,7 @@
       let currentDriveUrl = DRIVE_VAULT_URL;
       let currentAgent = agents.chief;
       let currentPromptText = "";
+      let currentLogText = "";
       let currentWorkflowTitle = "Active Workflow";
       let latestBackendResult = null;
 
@@ -2004,6 +2005,7 @@
       function renderOutput(title, agent, command, sections) {
         currentWorkflowTitle = title;
         currentPromptText = promptText(agent, command, sections);
+        currentLogText = "";
         activeOutput.innerHTML = `
           <h3>${title}</h3>
           <p><strong>Owner:</strong> ${agent.name}<br><strong>Save to:</strong> ${agent.saveTo}<br><strong>File:</strong> ${suggestedFileName(agent)}</p>
@@ -2066,6 +2068,7 @@
           agent: currentAgent.name,
           status,
           prompt: currentPromptText,
+          log: currentLogText,
           drivePath: drivePath.textContent,
           driveUrl: currentDriveUrl,
           fileName: driveFileName.textContent,
@@ -2091,7 +2094,10 @@
           `Status: ${item.status}`,
           `Save to: ${item.drivePath}`,
           `File: ${item.fileName}`,
-          `Drive: ${item.driveUrl}`
+          `Drive: ${item.driveUrl}`,
+          "",
+          "Audit Log:",
+          item.log || "No backend audit log captured yet."
         ].join("\n");
       }
 
@@ -2128,6 +2134,7 @@
       function renderBackendResult(result) {
         latestBackendResult = result;
         currentPromptText = result.output;
+        currentLogText = result.logEntry ? JSON.stringify(result.logEntry, null, 2) : "";
         const isAi = result.mode === "ai";
         const modeLabel = isAi ? "OpenAI backend" : result.mode === "mock_fallback" ? "AI fallback to mock" : "Mock backend";
         const heading = isAi ? "AI Agent Response" : "Agent Response";
@@ -2138,8 +2145,10 @@
           <div class="output-actions">
             <button type="button" data-copy-current="prompt">Copy Result</button>
             <button type="button" data-copy-current="summary">Copy Drive Info</button>
+            <button type="button" data-copy-current="log">Copy Audit Log</button>
           </div>
           <pre class="prompt-preview">${escapeHtml(result.output)}</pre>
+          ${currentLogText ? `<h3>Audit Log Entry</h3><pre class="prompt-preview">${escapeHtml(currentLogText)}</pre>` : ""}
         `;
       }
 
@@ -2222,7 +2231,8 @@
         const button = event.target.closest("[data-copy-current]");
         if (!button) return;
         const saveInfo = `Save to: ${drivePath.textContent}\nFile: ${driveFileName.textContent}\nDrive: ${currentDriveUrl}`;
-        copyText(button.dataset.copyCurrent === "prompt" ? currentPromptText : saveInfo, button.textContent.trim());
+        const text = button.dataset.copyCurrent === "prompt" ? currentPromptText : button.dataset.copyCurrent === "log" ? currentLogText || "No audit log captured yet." : saveInfo;
+        copyText(text, button.textContent.trim());
       });
 
       document.querySelector("#copyDrivePath").addEventListener("click", () => copyText(drivePath.textContent, "Drive Path"));

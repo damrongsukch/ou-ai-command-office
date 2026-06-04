@@ -1,0 +1,17 @@
+{
+  "date": "YYYY-MM-DD",
+  "request_from": "Ou",
+  "received_by": "Nova Chief",
+  "task_title": "",
+  "task_type": "command | sales | customer_follow_up | investment | risk_review | product_knowledge | document | content | life | memory",
+  "priority": "low | medium | high | urgent",
+  "assigned_agents": ["Ace Sales", "Mina Care"],
+  "status": "mock_ready | draft_ready | completed",
+  "qc_status": "pending_review | passed | revised | failed",
+  "google_drive_path": "",
+  "suggested_output_file": "YYYY-MM-DD_AGENT_TASK-TYPE_SHORT-TITLE.md",
+  "suggested_log_file": "YYYY-MM-DD_COMMAND_LOG_TASK-TYPE.json",
+  "final_output_summary": "",
+  "next_action": "",
+  "sent_back_to_ou": true
+}
