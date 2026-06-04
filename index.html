@@ -956,6 +956,218 @@
         color: #91a9bf;
       }
 
+      .team-board {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+        gap: 12px;
+        padding: 14px;
+        border: 1px solid rgba(88, 217, 255, 0.18);
+        border-radius: 10px;
+        background:
+          linear-gradient(135deg, rgba(9, 25, 43, 0.9), rgba(7, 18, 31, 0.96)),
+          radial-gradient(circle at 12% 0%, rgba(88, 217, 255, 0.13), transparent 30%);
+        box-shadow: var(--shadow);
+      }
+
+      .team-head {
+        grid-column: 1 / -1;
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: end;
+        padding-bottom: 6px;
+        border-bottom: 1px solid rgba(132, 169, 190, 0.16);
+      }
+
+      .team-head h2 {
+        color: #f4fbff;
+        font-size: 18px;
+        letter-spacing: 0;
+      }
+
+      .team-head p {
+        max-width: 680px;
+        margin-top: 4px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .team-meta {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      .team-meta span {
+        padding: 6px 8px;
+        border: 1px solid rgba(88, 217, 255, 0.22);
+        border-radius: 7px;
+        color: #ccecff;
+        background: rgba(32, 220, 255, 0.07);
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 9px;
+        align-content: start;
+      }
+
+      .team-room {
+        min-width: 0;
+        padding: 10px;
+        border: 1px solid rgba(132, 169, 190, 0.16);
+        border-radius: 8px;
+        background: rgba(4, 13, 25, 0.48);
+      }
+
+      .team-room h3 {
+        margin-bottom: 9px;
+        color: #eaf7ff;
+        font-size: 11px;
+        text-transform: uppercase;
+      }
+
+      .team-list {
+        display: grid;
+        gap: 7px;
+      }
+
+      .team-agent {
+        display: grid;
+        grid-template-columns: 34px minmax(0, 1fr);
+        gap: 8px;
+        align-items: center;
+        min-height: 56px;
+        padding: 8px;
+        text-align: left;
+        border-color: rgba(88, 217, 255, 0.13);
+        background: rgba(9, 25, 43, 0.72);
+      }
+
+      .team-agent:hover,
+      .team-agent.active {
+        border-color: rgba(88, 217, 255, 0.5);
+        background: rgba(32, 220, 255, 0.11);
+        transform: translateY(-1px);
+      }
+
+      .team-avatar {
+        display: grid;
+        place-items: center;
+        width: 34px;
+        height: 34px;
+        border: 1px solid rgba(88, 217, 255, 0.32);
+        border-radius: 8px;
+        color: #06111b;
+        background: linear-gradient(135deg, var(--cyan), var(--green));
+        font-size: 11px;
+        font-weight: 950;
+      }
+
+      .team-agent strong {
+        display: block;
+        overflow: hidden;
+        color: #f4fbff;
+        font-size: 11px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .team-agent small {
+        display: block;
+        margin-top: 3px;
+        overflow: hidden;
+        color: var(--muted);
+        font-size: 10px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .team-detail {
+        display: grid;
+        gap: 10px;
+        align-content: start;
+      }
+
+      .detail-card,
+      .pipeline-card {
+        padding: 13px;
+        border: 1px solid rgba(77, 229, 166, 0.22);
+        border-radius: 8px;
+        background: rgba(4, 13, 25, 0.58);
+      }
+
+      .detail-card h3,
+      .pipeline-card h3 {
+        color: var(--green);
+        font-size: 13px;
+        text-transform: uppercase;
+      }
+
+      .detail-card p {
+        margin-top: 8px;
+        color: #d6e8f4;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .detail-card dl {
+        display: grid;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .detail-card dt {
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .detail-card dd {
+        margin: 2px 0 0;
+        color: #f2fbff;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .pipeline-list {
+        display: grid;
+        gap: 7px;
+        margin-top: 10px;
+      }
+
+      .pipeline-step {
+        display: grid;
+        grid-template-columns: 26px minmax(0, 1fr);
+        gap: 8px;
+        align-items: center;
+        min-height: 34px;
+      }
+
+      .pipeline-step b {
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 7px;
+        color: #05111b;
+        background: var(--green);
+        font-size: 11px;
+      }
+
+      .pipeline-step span {
+        color: #cfe2ee;
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
       .tabs {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -1073,6 +1285,8 @@
         .stage-wrap { order: 1; min-height: min(720px, 72vw); }
         .panel.left { order: 2; }
         .panel.right { order: 3; }
+        .team-board { grid-template-columns: 1fr; }
+        .team-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
       }
 
       @media (max-width: 760px) {
@@ -1095,8 +1309,23 @@
         }
 
         .status-strip,
-        .footer {
+        .footer,
+        .team-grid {
           grid-template-columns: 1fr;
+        }
+
+        .team-board {
+          padding: 10px;
+          gap: 10px;
+        }
+
+        .team-head {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .team-meta {
+          justify-content: flex-start;
         }
 
         .panel {
@@ -1373,6 +1602,28 @@
         </aside>
       </main>
 
+      <section class="team-board" id="agentTeamBoard">
+        <div class="team-head">
+          <div>
+            <h2>Agent Team Studio</h2>
+            <p>Team grid and pipeline flow for Ou AI Office. Click an agent to flip its working card, route the command panel, and see how the output should move to Google Drive.</p>
+          </div>
+          <div class="team-meta">
+            <span>Team Grid</span>
+            <span>Pipeline Flow</span>
+            <span>Quality Gate</span>
+          </div>
+        </div>
+        <div class="team-grid" id="agentTeamGrid"></div>
+        <div class="team-detail">
+          <section class="detail-card" id="agentTeamDetail"></section>
+          <section class="pipeline-card">
+            <h3>Pipeline Flow</h3>
+            <div class="pipeline-list" id="agentPipeline"></div>
+          </section>
+        </div>
+      </section>
+
       <footer class="footer">
         <div><strong>Data Source</strong> Mock Data + Local History</div>
         <div><strong>Backend</strong> Cloudflare AI or safe mock fallback</div>
@@ -1549,6 +1800,14 @@
         }
       };
 
+      const teamRooms = [
+        { title: "Command Room", agentIds: ["chief", "memory"] },
+        { title: "Sales Room", agentIds: ["asm", "follow", "product"] },
+        { title: "Portfolio Room", agentIds: ["portfolio", "risk"] },
+        { title: "Document Studio", agentIds: ["document", "comm"] },
+        { title: "Life Room", agentIds: ["life"] }
+      ];
+
       const tasks = [
         ["Prepare Morning Engine", "08:00", "high", "In Progress"],
         ["Client Visit - Mock Customer", "10:00", "high", "Pending"],
@@ -1574,6 +1833,9 @@
       const driveFileName = document.querySelector("#driveFileName");
       const historyList = document.querySelector("#historyList");
       const backendStatus = document.querySelector("#backendStatus");
+      const agentTeamGrid = document.querySelector("#agentTeamGrid");
+      const agentTeamDetail = document.querySelector("#agentTeamDetail");
+      const agentPipeline = document.querySelector("#agentPipeline");
       const HISTORY_KEY = "ouAiCommandOffice.history.v1";
       let currentDriveUrl = DRIVE_VAULT_URL;
       let currentAgent = agents.chief;
@@ -1613,6 +1875,65 @@
         drivePath.textContent = agent.saveTo;
         driveFileName.textContent = suggestedFileName(agent);
         currentDriveUrl = DRIVE_FOLDER_URLS[agent.saveTo] || DRIVE_VAULT_URL;
+      }
+
+      function agentInitials(name) {
+        return name
+          .split(/\s+|&/g)
+          .filter(Boolean)
+          .slice(0, 2)
+          .map((part) => part[0])
+          .join("")
+          .toUpperCase();
+      }
+
+      function renderAgentTeam(activeId = "chief") {
+        const activeAgent = agents[activeId] || agents.chief;
+        agentTeamGrid.innerHTML = teamRooms.map((room) => `
+          <section class="team-room">
+            <h3>${escapeHtml(room.title)}</h3>
+            <div class="team-list">
+              ${room.agentIds.map((agentId) => {
+                const agent = agents[agentId];
+                return `
+                  <button class="team-agent ${agentId === activeId ? "active" : ""}" type="button" data-team-agent="${agentId}">
+                    <span class="team-avatar">${escapeHtml(agentInitials(agent.name))}</span>
+                    <span>
+                      <strong>${escapeHtml(agent.name)}</strong>
+                      <small>${escapeHtml(agent.role)}</small>
+                    </span>
+                  </button>
+                `;
+              }).join("")}
+            </div>
+          </section>
+        `).join("");
+
+        agentTeamDetail.innerHTML = `
+          <h3>${escapeHtml(activeAgent.name)}</h3>
+          <p>${escapeHtml(activeAgent.role)}</p>
+          <dl>
+            <div>
+              <dt>Output Format</dt>
+              <dd>${escapeHtml(activeAgent.output)}</dd>
+            </div>
+            <div>
+              <dt>Save to Drive</dt>
+              <dd>${escapeHtml(activeAgent.saveTo)}</dd>
+            </div>
+            <div>
+              <dt>Suggested File</dt>
+              <dd>${escapeHtml(suggestedFileName(activeAgent))}</dd>
+            </div>
+          </dl>
+        `;
+
+        agentPipeline.innerHTML = activeAgent.workflow.map((step, index) => `
+          <div class="pipeline-step">
+            <b>${index + 1}</b>
+            <span>${escapeHtml(step)}</span>
+          </div>
+        `).join("");
       }
 
       function promptText(agent, command, sections) {
@@ -1813,10 +2134,17 @@
           </div>
         `;
         renderOutput("Active Workflow", agent, `Use ${agent.name}: ${agent.role}`, agent.workflow);
+        renderAgentTeam(id);
       }
 
       document.querySelectorAll("[data-agent]").forEach((node) => {
         node.addEventListener("click", () => selectAgent(node.dataset.agent));
+      });
+
+      agentTeamGrid.addEventListener("click", (event) => {
+        const teamButton = event.target.closest("[data-team-agent]");
+        if (!teamButton) return;
+        selectAgent(teamButton.dataset.teamAgent);
       });
 
       document.querySelectorAll("[data-template]").forEach((node) => {
