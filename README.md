@@ -42,7 +42,7 @@ The MVP v1 goal is simple:
 ## Folder Structure
 
 - `index.html` - main command-office dashboard
-- `team.html` - agent team photo-card guide with roles, skills, and pipelines
+- `team.html` - agent team photo-card guide with roles, skills, and pipelines, served as `/team` on Cloudflare Pages
 - `styles.css` - simple fallback/static dashboard styles
 - `app.js` - simple fallback/static dashboard interactions
 - `assets/` - public-safe visual assets
