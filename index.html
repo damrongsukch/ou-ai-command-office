@@ -1486,7 +1486,401 @@
         }
 
         .task > div:last-child,
-        .recent > small {
+      .recent > small {
+          grid-column: 2;
+        }
+      }
+
+      .os-logo {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 18px;
+        color: #d8e8f7;
+        font-size: 22px;
+        font-weight: 900;
+        letter-spacing: 0.04em;
+      }
+
+      .os-logo span:first-child {
+        width: 30px;
+        height: 30px;
+        border: 4px solid var(--cyan);
+        border-right-color: var(--purple);
+        border-radius: 50%;
+        box-shadow: 0 0 22px rgba(32, 220, 255, 0.35);
+      }
+
+      .os-nav {
+        display: grid;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+
+      .os-nav button,
+      .system-card,
+      .brief-card,
+      .coordination-card {
+        border: 1px solid rgba(132, 169, 190, 0.14);
+        border-radius: 12px;
+        background: rgba(10, 24, 42, 0.68);
+      }
+
+      .os-nav button {
+        display: grid;
+        grid-template-columns: 28px 1fr auto;
+        gap: 10px;
+        align-items: center;
+        min-height: 44px;
+        padding: 9px 12px;
+        color: #c6d8e8;
+        text-align: left;
+      }
+
+      .os-nav button.active {
+        color: #73d8ff;
+        border-color: rgba(32, 220, 255, 0.24);
+        background: rgba(32, 220, 255, 0.10);
+      }
+
+      .os-nav i {
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 8px;
+        color: var(--cyan);
+        background: rgba(32, 220, 255, 0.10);
+        font-style: normal;
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      .system-card,
+      .brief-card {
+        margin-top: 14px;
+        padding: 14px;
+      }
+
+      .system-card h3,
+      .brief-card h3,
+      .coordination-card h3 {
+        color: #e8f5ff;
+        font-size: 12px;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .system-list {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .system-list div {
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .system-list b {
+        color: #dcefff;
+      }
+
+      .brief-card p {
+        margin: 9px 0 12px;
+        color: #aebfd1;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .brief-card button {
+        min-height: 40px;
+        border-color: rgba(88, 217, 255, 0.15);
+        background: rgba(255, 255, 255, 0.04);
+      }
+
+      .agent-mini {
+        position: absolute;
+        left: 12px;
+        bottom: 9px;
+        width: 54px;
+        height: 64px;
+        object-fit: contain;
+        filter: drop-shadow(0 9px 12px rgba(0, 0, 0, 0.55));
+      }
+
+      .chief .agent-mini {
+        left: 50%;
+        top: -54px;
+        bottom: auto;
+        width: 108px;
+        height: 132px;
+        transform: translateX(-50%);
+      }
+
+      .agent-card .character {
+        display: none;
+      }
+
+      .stage-wrap {
+        border-radius: 14px;
+        background:
+          linear-gradient(180deg, rgba(16, 39, 62, 0.78), rgba(5, 12, 22, 0.96)),
+          #06111f;
+      }
+
+      .office-bg {
+        filter: saturate(1.02) contrast(1.02) brightness(0.78);
+        opacity: 0.82;
+      }
+
+      .stage::before {
+        content: "Nova Command";
+        position: absolute;
+        z-index: 4;
+        left: 50%;
+        top: 27%;
+        transform: translateX(-50%);
+        padding: 8px 16px;
+        border: 1px solid rgba(32, 220, 255, 0.5);
+        border-radius: 8px;
+        color: var(--cyan);
+        background: rgba(4, 13, 25, 0.78);
+        box-shadow: 0 0 30px rgba(32, 220, 255, 0.12);
+        font-size: 16px;
+        font-weight: 900;
+      }
+
+      .agent-card {
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+      }
+
+      .chief {
+        top: 42%;
+        padding-top: 84px;
+      }
+
+      .asm { left: 11%; top: 20%; bottom: auto; }
+      .follow { left: 25%; top: 16%; bottom: auto; }
+      .portfolio { left: 51%; top: 17%; }
+      .risk { left: auto; right: 9%; top: 19%; }
+      .product { left: auto; right: 9%; top: 46%; bottom: auto; }
+      .document { left: 10%; bottom: 19%; right: auto; }
+      .comm { left: 22%; bottom: 30%; right: auto; }
+      .life { left: 42%; bottom: 8%; top: auto; right: auto; }
+      .memory { left: auto; right: 9%; bottom: 7%; transform: none; }
+
+      .room-label.sales { left: 18%; top: 10%; bottom: auto; color: var(--green); }
+      .room-label.portfolio { left: 58%; top: 7%; color: var(--blue); }
+      .room-label.document { left: 13%; top: 43%; right: auto; bottom: auto; color: var(--purple); }
+      .room-label.life { left: 45%; bottom: 30%; right: auto; top: auto; color: #a98cff; }
+
+      .workflow-console {
+        display: none;
+      }
+
+      .coord-tabs {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 4px;
+        margin: 10px 0 12px;
+        padding: 4px;
+        border: 1px solid rgba(132, 169, 190, 0.12);
+        border-radius: 10px;
+        background: rgba(5, 13, 24, 0.58);
+      }
+
+      .coord-tabs button {
+        min-height: 34px;
+        border: 0;
+        color: var(--muted);
+        background: transparent;
+        font-size: 11px;
+      }
+
+      .coord-tabs button.active {
+        color: #dffaff;
+        background: rgba(46, 124, 255, 0.22);
+      }
+
+      .live-feed {
+        display: grid;
+        gap: 10px;
+      }
+
+      .feed-item {
+        display: grid;
+        grid-template-columns: 44px 1fr auto;
+        gap: 10px;
+        align-items: start;
+        padding-bottom: 10px;
+        border-bottom: 1px solid rgba(132, 169, 190, 0.12);
+      }
+
+      .feed-item img {
+        width: 44px;
+        height: 44px;
+        object-fit: cover;
+        object-position: top;
+        border: 1px solid rgba(88, 217, 255, 0.26);
+        border-radius: 50%;
+        background: #0b1624;
+      }
+
+      .feed-item strong {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        color: #eef8ff;
+        font-size: 12px;
+      }
+
+      .feed-item p {
+        margin-top: 4px;
+        color: #aebfd1;
+        font-size: 12px;
+        line-height: 1.35;
+      }
+
+      .feed-tag {
+        padding: 3px 7px;
+        border-radius: 5px;
+        color: #bdf7ff;
+        background: rgba(32, 220, 255, 0.12);
+        font-size: 9px;
+        font-weight: 900;
+      }
+
+      .feed-time {
+        color: var(--muted);
+        font-size: 10px;
+        white-space: nowrap;
+      }
+
+      .footer {
+        grid-template-columns: 1fr repeat(4, minmax(130px, auto)) 1.2fr;
+        align-items: center;
+        border-radius: 0;
+      }
+
+      .footer-metric {
+        display: grid;
+        grid-template-columns: 36px 1fr;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .footer-metric i {
+        display: grid;
+        place-items: center;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        color: var(--cyan);
+        background: rgba(32, 220, 255, 0.09);
+        font-style: normal;
+        font-weight: 900;
+      }
+
+      .footer-metric b {
+        display: block;
+        color: var(--green);
+        font-size: 15px;
+      }
+
+      @media (max-width: 1380px) {
+        .main { grid-template-columns: 1fr; }
+        .panel.left, .panel.right { max-height: none; }
+        .stage-wrap { min-height: min(760px, 72vw); }
+        .footer { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      }
+
+      @media (max-width: 760px) {
+        .topbar,
+        .status-strip,
+        .footer {
+          grid-template-columns: 1fr;
+        }
+
+        .stage-wrap {
+          min-height: 0;
+          overflow: visible;
+        }
+
+        .stage {
+          position: relative;
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 8px;
+          padding: 118px 10px 10px;
+          overflow: visible;
+        }
+
+        .office-bg {
+          height: 108px;
+          opacity: 0.44;
+        }
+
+        .stage::before {
+          left: 12px;
+          top: 18px;
+          transform: none;
+        }
+
+        .stage::after {
+          height: 108px;
+          bottom: auto;
+        }
+
+        .room-label,
+        .workflow-console {
+          display: none;
+        }
+
+        .agent-card,
+        .chief,
+        .asm,
+        .follow,
+        .portfolio,
+        .risk,
+        .product,
+        .document,
+        .comm,
+        .life,
+        .memory {
+          position: relative;
+          left: auto;
+          right: auto;
+          top: auto;
+          bottom: auto;
+          width: 100%;
+          min-height: 78px;
+          padding: 10px 10px 10px 76px;
+          transform: none;
+        }
+
+        .chief .agent-mini,
+        .agent-mini {
+          left: 10px;
+          top: auto;
+          bottom: 6px;
+          width: 56px;
+          height: 68px;
+          transform: none;
+        }
+
+        .coord-tabs {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .feed-item {
+          grid-template-columns: 40px 1fr;
+        }
+
+        .feed-time {
           grid-column: 2;
         }
       }
@@ -1518,10 +1912,33 @@
 
       <main class="main">
         <aside class="panel left">
+          <div class="os-logo"><span></span><strong>Ou AI OS</strong></div>
+          <nav class="os-nav" aria-label="AI OS navigation">
+            <button class="active" type="button"><i>CC</i><span>Command Center</span><b>10</b></button>
+            <button type="button"><i>AG</i><span>Agents</span><b>10</b></button>
+            <button type="button"><i>WF</i><span>Workflow Pipeline</span><b>7</b></button>
+            <button type="button"><i>TK</i><span>Tasks & Tickets</span><b>24</b></button>
+            <button type="button"><i>KB</i><span>Knowledge Base</span><b>82%</b></button>
+            <button type="button"><i>AV</i><span>Archive Vault</span><b>OK</b></button>
+          </nav>
+          <section class="system-card">
+            <h3>System Status</h3>
+            <div class="system-list">
+              <div><span><span class="dot"></span> AI Agents</span><b>10/10</b></div>
+              <div><span><span class="dot"></span> Workflows</span><b>Active</b></div>
+              <div><span><span class="dot"></span> Storage</span><b>82%</b></div>
+              <div><span><span class="dot"></span> Security</span><b>Secure</b></div>
+            </div>
+          </section>
+          <section class="brief-card">
+            <h3>Daily Briefing</h3>
+            <p>All teams on track. Nova is ready to route commands from Telegram or Dashboard.</p>
+            <button type="button" data-template="morning">View Briefing</button>
+          </section>
           <div class="panel-head"><span>Command Panel</span><span>v</span></div>
           <section class="command-card">
             <label for="commandText">Command</label>
-            <p class="helper-text">Pick a quick action or type your own request, then click Run.</p>
+            <p class="helper-text">Use Dashboard here, or send the same command to Nova in Telegram.</p>
             <div class="command-row">
               <textarea id="commandText" placeholder="Type your command...">Prepare Morning Engine for today.</textarea>
               <button class="send-btn" id="sendCommand" aria-label="Run command">Run</button>
@@ -1574,43 +1991,43 @@
             <div class="room-label life">Life Room</div>
 
             <button class="agent-card chief active" data-agent="chief">
-              <span class="character robot-char"><span class="face"></span><span class="body"></span><span class="memory-core"></span></span>
+              <img class="agent-mini" src="assets/avatars-drive/nova-chief.png" alt="Nova Chief" />
               <span class="agent-copy"><strong>Nova Chief</strong><span>Daily command, priority routing</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card asm" data-agent="asm">
-              <span class="character sales-char"><span class="face"></span><span class="body"></span><span class="headset"></span></span>
+              <img class="agent-mini" src="assets/avatars-drive/ace-sales.png" alt="Ace Sales" />
               <span class="agent-copy"><strong>Ace Sales</strong><span>ProXES Sales Lead</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card follow" data-agent="follow">
-              <span class="character follow-char"><span class="face"></span><span class="body"></span><span class="headset"></span><span class="tablet"></span></span>
+              <img class="agent-mini" src="assets/avatars-drive/mina-care.png" alt="Mina Care" />
               <span class="agent-copy"><strong>Mina Care</strong><span>Follow-up & Relationship</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card portfolio" data-agent="portfolio">
-              <span class="character portfolio-char"><span class="face"></span><span class="body"></span><span class="glasses"></span></span>
+              <img class="agent-mini" src="assets/avatars-drive/atlas-invest.png" alt="Atlas Invest" />
               <span class="agent-copy"><strong>Atlas Invest</strong><span>DCA & Allocation</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card risk" data-agent="risk">
-              <span class="character risk-char"><span class="face"></span><span class="body"></span><span class="glasses"></span><span class="shield"></span></span>
+              <img class="agent-mini" src="assets/avatars-drive/vera-shield.png" alt="Vera Shield" />
               <span class="agent-copy"><strong>Vera Shield</strong><span>Risk & Protection</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card product" data-agent="product">
-              <span class="character product-char"><span class="face"></span><span class="body"></span><span class="tablet"></span></span>
+              <img class="agent-mini" src="assets/avatars-drive/keno-expert.png" alt="Keno Expert" />
               <span class="agent-copy"><strong>Keno Expert</strong><span>Solutions & Technical</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card document" data-agent="document">
-              <span class="character document-char"><span class="face"></span><span class="body"></span><span class="doc-icon"></span></span>
+              <img class="agent-mini" src="assets/avatars-drive/dara-docs.png" alt="Dara Docs" />
               <span class="agent-copy"><strong>Dara Docs</strong><span>Create - Check - Design</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card comm" data-agent="comm">
-              <span class="character document-char"><span class="face"></span><span class="body"></span><span class="headset"></span></span>
+              <img class="agent-mini" src="assets/avatars-drive/lina-voice.png" alt="Lina Voice" />
               <span class="agent-copy"><strong>Lina Voice</strong><span>Posts, captions, customer tone</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card life" data-agent="life">
-              <span class="character life-char"><span class="face"></span><span class="body"></span><span class="spark"></span></span>
+              <img class="agent-mini" src="assets/avatars-drive/luna-balance.png" alt="Luna Balance" />
               <span class="agent-copy"><strong>Luna Balance</strong><span>Family, timing, balance</span><small><span class="dot"></span> Online</small></span>
             </button>
             <button class="agent-card memory" data-agent="memory">
-              <span class="character robot-char"><span class="face"></span><span class="body"></span><span class="memory-core"></span></span>
+              <img class="agent-mini" src="assets/avatars-drive/nimo-vault.png" alt="Nimo Vault" />
               <span class="agent-copy"><strong>Nimo Vault</strong><span>Data Vault & Long-term Memory</span><small><span class="dot"></span> Online</small></span>
             </button>
 
@@ -1619,7 +2036,19 @@
         </section>
 
         <aside class="panel right">
-          <div class="panel-head"><span>Today</span><span class="badge">7</span></div>
+          <div class="panel-head"><span>Live Coordination</span><span class="badge"><span class="dot"></span> Live</span></div>
+          <div class="coord-tabs"><button class="active">All Activity</button><button>Tasks</button><button>Alerts</button><button>Mentions</button></div>
+          <section class="coordination-card">
+            <div class="live-feed" aria-label="Agent live activity">
+              <article class="feed-item"><img src="assets/avatars-drive/nova-chief.png" alt="Nova Chief" /><div><strong>Nova Chief <span class="feed-tag">DISPATCH</span></strong><p>Good morning team. All systems green. Commands can route from Telegram or Dashboard.</p></div><span class="feed-time">Live</span></article>
+              <article class="feed-item"><img src="assets/avatars-drive/ace-sales.png" alt="Ace Sales" /><div><strong>Ace Sales <span class="feed-tag">SALES</span></strong><p>Ready for visit briefs, proposal prep, and weekly ProXES report routing.</p></div><span class="feed-time">Ready</span></article>
+              <article class="feed-item"><img src="assets/avatars-drive/mina-care.png" alt="Mina Care" /><div><strong>Mina Care <span class="feed-tag">FOLLOW-UP</span></strong><p>Customer follow-up drafts and Salesforce update notes are queued through Nova.</p></div><span class="feed-time">Ready</span></article>
+              <article class="feed-item"><img src="assets/avatars-drive/atlas-invest.png" alt="Atlas Invest" /><div><strong>Atlas Invest <span class="feed-tag">REPORT</span></strong><p>DCA workflow waits for allocation truth before any buy/wait recommendation.</p></div><span class="feed-time">Ready</span></article>
+              <article class="feed-item"><img src="assets/avatars-drive/vera-shield.png" alt="Vera Shield" /><div><strong>Vera Shield <span class="feed-tag">ALERT</span></strong><p>Risk gate active. No private data or live market claims without source truth.</p></div><span class="feed-time">Guard</span></article>
+              <article class="feed-item"><img src="assets/avatars-drive/nimo-vault.png" alt="Nimo Vault" /><div><strong>Nimo Vault <span class="feed-tag">ARCHIVE</span></strong><p>Drive vault paths are mapped; approved outputs still need Ou confirmation.</p></div><span class="feed-time">Vault</span></article>
+            </div>
+          </section>
+          <div class="panel-head" style="margin-top:18px"><span>Tasks & Tickets</span><span class="badge">7</span></div>
           <div class="tabs"><button class="active">Today</button><button>Upcoming</button><button>Waiting</button></div>
           <div id="taskQueue"></div>
           <button class="view-all">View All Tasks</button>
@@ -1691,10 +2120,12 @@
       </section>
 
       <footer class="footer">
-        <div><strong>Data Source</strong> Mock Data + Local History</div>
-        <div><strong>Backend</strong> Cloudflare AI or safe mock fallback</div>
-        <div><strong>GitHub Pages</strong> Local fallback mode</div>
-        <div><strong>Tip</strong> Click Run on Cloudflare to test the agent backend.</div>
+        <div><strong>Ou AI Command Office</strong><br />2026 Ou AI Systems</div>
+        <div class="footer-metric"><i>AG</i><span>Active Agents<b>10 / 10</b></span></div>
+        <div class="footer-metric"><i>TK</i><span>Tasks in Progress<b>24</b></span></div>
+        <div class="footer-metric"><i>OK</i><span>Completed Today<b>128</b></span></div>
+        <div class="footer-metric"><i>SH</i><span>System Health<b>100%</b></span></div>
+        <div><strong>Intelligence. Coordination. Impact.</strong><br />Together, we get it done.</div>
       </footer>
     </div>
 
