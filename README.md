@@ -162,8 +162,10 @@ Cloudflare Pages deployment:
 
 - It receives dashboard commands through `POST /api/command`.
 - It routes the command to the right agent room.
+- It embeds `prompts/nova_orchestration_system.md` as the Nova Chief orchestration contract for AI responses.
+- It returns orchestration metadata: Nova owner, global workflow, QC criteria, and final delivery rule.
 - It calls the OpenAI Responses API server-side when `OPENAI_API_KEY` is configured.
-- It falls back to public-safe mock output if OpenAI is not configured or the API call fails.
+- It falls back to public-safe smart local draft output if OpenAI is not configured or the API call fails.
 - It does not read or write Google Drive.
 - It does not store private data.
 - It must never expose `private_context` data in the UI.

@@ -61,6 +61,50 @@ const AGENT_RULES = {
   }
 };
 
+const NOVA_ORCHESTRATION_SYSTEM_PROMPT = [
+  "You are the orchestration engine for Ou AI Command Office.",
+  "",
+  "The system has one central Chief of Staff agent named Nova Chief and multiple specialist sub agents. All requests from Ou must first be received by Nova Chief.",
+  "",
+  "Nova Chief must:",
+  "1. Receive the request from Ou.",
+  "2. Understand the objective.",
+  "3. Classify the task type.",
+  "4. Determine priority.",
+  "5. Select only the relevant sub agents.",
+  "6. Assign clear tasks to selected sub agents.",
+  "7. Collect all sub-agent outputs.",
+  "8. Consolidate the outputs into one coherent final result.",
+  "9. Perform quality control before delivery.",
+  "10. If the result is not good enough, send it back to the relevant sub agents for revision.",
+  "11. Once approved, store the final output in Google Drive.",
+  "12. Record an activity log.",
+  "13. Send the final approved result back to Ou.",
+  "",
+  "No sub agent may deliver final output directly to Ou. Every sub-agent result must return to Nova Chief first.",
+  "",
+  "Global workflow:",
+  "Ou Input -> Nova Chief -> Specialist Sub Agents -> Return to Nova -> Nova Review/QC -> Google Drive Storage -> Log Entry -> Final Delivery to Ou",
+  "",
+  "Agent roster:",
+  "1. Nova Chief - Chief of Staff - Central command, task classification, priority routing, agent assignment, quality control, final approval.",
+  "2. Ace Sales - ASM Sales Agent - Sales leads, CRM, pipeline tracking, proposals, sales follow-up.",
+  "3. Mina Care - Customer Follow-up - Customer relationship, follow-up, retention, reminders, after-sales care.",
+  "4. Atlas Invest - Portfolio Agent - Portfolio analysis, DCA planning, asset allocation, investment monitoring.",
+  "5. Vera Shield - Risk Manager - Risk analysis, downside protection, compliance checking, alerts, safeguards.",
+  "6. Keno Expert - Product Knowledge - Product knowledge, technical explanation, product comparison, solution mapping.",
+  "7. Dara Docs - Document Studio - Documents, slides, sheets, writing, formatting, QA, design.",
+  "8. Lina Voice - LinkedIn & Email - LinkedIn posts, email writing, captions, tone of voice, customer-facing copy.",
+  "9. Luna Balance - Life Room - Family, routines, reminders, personal planning, timing, life balance.",
+  "10. Nimo Vault - Memory Steward - Memory vault, file organization, tagging, retrieval, versioning, long-term knowledge.",
+  "",
+  "Quality control criteria: Correctness, Completeness, Clarity, Consistency, Actionability.",
+  "",
+  "Storage rule: After QC approval, store the final output in Google Drive using a structured folder path based on task type. Then create a log entry before sending the result back to Ou.",
+  "",
+  "Response rule: Final responses to Ou must be concise, useful, and action-ready. If files were created or stored, include the file name, storage path, and short summary."
+].join("\n");
+
 function inferAgent(command = "", requestedAgent = "") {
   const value = `${requestedAgent} ${command}`.toLowerCase();
   if (value.includes("nova") || value.includes("chief")) return "chief";
@@ -155,7 +199,8 @@ function buildLogEntry({ command, agentId, agent, mode, now, output }) {
     suggested_log_file: `${date}_COMMAND_LOG_${slug(taskType)}.json`,
     final_output_summary: output.split("\n").find((line) => line.trim())?.slice(0, 140) || "",
     next_action: isDraftMode(mode) ? "Nova reviews and Ou approves before saving to Drive." : "Review mock output; configure OpenAI secret for live AI drafts.",
-    sent_back_to_ou: true
+    sent_back_to_ou: true,
+    orchestration_rule: "All specialist outputs return to Nova Chief before final delivery."
   };
 }
 
@@ -341,16 +386,21 @@ function buildSmartLocalOutput(command, agent, agentId) {
 
 function buildAgentInstructions(agent) {
   return [
-    "You are one agent inside Ou AI Command Office.",
-    "Nova Chief is the single command center. All specialist outputs return to Nova for consolidation and QC before Ou receives the final result.",
+    NOVA_ORCHESTRATION_SYSTEM_PROMPT,
+    "",
+    "Runtime operating rules:",
     "Answer as a practical executive assistant for Ou. Be concise, specific, and action-oriented.",
     "Never claim you accessed Google Drive, Salesforce, email, live market data, or private files unless that data is provided in the user command.",
     "If current portfolio, customer, family, astrology, or confidential data is missing, clearly ask Ou to attach or provide the source of truth.",
     "Do not expose private_context data. Treat all real customer, portfolio, family, and astrology details as private.",
-    `Agent: ${agent.name}`,
-    `Room: ${agent.route}`,
-    `Suggested Drive save folder: ${agent.saveTo}`,
-    `Required output sections: ${agent.sections.join(", ")}`,
+    "",
+    "Current selected execution owner:",
+    `- Agent: ${agent.name}`,
+    `- Room: ${agent.route}`,
+    `- Suggested Drive save folder: ${agent.saveTo}`,
+    `- Required output sections: ${agent.sections.join(", ")}`,
+    "",
+    "When acting as a specialist, write the sub-agent output as returning to Nova Chief for consolidation and QC. Do not speak as if the specialist bypasses Nova.",
     "Always include whether this is a draft for Nova review or a final Nova-approved response.",
     "End with: Next Action for Ou."
   ].join("\n");
@@ -445,6 +495,13 @@ export async function onRequestPost(context) {
       agentName: agent.name,
       room: agent.route,
       saveTo: agent.saveTo
+    },
+    orchestration: {
+      engine: "Nova Chief",
+      version: "nova_orchestration_v1",
+      workflow: "Ou Input -> Nova Chief -> Specialist Sub Agents -> Return to Nova -> Nova Review/QC -> Google Drive Storage -> Log Entry -> Final Delivery to Ou",
+      qcCriteria: ["Correctness", "Completeness", "Clarity", "Consistency", "Actionability"],
+      finalDeliveryRule: "No sub agent may deliver final output directly to Ou."
     },
     output,
     backendNote,
