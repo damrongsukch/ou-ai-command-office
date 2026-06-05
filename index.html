@@ -2065,61 +2065,236 @@
           grid-row: 2;
           position: relative;
           overflow: hidden;
-          background: #07101f;
+          background:
+            radial-gradient(circle at 50% 46%, rgba(35, 120, 255, 0.2), transparent 26%),
+            radial-gradient(circle at 18% 24%, rgba(43, 212, 181, 0.13), transparent 22%),
+            radial-gradient(circle at 77% 28%, rgba(240, 177, 82, 0.12), transparent 22%),
+            linear-gradient(145deg, #06111f 0%, #091522 48%, #040913 100%);
         }
 
-        .office-core img {
+        .office-map {
+          display: grid;
+          grid-template-columns: repeat(12, minmax(0, 1fr));
+          grid-template-rows: repeat(12, minmax(0, 1fr));
+          gap: 14px;
           width: 100%;
           height: 100%;
-          object-fit: cover;
-          object-position: center;
-          display: block;
+          padding: 18px;
+          isolation: isolate;
         }
 
-        .agent-hotspot {
+        .office-map::before {
+          content: "";
           position: absolute;
-          z-index: 3;
-          border: 0;
-          border-radius: 14px;
-          background: rgba(32, 220, 255, 0);
-          color: transparent;
+          inset: 0;
+          z-index: -1;
+          background:
+            linear-gradient(rgba(72, 143, 186, 0.06) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(72, 143, 186, 0.05) 1px, transparent 1px);
+          background-size: 42px 42px;
+          mask-image: radial-gradient(circle at 50% 48%, black 30%, transparent 78%);
         }
 
-        .agent-hotspot:hover {
-          background: rgba(32, 220, 255, 0.08);
-          box-shadow: inset 0 0 0 2px rgba(32, 220, 255, 0.22);
-        }
-
-        .agent-hotspot.nova { left: 40%; top: 22%; width: 18%; height: 30%; }
-        .agent-hotspot.ace { left: 3%; top: 6%; width: 25%; height: 25%; }
-        .agent-hotspot.mina { left: 25%; top: 4%; width: 17%; height: 24%; }
-        .agent-hotspot.atlas { left: 54%; top: 0%; width: 18%; height: 22%; }
-        .agent-hotspot.vera { left: 72%; top: 5%; width: 20%; height: 25%; }
-        .agent-hotspot.lina { left: 10%; top: 34%; width: 20%; height: 24%; }
-        .agent-hotspot.dara { left: 0%; top: 51%; width: 20%; height: 24%; }
-        .agent-hotspot.keno { left: 72%; top: 36%; width: 22%; height: 25%; }
-        .agent-hotspot.luna { left: 28%; top: 64%; width: 18%; height: 22%; }
-        .agent-hotspot.nimo { left: 50%; top: 62%; width: 19%; height: 22%; }
-
-        .agent-label {
+        .office-map::after {
+          content: "";
           position: absolute;
-          z-index: 4;
-          display: inline-flex;
-          align-items: center;
-          gap: 6px;
-          padding: 5px 10px;
-          border: 1px solid rgba(255, 255, 255, 0.16);
-          border-radius: 7px;
-          color: #f2fbff;
-          background: rgba(6, 20, 35, 0.86);
-          box-shadow: 0 8px 18px rgba(0, 0, 0, 0.34);
-          font-size: 13px;
-          font-weight: 800;
+          inset: 18px;
+          z-index: -1;
+          border: 1px solid rgba(86, 175, 255, 0.16);
+          border-radius: 26px;
+          box-shadow: inset 0 0 80px rgba(24, 114, 210, 0.18);
           pointer-events: none;
         }
 
-        .agent-label.mina-label { left: 33.2%; top: 7.2%; background: rgba(141, 62, 105, 0.9); }
-        .agent-label.keno-label { left: 73.6%; top: 55.4%; background: rgba(142, 101, 18, 0.92); }
+        .office-room {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          min-width: 0;
+          min-height: 0;
+          overflow: hidden;
+          padding: 14px;
+          border: 1px solid rgba(125, 194, 241, 0.18);
+          border-radius: 20px;
+          background:
+            linear-gradient(180deg, rgba(15, 35, 58, 0.82), rgba(8, 19, 34, 0.92)),
+            repeating-linear-gradient(90deg, rgba(255,255,255,0.035) 0 1px, transparent 1px 52px);
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 16px 34px rgba(0, 0, 0, 0.26);
+        }
+
+        .office-room::before {
+          content: "";
+          position: absolute;
+          left: 14px;
+          right: 14px;
+          top: 42px;
+          height: 38px;
+          border-radius: 10px;
+          background:
+            linear-gradient(90deg, rgba(31, 220, 255, 0.12), transparent),
+            repeating-linear-gradient(90deg, rgba(68, 205, 255, 0.3) 0 8px, transparent 8px 18px);
+          opacity: 0.7;
+        }
+
+        .office-room::after {
+          content: "";
+          position: absolute;
+          inset: auto 12px 10px;
+          height: 42%;
+          border-radius: 16px 16px 8px 8px;
+          background:
+            linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.04)),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.05), transparent 24%, transparent 72%, rgba(255, 255, 255, 0.05));
+          pointer-events: none;
+        }
+
+        .room-title {
+          position: relative;
+          z-index: 2;
+          align-self: flex-start;
+          padding: 7px 12px;
+          border: 1px solid var(--room-accent, rgba(32, 220, 255, 0.45));
+          border-radius: 9px;
+          color: #f6fbff;
+          background: rgba(5, 12, 24, 0.82);
+          box-shadow: 0 0 22px color-mix(in srgb, var(--room-accent, #20dcff), transparent 70%);
+          font-size: 12px;
+          font-weight: 900;
+          letter-spacing: 0;
+          text-transform: uppercase;
+        }
+
+        .room-agents {
+          position: relative;
+          z-index: 2;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 10px;
+          align-items: end;
+        }
+
+        .agent-node {
+          position: relative;
+          display: grid;
+          grid-template-rows: minmax(0, 1fr) auto;
+          align-items: end;
+          min-width: 0;
+          min-height: 154px;
+          padding: 0 8px 10px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+          color: #eaf6ff;
+          background: linear-gradient(180deg, rgba(3, 12, 24, 0.08), rgba(3, 12, 24, 0.72));
+          box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.08);
+          cursor: pointer;
+          transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+        }
+
+        .agent-node:hover,
+        .agent-node:focus-visible {
+          transform: translateY(-3px);
+          border-color: var(--room-accent, rgba(32, 220, 255, 0.8));
+          box-shadow: 0 14px 28px rgba(0, 0, 0, 0.28), 0 0 24px color-mix(in srgb, var(--room-accent, #20dcff), transparent 75%);
+          outline: 0;
+        }
+
+        .agent-node img,
+        .feed-avatar {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          object-position: bottom center;
+          display: block;
+        }
+
+        .agent-node img {
+          min-height: 0;
+          max-height: 132px;
+          filter: drop-shadow(0 15px 16px rgba(0, 0, 0, 0.38));
+        }
+
+        .agent-chip {
+          position: relative;
+          z-index: 3;
+          display: inline-flex;
+          flex-direction: column;
+          gap: 2px;
+          width: 100%;
+          padding: 7px 9px;
+          border: 1px solid rgba(255, 255, 255, 0.14);
+          border-radius: 10px;
+          color: #f2fbff;
+          background: rgba(3, 12, 24, 0.82);
+          box-shadow: 0 8px 18px rgba(0, 0, 0, 0.34);
+          text-align: left;
+        }
+
+        .agent-chip strong {
+          overflow: hidden;
+          color: #ffffff;
+          font-size: 12px;
+          font-weight: 900;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .agent-chip span {
+          overflow: hidden;
+          color: #aebfd1;
+          font-size: 10px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        .agent-chip small {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          color: var(--green);
+          font-size: 9px;
+          font-weight: 900;
+          text-transform: uppercase;
+        }
+
+        .agent-chip small::before {
+          content: "";
+          width: 6px;
+          height: 6px;
+          border-radius: 999px;
+          background: currentColor;
+        }
+
+        .sales-room { --room-accent: #34d399; grid-column: 1 / 5; grid-row: 1 / 4; }
+        .finance-room { --room-accent: #3b82f6; grid-column: 5 / 10; grid-row: 1 / 4; }
+        .command-room { --room-accent: #22d3ee; grid-column: 5 / 9; grid-row: 4 / 9; z-index: 3; align-items: center; text-align: center; }
+        .content-room { --room-accent: #a78bfa; grid-column: 1 / 5; grid-row: 4 / 9; }
+        .product-room { --room-accent: #f59e0b; grid-column: 10 / 13; grid-row: 1 / 5; }
+        .life-room { --room-accent: #c084fc; grid-column: 3 / 9; grid-row: 9 / 13; }
+        .vault-room { --room-accent: #14b8a6; grid-column: 9 / 13; grid-row: 5 / 13; }
+
+        .command-room .room-agents {
+          width: min(250px, 62%);
+          grid-template-columns: 1fr;
+          margin: 0 auto;
+        }
+
+        .command-room .agent-node {
+          min-height: 238px;
+          padding-inline: 18px;
+          background:
+            radial-gradient(circle at 50% 78%, rgba(32, 220, 255, 0.28), transparent 30%),
+            linear-gradient(180deg, rgba(4, 19, 38, 0.08), rgba(3, 12, 24, 0.76));
+        }
+
+        .command-room .agent-node img {
+          max-height: 196px;
+        }
+
+        .single-agent .room-agents {
+          grid-template-columns: minmax(150px, 0.72fr);
+          justify-content: center;
+        }
 
         .agent-detail {
           position: absolute;
@@ -2222,9 +2397,10 @@
         .os-feed img {
           width: 44px;
           height: 44px;
-          object-fit: cover;
+          object-fit: contain;
           object-position: top;
           border-radius: 50%;
+          background: rgba(7, 18, 34, 0.82);
         }
 
         .os-feed strong {
@@ -2397,20 +2573,93 @@
             <div class="os-top-status"><span class="os-pill">All Systems Operational</span><span>10:20:01 PM</span><span>Ou</span></div>
           </header>
 
-          <main class="office-core">
-            <img src="assets/ou-ai-office-core.png" alt="Ou AI Command Office agent rooms" />
-            <button class="agent-hotspot nova" type="button" data-agent-key="nova">Nova Chief</button>
-            <button class="agent-hotspot ace" type="button" data-agent-key="ace">Ace Sales</button>
-            <button class="agent-hotspot mina" type="button" data-agent-key="mina">Mina Care</button>
-            <button class="agent-hotspot atlas" type="button" data-agent-key="atlas">Atlas Invest</button>
-            <button class="agent-hotspot vera" type="button" data-agent-key="vera">Vera Shield</button>
-            <button class="agent-hotspot lina" type="button" data-agent-key="lina">Lina Voice</button>
-            <button class="agent-hotspot dara" type="button" data-agent-key="dara">Dara Docs</button>
-            <button class="agent-hotspot keno" type="button" data-agent-key="keno">Keno Expert</button>
-            <button class="agent-hotspot luna" type="button" data-agent-key="luna">Luna Balance</button>
-            <button class="agent-hotspot nimo" type="button" data-agent-key="nimo">Nimo Vault</button>
-            <span class="agent-label mina-label">Mina Care</span>
-            <span class="agent-label keno-label">Keno Expert</span>
+          <main class="office-core office-map">
+            <section class="office-room sales-room" aria-label="Sales and Relationship room">
+              <div class="room-title">Sales &amp; Relationship</div>
+              <div class="room-agents">
+                <button class="agent-node" type="button" data-agent-key="ace">
+                  <img src="assets/office-agents/ace-sales.png" alt="Ace Sales" />
+                  <span class="agent-chip"><strong>Ace Sales</strong><span>ASM Sales Agent</span><small>online</small></span>
+                </button>
+                <button class="agent-node" type="button" data-agent-key="mina">
+                  <img src="assets/office-agents/mina-care.png" alt="Mina Care" />
+                  <span class="agent-chip"><strong>Mina Care</strong><span>Customer Follow-up</span><small>online</small></span>
+                </button>
+              </div>
+            </section>
+
+            <section class="office-room finance-room" aria-label="Finance and Risk room">
+              <div class="room-title">Finance &amp; Risk</div>
+              <div class="room-agents">
+                <button class="agent-node" type="button" data-agent-key="atlas">
+                  <img src="assets/office-agents/atlas-invest.png" alt="Atlas Invest" />
+                  <span class="agent-chip"><strong>Atlas Invest</strong><span>Portfolio Agent</span><small>ready</small></span>
+                </button>
+                <button class="agent-node" type="button" data-agent-key="vera">
+                  <img src="assets/office-agents/vera-shield.png" alt="Vera Shield" />
+                  <span class="agent-chip"><strong>Vera Shield</strong><span>Risk Manager</span><small>guard</small></span>
+                </button>
+              </div>
+            </section>
+
+            <section class="office-room command-room" aria-label="Nova command room">
+              <div class="room-title">Nova Command</div>
+              <div class="room-agents">
+                <button class="agent-node chief-node" type="button" data-agent-key="nova">
+                  <img src="assets/office-agents/nova-chief.png" alt="Nova Chief" />
+                  <span class="agent-chip"><strong>Nova Chief</strong><span>Chief of Staff</span><small>dispatch</small></span>
+                </button>
+              </div>
+            </section>
+
+            <section class="office-room content-room" aria-label="Content and Documents room">
+              <div class="room-title">Content &amp; Documents</div>
+              <div class="room-agents">
+                <button class="agent-node" type="button" data-agent-key="lina">
+                  <img src="assets/office-agents/lina-voice.png" alt="Lina Voice" />
+                  <span class="agent-chip"><strong>Lina Voice</strong><span>LinkedIn &amp; Email</span><small>content</small></span>
+                </button>
+                <button class="agent-node" type="button" data-agent-key="dara">
+                  <img src="assets/office-agents/dara-docs.png" alt="Dara Docs" />
+                  <span class="agent-chip"><strong>Dara Docs</strong><span>Document Studio</span><small>docs</small></span>
+                </button>
+              </div>
+            </section>
+
+            <section class="office-room product-room single-agent" aria-label="Product knowledge room">
+              <div class="room-title">Product Knowledge</div>
+              <div class="room-agents">
+                <button class="agent-node" type="button" data-agent-key="keno">
+                  <img src="assets/office-agents/keno-expert.png" alt="Keno Expert" />
+                  <span class="agent-chip"><strong>Keno Expert</strong><span>Product Knowledge</span><small>tech</small></span>
+                </button>
+              </div>
+            </section>
+
+            <section class="office-room life-room" aria-label="Life and Memory room">
+              <div class="room-title">Life &amp; Memory</div>
+              <div class="room-agents">
+                <button class="agent-node" type="button" data-agent-key="luna">
+                  <img src="assets/office-agents/luna-balance.png" alt="Luna Balance" />
+                  <span class="agent-chip"><strong>Luna Balance</strong><span>Life Room</span><small>planner</small></span>
+                </button>
+                <button class="agent-node" type="button" data-agent-key="nimo">
+                  <img src="assets/office-agents/nimo-vault.png" alt="Nimo Vault" />
+                  <span class="agent-chip"><strong>Nimo Vault</strong><span>Memory Steward</span><small>vault</small></span>
+                </button>
+              </div>
+            </section>
+
+            <section class="office-room vault-room single-agent" aria-label="Archive vault">
+              <div class="room-title">Archive Vault</div>
+              <div class="room-agents">
+                <button class="agent-node" type="button" data-agent-key="nimo">
+                  <img src="assets/office-agents/nimo-vault.png" alt="Nimo Vault archive station" />
+                  <span class="agent-chip"><strong>Nimo Vault</strong><span>Google Drive / Logs</span><small>storage</small></span>
+                </button>
+              </div>
+            </section>
+
             <section class="agent-detail" id="agentDetail"><strong>Nova Chief</strong><p>Click any agent to see current role, work status, and next action.</p><small>READY</small></section>
           </main>
 
@@ -2418,12 +2667,12 @@
             <h2>Live Coordination <span class="dot"></span></h2>
             <div class="os-tabs"><button class="active">All Activity</button><button>Tasks</button><button>Alerts</button><button>Mentions</button></div>
             <div class="os-feed">
-              <article><img src="assets/avatars-drive/nova-chief.png" alt="Nova Chief" /><div><strong>Nova Chief</strong><p>Ready to dispatch Telegram and dashboard commands.</p></div><small>Live</small></article>
-              <article><img src="assets/avatars-drive/ace-sales.png" alt="Ace Sales" /><div><strong>Ace Sales</strong><p>Closed-loop sales routing is ready for visit briefs and proposals.</p></div><small>Update</small></article>
-              <article><img src="assets/avatars-drive/mina-care.png" alt="Mina Care" /><div><strong>Mina Care</strong><p>Follow-up drafts, retention notes, and reminders queued.</p></div><small>Follow-up</small></article>
-              <article><img src="assets/avatars-drive/atlas-invest.png" alt="Atlas Invest" /><div><strong>Atlas Invest</strong><p>DCA waits for allocation truth before decision.</p></div><small>Ready</small></article>
-              <article><img src="assets/avatars-drive/vera-shield.png" alt="Vera Shield" /><div><strong>Vera Shield</strong><p>Risk gate active for missing or private source data.</p></div><small>Guard</small></article>
-              <article><img src="assets/avatars-drive/nimo-vault.png" alt="Nimo Vault" /><div><strong>Nimo Vault</strong><p>Drive vault paths mapped for approved outputs.</p></div><small>Vault</small></article>
+              <article><img src="assets/office-agents/nova-chief.png" alt="Nova Chief" /><div><strong>Nova Chief</strong><p>Ready to dispatch Telegram and dashboard commands.</p></div><small>Live</small></article>
+              <article><img src="assets/office-agents/ace-sales.png" alt="Ace Sales" /><div><strong>Ace Sales</strong><p>Closed-loop sales routing is ready for visit briefs and proposals.</p></div><small>Update</small></article>
+              <article><img src="assets/office-agents/mina-care.png" alt="Mina Care" /><div><strong>Mina Care</strong><p>Follow-up drafts, retention notes, and reminders queued.</p></div><small>Follow-up</small></article>
+              <article><img src="assets/office-agents/atlas-invest.png" alt="Atlas Invest" /><div><strong>Atlas Invest</strong><p>DCA waits for allocation truth before decision.</p></div><small>Ready</small></article>
+              <article><img src="assets/office-agents/vera-shield.png" alt="Vera Shield" /><div><strong>Vera Shield</strong><p>Risk gate active for missing or private source data.</p></div><small>Guard</small></article>
+              <article><img src="assets/office-agents/nimo-vault.png" alt="Nimo Vault" /><div><strong>Nimo Vault</strong><p>Drive vault paths mapped for approved outputs.</p></div><small>Vault</small></article>
             </div>
           </aside>
 
