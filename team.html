@@ -6,516 +6,621 @@
     <title>Ou AI Command Office - Agent Team</title>
     <style>
       :root {
-        color-scheme: light;
-        --ink: #0b2a63;
-        --muted: #55708f;
-        --line: #c9d7ee;
-        --soft: #f5f9ff;
-        --green: #198f52;
-        --blue: #1763c7;
-        --purple: #6742ad;
-        --olive: #6c9f39;
-        --cyan: #087894;
-        --shadow: 0 18px 45px rgba(12, 39, 86, 0.12);
+        color-scheme: dark;
+        --bg: #030b16;
+        --panel: #071525;
+        --panel-2: #0a1b2f;
+        --line: rgba(119, 171, 217, 0.2);
+        --line-strong: rgba(32, 220, 255, 0.34);
+        --text: #f4f8ff;
+        --muted: #9fb1c8;
+        --cyan: #22d3ee;
+        --green: #34d399;
+        --blue: #60a5fa;
+        --pink: #f472b6;
+        --purple: #a78bfa;
+        --gold: #f59e0b;
+        --shadow: 0 24px 70px rgba(0, 0, 0, 0.38);
       }
 
       * { box-sizing: border-box; }
 
       body {
         margin: 0;
-        color: var(--ink);
+        min-height: 100vh;
+        overflow-x: hidden;
+        color: var(--text);
         background:
-          linear-gradient(180deg, rgba(255,255,255,0.94), rgba(244,248,255,0.96)),
-          radial-gradient(circle at 16% 8%, rgba(21,99,196,0.12), transparent 34%);
+          radial-gradient(circle at 42% 14%, rgba(32, 220, 255, 0.14), transparent 34%),
+          radial-gradient(circle at 75% 84%, rgba(167, 139, 250, 0.13), transparent 30%),
+          var(--bg);
         font-family: Inter, "Segoe UI", Arial, sans-serif;
       }
 
       a { color: inherit; text-decoration: none; }
 
-      .page {
-        width: min(1440px, calc(100% - 28px));
-        margin: 0 auto;
-        padding: 24px 0 28px;
-      }
-
-      .hero {
+      .os-shell {
+        width: 100vw;
+        min-height: 100vh;
         display: grid;
-        grid-template-columns: 1fr auto;
-        gap: 22px;
-        align-items: start;
-        padding: 18px 0 20px;
-        border-bottom: 3px solid var(--ink);
-      }
-
-      .hero h1 {
-        margin: 0;
-        font-size: clamp(34px, 5.4vw, 74px);
-        line-height: 0.95;
-        letter-spacing: 0;
-      }
-
-      .hero p {
-        max-width: 760px;
-        margin: 12px 0 0;
-        color: var(--cyan);
-        font-size: clamp(15px, 1.8vw, 22px);
-        font-weight: 800;
-      }
-
-      .nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        gap: 9px;
-      }
-
-      .nav a {
-        padding: 10px 13px;
+        grid-template-columns: 204px minmax(0, 1fr) 330px;
+        grid-template-rows: 70px minmax(0, 1fr) 64px;
+        background: rgba(4, 16, 32, 0.94);
         border: 1px solid var(--line);
-        border-radius: 8px;
-        background: white;
-        box-shadow: 0 8px 20px rgba(12,39,86,0.06);
-        font-size: 13px;
-        font-weight: 900;
       }
 
-      .chief-card,
-      .pipeline,
-      .team-card,
-      .team-group {
-        background: rgba(255,255,255,0.9);
-        border: 2px solid var(--ink);
-        border-radius: 12px;
-        box-shadow: var(--shadow);
+      .side {
+        grid-row: 1 / 4;
+        padding: 22px 14px;
+        border-right: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(4, 14, 27, 0.98), rgba(2, 8, 16, 0.98));
       }
 
-      .chief-card {
-        display: grid;
-        grid-template-columns: 260px minmax(0, 1fr);
-        gap: 24px;
-        margin: 24px auto 18px;
-        padding: 22px;
-        width: min(820px, 100%);
-      }
-
-      .chief-photo {
-        display: grid;
-        gap: 12px;
-        align-content: start;
-        justify-items: center;
-        text-align: center;
-      }
-
-      .chief-photo img {
-        width: min(100%, 230px);
-        max-height: 260px;
-        object-fit: contain;
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        background: #f7fbff;
-        box-shadow: 0 14px 28px rgba(17, 50, 94, 0.1);
-      }
-
-      .chief-photo h2,
-      .team-card h3 {
-        margin: 0;
-        font-size: 27px;
-      }
-
-      .info-list {
-        display: grid;
-        gap: 11px;
-      }
-
-      .info-row {
-        display: grid;
-        grid-template-columns: 110px minmax(0, 1fr);
-        gap: 12px;
-        align-items: start;
-        font-size: 14px;
-        line-height: 1.45;
-      }
-
-      .info-row b {
-        color: var(--cyan);
-        text-transform: uppercase;
-        font-size: 12px;
-      }
-
-      .mini-pipeline {
-        padding: 10px 12px;
-        border: 1px solid #9bb7dd;
-        border-radius: 9px;
-        background: #f7fbff;
-        font-weight: 800;
-      }
-
-      .nova-rule {
-        width: min(820px, 100%);
-        margin: 0 auto 18px;
-        padding: 13px 16px;
-        border: 2px solid var(--ink);
-        border-radius: 10px;
-        background: white;
-        text-align: center;
-        font-weight: 900;
-      }
-
-      .team-board {
-        display: grid;
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-        gap: 18px;
-      }
-
-      .team-group {
-        overflow: hidden;
-        border-color: var(--group-color);
-      }
-
-      .group-head {
+      .brand {
         display: flex;
         align-items: center;
         gap: 10px;
-        min-height: 66px;
-        padding: 12px 14px;
-        color: white;
-        background: var(--group-color);
+        margin-bottom: 26px;
+        font-size: 27px;
+        font-weight: 900;
       }
 
-      .group-head span {
+      .brand-mark {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        border: 6px solid var(--cyan);
+        border-right-color: var(--purple);
+      }
+
+      .menu {
+        display: grid;
+        gap: 8px;
+      }
+
+      .menu a {
+        display: grid;
+        grid-template-columns: 34px 1fr auto;
+        align-items: center;
+        gap: 10px;
+        padding: 11px 12px;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        color: #d7e6fb;
+        font-size: 13px;
+      }
+
+      .menu a.active,
+      .menu a:hover {
+        border-color: rgba(32, 220, 255, 0.28);
+        background: rgba(32, 132, 255, 0.12);
+        color: white;
+      }
+
+      .nav-icon {
+        width: 24px;
+        height: 24px;
         display: grid;
         place-items: center;
-        width: 38px;
-        height: 38px;
-        border-radius: 50%;
-        background: white;
-        color: var(--group-color);
-        font-weight: 950;
+        border-radius: 8px;
+        background: rgba(32, 220, 255, 0.11);
+        color: var(--cyan);
+        font-size: 11px;
+        font-weight: 900;
       }
 
-      .group-head h2 {
-        margin: 0;
-        font-size: 20px;
-        line-height: 1.05;
+      .side-card {
+        margin-top: 26px;
+        padding: 14px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(9, 28, 49, 0.7);
+      }
+
+      .side-card h3 {
+        margin: 0 0 12px;
+        font-size: 12px;
         text-transform: uppercase;
       }
 
-      .group-body {
+      .side-card p,
+      .side-card li {
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.5;
+      }
+
+      .side-card ul {
+        display: grid;
+        gap: 7px;
+        padding-left: 16px;
+        margin: 0;
+      }
+
+      .topbar {
+        grid-column: 2 / 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 0 24px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .topbar h1 {
+        margin: 0;
+        font-size: 25px;
+        letter-spacing: 0;
+      }
+
+      .topbar small {
+        color: var(--muted);
+      }
+
+      .status-strip {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border: 1px solid rgba(52, 211, 153, 0.26);
+        border-radius: 8px;
+        color: #dffbf0;
+        background: rgba(52, 211, 153, 0.08);
+        font-weight: 800;
+      }
+
+      .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 12px var(--green);
+      }
+
+      .main {
+        grid-column: 2 / 3;
+        overflow: auto;
+        padding: 22px 24px 28px;
+        border-right: 1px solid var(--line);
+      }
+
+      .team-hero {
+        display: grid;
+        grid-template-columns: 280px minmax(0, 1fr);
+        gap: 22px;
+        align-items: stretch;
+        margin-bottom: 20px;
+      }
+
+      .nova-card,
+      .team-card,
+      .pipeline {
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background:
+          linear-gradient(180deg, rgba(12, 32, 53, 0.9), rgba(6, 18, 33, 0.92));
+        box-shadow: var(--shadow);
+      }
+
+      .nova-card {
+        padding: 16px;
         display: grid;
         gap: 12px;
-        padding: 12px;
+        min-height: 360px;
+      }
+
+      .nova-card img {
+        width: 100%;
+        height: 260px;
+        object-fit: contain;
+        object-position: bottom center;
+        border-radius: 10px;
+        background: radial-gradient(circle at 50% 70%, rgba(32, 220, 255, 0.16), transparent 55%);
+      }
+
+      .nova-card h2,
+      .brief h2,
+      .pipeline h2 {
+        margin: 0;
+        font-size: 24px;
+      }
+
+      .nova-card p,
+      .brief p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .brief {
+        padding: 18px;
+        border: 1px solid var(--line-strong);
+        border-radius: 12px;
+        background:
+          linear-gradient(135deg, rgba(32, 220, 255, 0.11), rgba(167, 139, 250, 0.07)),
+          rgba(7, 21, 37, 0.9);
+      }
+
+      .brief-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .brief-stat {
+        padding: 13px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: rgba(3, 11, 22, 0.42);
+      }
+
+      .brief-stat span {
+        color: var(--muted);
+        font-size: 11px;
+        text-transform: uppercase;
+      }
+
+      .brief-stat strong {
+        display: block;
+        margin-top: 8px;
+        font-size: 22px;
+        color: var(--green);
+      }
+
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(150px, 1fr));
+        gap: 14px;
       }
 
       .team-card {
-        display: grid;
-        grid-template-columns: minmax(98px, 0.42fr) minmax(0, 1fr);
-        gap: 12px;
+        position: relative;
+        overflow: hidden;
+        min-height: 312px;
         padding: 12px;
-        border-color: color-mix(in srgb, var(--group-color) 60%, #ffffff);
-        box-shadow: none;
+        cursor: pointer;
+        transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+      }
+
+      .team-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--agent-color);
+        box-shadow: 0 18px 45px color-mix(in srgb, var(--agent-color) 24%, transparent);
       }
 
       .team-card img {
         width: 100%;
-        max-height: 178px;
+        height: 170px;
         object-fit: contain;
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        background: #f7fbff;
+        object-position: bottom center;
+        border-radius: 10px;
+        background: radial-gradient(circle at 50% 72%, color-mix(in srgb, var(--agent-color) 24%, transparent), transparent 58%);
       }
 
       .team-card h3 {
-        color: var(--group-color);
-        font-size: 20px;
+        margin: 10px 0 2px;
+        font-size: 17px;
       }
 
-      .team-card dl {
-        display: grid;
-        gap: 7px;
-        margin: 8px 0 0;
+      .team-card small {
+        color: var(--agent-color);
+        font-weight: 900;
       }
 
-      .team-card dt {
-        color: var(--group-color);
-        font-size: 11px;
-        font-weight: 950;
-        text-transform: uppercase;
-      }
-
-      .team-card dd {
-        margin: 2px 0 0;
-        color: #17325e;
+      .team-card p {
+        margin: 9px 0 0;
+        color: var(--muted);
         font-size: 12px;
         line-height: 1.45;
       }
 
-      .team-card .wide {
-        grid-column: 1 / -1;
+      .skill-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 10px;
+      }
+
+      .skill-row span {
+        padding: 5px 7px;
+        border: 1px solid color-mix(in srgb, var(--agent-color) 46%, transparent);
+        border-radius: 7px;
+        color: #dcecff;
+        background: rgba(255, 255, 255, 0.04);
+        font-size: 10px;
+        font-weight: 800;
       }
 
       .pipeline {
-        margin-top: 20px;
-        padding: 18px;
-      }
-
-      .pipeline h2 {
-        margin: 0 0 14px;
-        text-align: center;
-        font-size: 30px;
-        letter-spacing: 2px;
+        margin-top: 18px;
+        padding: 17px;
       }
 
       .pipe-grid {
         display: grid;
         grid-template-columns: repeat(7, minmax(0, 1fr));
         gap: 10px;
+        margin-top: 14px;
       }
 
       .pipe-step {
         display: grid;
-        gap: 8px;
+        gap: 7px;
         justify-items: center;
         padding: 12px 8px;
         border: 1px solid var(--line);
         border-radius: 10px;
-        background: var(--soft);
+        background: rgba(3, 11, 22, 0.42);
         text-align: center;
       }
 
-      .pipe-icon {
+      .pipe-step b {
         display: grid;
         place-items: center;
-        width: 58px;
-        height: 58px;
-        border: 3px solid var(--cyan);
-        border-radius: 50%;
-        background: white;
-        color: var(--ink);
-        font-size: 24px;
-        font-weight: 950;
+        width: 42px;
+        height: 42px;
+        border-radius: 12px;
+        color: #041020;
+        background: var(--cyan);
       }
 
       .pipe-step strong {
-        font-size: 14px;
+        font-size: 12px;
       }
 
       .pipe-step small {
         color: var(--muted);
+        font-size: 10px;
+      }
+
+      .right {
+        grid-column: 3 / 4;
+        grid-row: 1 / 4;
+        padding: 18px 14px;
+        background: rgba(3, 11, 22, 0.96);
+      }
+
+      .right h2 {
+        margin: 0 0 14px;
+        font-size: 16px;
+      }
+
+      .activity {
+        display: grid;
+        gap: 10px;
+      }
+
+      .activity article {
+        display: grid;
+        grid-template-columns: 42px 1fr auto;
+        gap: 10px;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .activity img {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        object-fit: cover;
+        background: rgba(32, 220, 255, 0.08);
+      }
+
+      .activity strong {
+        display: block;
+        font-size: 13px;
+      }
+
+      .activity p {
+        margin: 3px 0 0;
+        color: var(--muted);
         font-size: 11px;
-        line-height: 1.3;
+        line-height: 1.35;
+      }
+
+      .activity small {
+        color: var(--green);
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      .footer {
+        grid-column: 2 / 3;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 0 24px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .footer strong {
+        color: var(--green);
+        font-size: 16px;
       }
 
       @media (max-width: 1180px) {
-        .team-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .os-shell {
+          grid-template-columns: 78px minmax(0, 1fr);
+          grid-template-rows: 70px auto auto;
+        }
+        .side { grid-row: 1 / 4; }
+        .brand span,
+        .menu a span:not(.nav-icon),
+        .menu a em,
+        .side-card { display: none; }
+        .menu a { grid-template-columns: 1fr; justify-items: center; padding: 10px; }
+        .topbar, .main, .footer { grid-column: 2 / 3; }
+        .right { display: none; }
+        .team-grid { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
         .pipe-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
       }
 
-      @media (max-width: 720px) {
-        .page { width: min(100% - 18px, 1440px); padding-top: 14px; }
-        .hero { grid-template-columns: 1fr; }
-        .nav { justify-content: flex-start; }
-        .chief-card { grid-template-columns: 1fr; padding: 16px; }
-        .info-row { grid-template-columns: 1fr; gap: 4px; }
-        .team-board, .pipe-grid { grid-template-columns: 1fr; }
-        .team-card { grid-template-columns: minmax(92px, 0.38fr) minmax(0, 1fr); }
-        .team-card img { max-height: 150px; }
+      @media (max-width: 760px) {
+        .os-shell {
+          display: block;
+          width: 100%;
+        }
+        .side {
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          display: flex;
+          gap: 12px;
+          overflow-x: auto;
+          padding: 12px;
+        }
+        .brand { margin: 0; min-width: 122px; }
+        .menu {
+          display: flex;
+          gap: 8px;
+        }
+        .menu a {
+          min-width: 54px;
+        }
+        .topbar {
+          padding: 16px;
+          align-items: flex-start;
+        }
+        .status-strip { display: none; }
+        .main { padding: 14px; }
+        .team-hero { grid-template-columns: 1fr; }
+        .brief-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .pipe-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .footer { padding: 16px; flex-wrap: wrap; }
       }
     </style>
   </head>
   <body>
-    <main class="page">
-      <header class="hero">
-        <div>
-          <h1>Ou AI Command Office</h1>
-          <p>Organization Chart • Character Guide • Skills • Workflow</p>
-        </div>
-        <nav class="nav" aria-label="Team navigation">
-          <a href="./">Dashboard</a>
-          <a href="./docs/nova_orchestration_sop.md">Nova SOP</a>
-          <a href="./docs/telegram_nova_setup.md">Telegram Setup</a>
+    <div class="os-shell">
+      <aside class="side">
+        <a class="brand" href="./"><span class="brand-mark"></span><span>Ou AI OS</span></a>
+        <nav class="menu" aria-label="Office navigation">
+          <a href="./"><span class="nav-icon">CC</span><span>Command Center</span></a>
+          <a class="active" href="./team.html"><span class="nav-icon">AG</span><span>Agents</span><em>10</em></a>
+          <a href="./#workflow"><span class="nav-icon">WF</span><span>Workflow Pipeline</span></a>
+          <a href="./#tasks"><span class="nav-icon">TK</span><span>Tasks & Tickets</span></a>
+          <a href="./#knowledge"><span class="nav-icon">KB</span><span>Knowledge Base</span></a>
+          <a href="./#archive"><span class="nav-icon">AV</span><span>Archive Vault</span></a>
         </nav>
+        <section class="side-card">
+          <h3>Team Rule</h3>
+          <p>Every specialist result returns to Nova Chief for QC before delivery, Drive storage, and activity logging.</p>
+        </section>
+      </aside>
+
+      <header class="topbar">
+        <div>
+          <h1>Agent Team</h1>
+          <small>Character guide, skills, and workflow ownership</small>
+        </div>
+        <div class="status-strip">
+          <span class="pill"><span class="dot"></span> 10 Agents Online</span>
+          <span>Theme synced with Command Office</span>
+        </div>
       </header>
 
-      <section class="chief-card">
-        <div class="chief-photo">
-          <img src="assets/avatars-drive/nova-chief.png" alt="Nova Chief avatar" />
-          <h2>Nova Chief</h2>
-        </div>
-        <div class="info-list">
-          <div class="info-row"><b>Position</b><span>Chief of Staff</span></div>
-          <div class="info-row"><b>Personality</b><span>Strategic • Decisive • Calm</span></div>
-          <div class="info-row"><b>Duty</b><span>Prioritize tasks, route commands, coordinate agents, approve final direction.</span></div>
-          <div class="info-row"><b>Skills</b><span>Planning, routing, synthesis, escalation, QC, Drive storage coordination, audit logging.</span></div>
-          <div class="info-row"><b>Pipeline</b><span class="mini-pipeline">Receive from Ou → Prioritize → Assign Sub Agents → Review Results → Quality Check → Store to Google Drive → Log → Send to Ou</span></div>
-          <div class="info-row"><b>Workflow</b><span>Nova receives Ou's request, classifies and prioritizes it, dispatches to the right sub agents, consolidates outputs, performs a quality check, stores approved files to Google Drive, writes a log entry, and sends the final output back to Ou.</span></div>
-        </div>
-      </section>
+      <main class="main">
+        <section class="team-hero">
+          <article class="nova-card">
+            <img src="assets/office-agents/nova-chief.png" alt="Nova Chief avatar" />
+            <div>
+              <h2>Nova Chief</h2>
+              <p>Chief of Staff. Receives every Ou request first, classifies priority, routes only the relevant agents, performs QC, stores approved output, logs activity, and sends the final result back.</p>
+            </div>
+          </article>
 
-      <div class="nova-rule">All sub-agent outputs return to Nova for review before storage and delivery.</div>
+          <article class="brief">
+            <h2>Ou AI Command Office Team</h2>
+            <p>This team structure keeps daily work simple: one command center, specialist execution, Nova review, Google Drive storage, and a concise final response to Ou.</p>
+            <div class="brief-grid">
+              <div class="brief-stat"><span>Agents</span><strong>10 / 10</strong></div>
+              <div class="brief-stat"><span>Rooms</span><strong>5</strong></div>
+              <div class="brief-stat"><span>QC Owner</span><strong>Nova</strong></div>
+              <div class="brief-stat"><span>Storage</span><strong>Drive</strong></div>
+            </div>
+          </article>
+        </section>
 
-      <section class="team-board" id="teamBoard"></section>
+        <section class="team-grid" id="teamGrid" aria-label="Agent cards"></section>
 
-      <section class="pipeline">
-        <h2>GLOBAL COMMAND PIPELINE</h2>
-        <div class="pipe-grid">
-          <div class="pipe-step"><span class="pipe-icon">OU</span><strong>Ou Input</strong><small>Command or task request</small></div>
-          <div class="pipe-step"><span class="pipe-icon">NC</span><strong>Nova Chief</strong><small>Classify and prioritize</small></div>
-          <div class="pipe-step"><span class="pipe-icon">AG</span><strong>Specialist Agents</strong><small>Relevant agents execute</small></div>
-          <div class="pipe-step"><span class="pipe-icon">QC</span><strong>Nova Review / QC</strong><small>Correct, complete, clear</small></div>
-          <div class="pipe-step"><span class="pipe-icon">GD</span><strong>Google Drive</strong><small>Approved output vault</small></div>
-          <div class="pipe-step"><span class="pipe-icon">LG</span><strong>Log Entry</strong><small>Audit trail metadata</small></div>
-          <div class="pipe-step"><span class="pipe-icon">OK</span><strong>Send to Ou</strong><small>Final action-ready result</small></div>
-        </div>
-      </section>
-    </main>
-
-    <script>
-      const groups = [
-        {
-          title: "Sales & Relationship",
-          color: "#199653",
-          agents: [
-            {
-              name: "Ace Sales",
-              position: "ASM Sales Agent",
-              avatar: "assets/avatars-drive/ace-sales.png",
-              personality: "Proactive • Persuasive • Energetic",
-              duty: "Manage leads, sales pipeline, proposals, deal progress, visit plans, and weekly sales reports.",
-              skills: "CRM • Lead Qualification • Proposal Support • Pipeline Tracking",
-              pipeline: "Receive from Nova → Review objective → Prepare sales recommendation → Return to Nova",
-              workflow: "Capture lead context, qualify opportunity, prepare offer or follow-up plan, and send results to Nova."
-            },
-            {
-              name: "Mina Care",
-              position: "Customer Follow-up",
-              avatar: "assets/avatars-drive/mina-care.png",
-              personality: "Warm • Patient • Caring",
-              duty: "Nurture clients, follow up open items, maintain relationship notes, and support retention.",
-              skills: "Communication • Reminder System • Retention • CRM Updates",
-              pipeline: "Receive from Nova → Review customer context → Draft next step → Return to Nova",
-              workflow: "Connect customer context, check open items, update relationship notes, and send results to Nova."
-            },
-            {
-              name: "Lina Voice",
-              position: "LinkedIn & Email",
-              avatar: "assets/avatars-drive/lina-voice.png",
-              personality: "Creative • Articulate • Brand-savvy",
-              duty: "Write posts, emails, captions, customer-facing copy, and tone variants.",
-              skills: "Copywriting • Tone of Voice • Social Content • Email Content",
-              pipeline: "Receive from Nova → Draft content → Tone check → Return to Nova",
-              workflow: "Brief, draft, edit, check customer tone, prepare options, and send results to Nova."
-            }
-          ]
-        },
-        {
-          title: "Finance & Risk",
-          color: "#1763c7",
-          agents: [
-            {
-              name: "Atlas Invest",
-              position: "Portfolio Agent",
-              avatar: "assets/avatars-drive/atlas-invest.png",
-              personality: "Analytical • Disciplined • Objective",
-              duty: "DCA deals, asset allocation, portfolio summary, rebalancing, and investment monitoring.",
-              skills: "Allocation Strategy • DCA Planning • Budgeting • Dashboarding",
-              pipeline: "Receive from Nova → Analyze portfolio truth → Recommend action → Return to Nova",
-              workflow: "Review holdings, check DCA logic, identify target gaps, and send investment view to Nova."
-            },
-            {
-              name: "Vera Shield",
-              position: "Risk Manager",
-              avatar: "assets/avatars-drive/vera-shield.png",
-              personality: "Cautious • Vigilant • Protective",
-              duty: "Assess risk, downside protection, compliance checks, and safeguards.",
-              skills: "Risk Scoring • Hedge Logic • Checklist • Safeguards",
-              pipeline: "Receive from Nova → Review plan → Flag issues → Return to Nova",
-              workflow: "Input plan, run risk check, flag issues, suggest protection, and send results to Nova."
-            },
-            {
-              name: "Keno Expert",
-              position: "Product Knowledge",
-              avatar: "assets/avatars-drive/keno-expert.png",
-              personality: "Curious • Precise • Solution-oriented",
-              duty: "Explain products, match needs to solutions, and prepare technical support.",
-              skills: "Product Specs • Comparison • Solution Mapping • Technical Q&A",
-              pipeline: "Receive from Nova → Match solution → Explain answer → Return to Nova",
-              workflow: "Identify customer need, match product capability, prepare evidence, and send results to Nova."
-            }
-          ]
-        },
-        {
-          title: "Content & Documents",
-          color: "#6742ad",
-          agents: [
-            {
-              name: "Dara Docs",
-              position: "Document Studio",
-              avatar: "assets/avatars-drive/dara-docs.png",
-              personality: "Organized • Detail-focused • Polished",
-              duty: "Create, check, refine documents, slides, sheets, PDF, forms, and layouts.",
-              skills: "Writing • Formatting • QA • Design • Print Readiness",
-              pipeline: "Receive from Nova → Draft → Check → Refine → Return to Nova",
-              workflow: "Review brief, structure content, create draft, check formatting, and send document output to Nova."
-            }
-          ]
-        },
-        {
-          title: "Life & Memory",
-          color: "#6c9f39",
-          agents: [
-            {
-              name: "Luna Balance",
-              position: "Life Room",
-              avatar: "assets/avatars-drive/luna-balance.png",
-              personality: "Gentle • Intuitive • Supportive",
-              duty: "Family planning, reminders, routines, timing, work-life balance, and astrology lens.",
-              skills: "Scheduling • Reflection • Life Planning • Wellbeing",
-              pipeline: "Receive from Nova → Prioritize life context → Advice/reminder → Return to Nova",
-              workflow: "Review personal input, prioritize reminders or advice, create balance plan, and send results to Nova."
-            },
-            {
-              name: "Nimo Vault",
-              position: "Memory Steward",
-              avatar: "assets/avatars-drive/nimo-vault.png",
-              personality: "Reliable • Meticulous • Discreet",
-              duty: "Manage data vault, memory files, retrieval, long-term knowledge, and archive rules.",
-              skills: "Tagging • Archive • Retrieval • Versioning",
-              pipeline: "Receive from Nova → Tag → Store/Retrieve → Return to Nova",
-              workflow: "Capture information, tag and index it, store or retrieve content, and send memory summary to Nova."
-            }
-          ]
-        }
-      ];
-
-      const teamBoard = document.querySelector("#teamBoard");
-
-      teamBoard.innerHTML = groups.map((group, index) => `
-        <section class="team-group" style="--group-color:${group.color}">
-          <header class="group-head">
-            <span>${index + 1}</span>
-            <h2>${group.title}</h2>
-          </header>
-          <div class="group-body">
-            ${group.agents.map((agent) => `
-              <article class="team-card">
-                <img src="${agent.avatar}" alt="${agent.name} avatar" />
-                <div>
-                  <h3>${agent.name}</h3>
-                  <dl>
-                    <div><dt>Position</dt><dd>${agent.position}</dd></div>
-                    <div><dt>Personality</dt><dd>${agent.personality}</dd></div>
-                  </dl>
-                </div>
-                <dl class="wide">
-                  <div><dt>Duty</dt><dd>${agent.duty}</dd></div>
-                  <div><dt>Skills</dt><dd>${agent.skills}</dd></div>
-                  <div><dt>Pipeline</dt><dd>${agent.pipeline}</dd></div>
-                  <div><dt>Workflow</dt><dd>${agent.workflow}</dd></div>
-                </dl>
-              </article>
-            `).join("")}
+        <section class="pipeline" id="workflow">
+          <h2>Global Command Pipeline</h2>
+          <div class="pipe-grid">
+            <div class="pipe-step"><b>OU</b><strong>Ou Input</strong><small>Command, file, or task</small></div>
+            <div class="pipe-step"><b>NC</b><strong>Nova Chief</strong><small>Classify and prioritize</small></div>
+            <div class="pipe-step"><b>AG</b><strong>Specialist Agents</strong><small>Only relevant agents work</small></div>
+            <div class="pipe-step"><b>QC</b><strong>Nova Review</strong><small>Correct, complete, clear</small></div>
+            <div class="pipe-step"><b>GD</b><strong>Google Drive</strong><small>Approved private vault</small></div>
+            <div class="pipe-step"><b>LG</b><strong>Log Entry</strong><small>Traceable activity record</small></div>
+            <div class="pipe-step"><b>OK</b><strong>Back to Ou</strong><small>Action-ready result</small></div>
           </div>
         </section>
+      </main>
+
+      <aside class="right">
+        <h2>Live Coordination</h2>
+        <div class="activity" id="activity"></div>
+      </aside>
+
+      <footer class="footer">
+        <span>Ou AI Command Office</span>
+        <span>Active Agents <strong>10 / 10</strong></span>
+        <span>Pipeline <strong>Nova First</strong></span>
+        <span>System Health <strong>100%</strong></span>
+      </footer>
+    </div>
+
+    <script>
+      const agents = [
+        { no: 1, key: "nova", name: "Nova Chief", role: "Chief of Staff", color: "#22d3ee", avatar: "assets/office-agents/nova-chief.png", duty: "Central command, task routing, quality control, final approval.", skills: ["Routing", "QC", "Priority"] },
+        { no: 2, key: "ace", name: "Ace Sales", role: "ASM Sales Agent", color: "#34d399", avatar: "assets/office-agents/ace-sales.png", duty: "Visit plans, opportunities, proposal inputs, and sales reporting.", skills: ["CRM", "Pipeline", "Proposal"] },
+        { no: 3, key: "mina", name: "Mina Care", role: "Customer Follow-up", color: "#f472b6", avatar: "assets/office-agents/mina-care.png", duty: "Customer relationship, follow-ups, retention notes, and reminders.", skills: ["Follow-up", "Retention", "Care"] },
+        { no: 4, key: "lina", name: "Lina Voice", role: "LinkedIn & Email", color: "#14b8a6", avatar: "assets/office-agents/lina-voice.png", duty: "Posts, captions, email drafts, customer tone, and message polish.", skills: ["Email", "Content", "Tone"] },
+        { no: 5, key: "atlas", name: "Atlas Invest", role: "Portfolio Agent", color: "#60a5fa", avatar: "assets/office-agents/atlas-invest.png", duty: "Portfolio analysis, DCA planning, allocation, and dashboards.", skills: ["DCA", "Allocation", "Review"] },
+        { no: 6, key: "vera", name: "Vera Shield", role: "Risk Manager", color: "#f59e0b", avatar: "assets/office-agents/vera-shield.png", duty: "Risk checks, safeguards, compliance lens, and downside alerts.", skills: ["Risk", "Guard", "Check"] },
+        { no: 7, key: "keno", name: "Keno Expert", role: "Product Knowledge", color: "#fbbf24", avatar: "assets/office-agents/keno-expert.png", duty: "Product explanation, comparison, technical matching, and Q&A.", skills: ["Product", "Specs", "Mapping"] },
+        { no: 8, key: "dara", name: "Dara Docs", role: "Document Studio", color: "#a78bfa", avatar: "assets/office-agents/dara-docs.png", duty: "PDF, Excel, slides, formatting, document QA, and design cleanup.", skills: ["Docs", "QA", "Layout"] },
+        { no: 9, key: "luna", name: "Luna Balance", role: "Life Room", color: "#c084fc", avatar: "assets/office-agents/luna-balance.png", duty: "Family planning, reminders, life balance, timing, and astrology lens.", skills: ["Planning", "Balance", "Timing"] },
+        { no: 10, key: "nimo", name: "Nimo Vault", role: "Memory Steward", color: "#2dd4bf", avatar: "assets/office-agents/nimo-vault.png", duty: "Drive vault, tagging, retrieval, archive paths, and version control.", skills: ["Vault", "Archive", "Memory"] }
+      ];
+
+      const teamGrid = document.querySelector("#teamGrid");
+      const activity = document.querySelector("#activity");
+
+      teamGrid.innerHTML = agents.map((agent) => `
+        <article class="team-card" style="--agent-color:${agent.color}">
+          <img src="${agent.avatar}" alt="${agent.name} avatar" />
+          <h3>${agent.no}. ${agent.name}</h3>
+          <small>${agent.role}</small>
+          <p>${agent.duty}</p>
+          <div class="skill-row">${agent.skills.map((skill) => `<span>${skill}</span>`).join("")}</div>
+        </article>
+      `).join("");
+
+      activity.innerHTML = agents.map((agent) => `
+        <article>
+          <img src="${agent.avatar}" alt="${agent.name}" />
+          <div>
+            <strong>${agent.no}. ${agent.name}</strong>
+            <p>${agent.role} is mapped to Nova-first workflow.</p>
+          </div>
+          <small>Ready</small>
+        </article>
       `).join("");
     </script>
   </body>
