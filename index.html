@@ -2101,6 +2101,26 @@
         .agent-hotspot.luna { left: 28%; top: 64%; width: 18%; height: 22%; }
         .agent-hotspot.nimo { left: 50%; top: 62%; width: 19%; height: 22%; }
 
+        .agent-label {
+          position: absolute;
+          z-index: 4;
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 5px 10px;
+          border: 1px solid rgba(255, 255, 255, 0.16);
+          border-radius: 7px;
+          color: #f2fbff;
+          background: rgba(6, 20, 35, 0.86);
+          box-shadow: 0 8px 18px rgba(0, 0, 0, 0.34);
+          font-size: 13px;
+          font-weight: 800;
+          pointer-events: none;
+        }
+
+        .agent-label.mina-label { left: 33.2%; top: 7.2%; background: rgba(141, 62, 105, 0.9); }
+        .agent-label.keno-label { left: 73.6%; top: 55.4%; background: rgba(142, 101, 18, 0.92); }
+
         .agent-detail {
           position: absolute;
           z-index: 6;
@@ -2389,6 +2409,8 @@
             <button class="agent-hotspot keno" type="button" data-agent-key="keno">Keno Expert</button>
             <button class="agent-hotspot luna" type="button" data-agent-key="luna">Luna Balance</button>
             <button class="agent-hotspot nimo" type="button" data-agent-key="nimo">Nimo Vault</button>
+            <span class="agent-label mina-label">Mina Care</span>
+            <span class="agent-label keno-label">Keno Expert</span>
             <section class="agent-detail" id="agentDetail"><strong>Nova Chief</strong><p>Click any agent to see current role, work status, and next action.</p><small>READY</small></section>
           </main>
 
@@ -2397,8 +2419,8 @@
             <div class="os-tabs"><button class="active">All Activity</button><button>Tasks</button><button>Alerts</button><button>Mentions</button></div>
             <div class="os-feed">
               <article><img src="assets/avatars-drive/nova-chief.png" alt="Nova Chief" /><div><strong>Nova Chief</strong><p>Ready to dispatch Telegram and dashboard commands.</p></div><small>Live</small></article>
-              <article><img src="assets/avatars-drive/ace-sales.png" alt="Ace Sales" /><div><strong>Ace Sales</strong><p>Visit plans, proposals, and weekly reports ready.</p></div><small>Ready</small></article>
-              <article><img src="assets/avatars-drive/mina-care.png" alt="Mina Care" /><div><strong>Mina Care</strong><p>Follow-up drafts and Salesforce notes queued.</p></div><small>Ready</small></article>
+              <article><img src="assets/avatars-drive/ace-sales.png" alt="Ace Sales" /><div><strong>Ace Sales</strong><p>Closed-loop sales routing is ready for visit briefs and proposals.</p></div><small>Update</small></article>
+              <article><img src="assets/avatars-drive/mina-care.png" alt="Mina Care" /><div><strong>Mina Care</strong><p>Follow-up drafts, retention notes, and reminders queued.</p></div><small>Follow-up</small></article>
               <article><img src="assets/avatars-drive/atlas-invest.png" alt="Atlas Invest" /><div><strong>Atlas Invest</strong><p>DCA waits for allocation truth before decision.</p></div><small>Ready</small></article>
               <article><img src="assets/avatars-drive/vera-shield.png" alt="Vera Shield" /><div><strong>Vera Shield</strong><p>Risk gate active for missing or private source data.</p></div><small>Guard</small></article>
               <article><img src="assets/avatars-drive/nimo-vault.png" alt="Nimo Vault" /><div><strong>Nimo Vault</strong><p>Drive vault paths mapped for approved outputs.</p></div><small>Vault</small></article>
@@ -2407,10 +2429,10 @@
 
           <footer class="os-bottom">
             <div class="os-metric"><span>Active Agents</span><b>10 / 10</b></div>
-            <div class="os-metric"><span>Tasks in Progress</span><b>24</b></div>
-            <div class="os-metric"><span>Completed Today</span><b>128</b></div>
+            <div class="os-metric"><span>Tasks in Progress</span><b>23</b></div>
+            <div class="os-metric"><span>Completed Today</span><b>427</b></div>
             <div class="os-metric"><span>System Health</span><b>100%</b></div>
-            <div class="os-metric"><span>Intelligence. Coordination. Impact.</span><b>Together, we get it done.</b></div>
+            <div class="os-metric"><span>Intelligence. Coordination. Impact.</span><b>Built for the future, today.</b></div>
           </footer>
 
           <div class="action-toast" id="dashboardToast" aria-live="polite"><strong>Ready</strong><span>Select a menu item.</span></div>
