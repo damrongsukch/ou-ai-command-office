@@ -1924,7 +1924,7 @@
           width: 100vw;
           height: 100vh;
           display: grid;
-          grid-template-columns: 220px minmax(0, 1fr) 350px;
+          grid-template-columns: 204px minmax(0, 1fr) 330px;
           grid-template-rows: 70px minmax(0, 1fr) 64px;
           background: #041020;
           border: 1px solid rgba(132, 169, 190, 0.18);
@@ -2344,6 +2344,165 @@
           justify-content: center;
         }
 
+        .office-scene {
+          display: block;
+          padding: 0;
+          border-left: 1px solid rgba(132, 169, 190, 0.16);
+          border-right: 1px solid rgba(132, 169, 190, 0.16);
+          background: #040b15;
+        }
+
+        .office-scene-image {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          object-position: center;
+          display: block;
+        }
+
+        .scene-hotspot {
+          position: absolute;
+          z-index: 4;
+          border: 0;
+          border-radius: 16px;
+          color: transparent;
+          background: transparent;
+          cursor: pointer;
+        }
+
+        .scene-hotspot:hover,
+        .scene-hotspot:focus-visible {
+          background: rgba(32, 220, 255, 0.08);
+          box-shadow: inset 0 0 0 2px rgba(32, 220, 255, 0.34), 0 0 24px rgba(32, 220, 255, 0.22);
+          outline: 0;
+        }
+
+        .scene-hotspot.nova { left: 38%; top: 24%; width: 20%; height: 27%; }
+        .scene-hotspot.ace { left: 4%; top: 9%; width: 16%; height: 24%; }
+        .scene-hotspot.mina { left: 20%; top: 8%; width: 15%; height: 24%; }
+        .scene-hotspot.atlas { left: 47%; top: 8%; width: 17%; height: 23%; }
+        .scene-hotspot.vera { left: 65%; top: 8%; width: 17%; height: 25%; }
+        .scene-hotspot.lina { left: 14%; top: 36%; width: 17%; height: 22%; }
+        .scene-hotspot.dara { left: 3%; top: 51%; width: 18%; height: 25%; }
+        .scene-hotspot.keno { left: 74%; top: 35%; width: 18%; height: 25%; }
+        .scene-hotspot.luna { left: 30%; top: 60%; width: 18%; height: 25%; }
+        .scene-hotspot.nimo { left: 51%; top: 60%; width: 17%; height: 24%; }
+
+        .scene-name-fix {
+          position: absolute;
+          z-index: 5;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 86px;
+          min-height: 24px;
+          padding: 5px 12px;
+          border: 1px solid var(--fix-accent, rgba(32, 220, 255, 0.72));
+          border-radius: 8px;
+          color: #f7fbff;
+          background:
+            linear-gradient(180deg, rgba(11, 28, 43, 0.98), rgba(4, 13, 24, 0.96));
+          box-shadow:
+            0 0 16px color-mix(in srgb, var(--fix-accent, #20dcff), transparent 48%),
+            0 8px 18px rgba(0, 0, 0, 0.38),
+            inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          font-size: 12px;
+          font-weight: 900;
+          line-height: 1;
+          pointer-events: none;
+          text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+          white-space: nowrap;
+          backdrop-filter: blur(6px);
+        }
+
+        .scene-name-fix::before {
+          content: attr(data-no);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          width: 18px;
+          height: 18px;
+          margin-right: 7px;
+          border-radius: 5px;
+          color: #041020;
+          background: var(--fix-accent, #20dcff);
+          font-size: 10px;
+          font-weight: 1000;
+          box-shadow: 0 0 10px color-mix(in srgb, var(--fix-accent, #20dcff), transparent 35%);
+        }
+
+        .scene-name-fix.ace-fix {
+          --fix-accent: #34d399;
+          left: 6.0%;
+          top: 29.8%;
+          min-width: 132px;
+        }
+
+        .scene-name-fix.mina-fix {
+          --fix-accent: #f472b6;
+          left: 31.3%;
+          top: 14.0%;
+          min-width: 122px;
+        }
+
+        .scene-name-fix.atlas-fix {
+          --fix-accent: #60a5fa;
+          left: 55.2%;
+          top: 23.8%;
+          min-width: 154px;
+        }
+
+        .scene-name-fix.vera-fix {
+          --fix-accent: #f59e0b;
+          left: 72.5%;
+          top: 30.0%;
+          min-width: 126px;
+        }
+
+        .scene-name-fix.nova-fix {
+          --fix-accent: #22d3ee;
+          left: 45.0%;
+          top: 48.1%;
+          min-width: 150px;
+        }
+
+        .scene-name-fix.lina-fix {
+          --fix-accent: #14b8a6;
+          left: 14.3%;
+          top: 53.6%;
+          min-width: 136px;
+        }
+
+        .scene-name-fix.dara-fix {
+          --fix-accent: #a78bfa;
+          left: 5.8%;
+          top: 66.8%;
+          min-width: 132px;
+        }
+
+        .scene-name-fix.keno-fix {
+          --fix-accent: #f59e0b;
+          left: 73.3%;
+          top: 52.6%;
+          min-width: 132px;
+        }
+
+        .scene-name-fix.luna-fix {
+          --fix-accent: #c084fc;
+          left: 29.7%;
+          top: 79.5%;
+          min-width: 136px;
+        }
+
+        .scene-name-fix.nimo-fix {
+          --fix-accent: #2dd4bf;
+          left: 56.8%;
+          top: 77.4%;
+          min-width: 164px;
+        }
+
         .agent-detail {
           position: absolute;
           z-index: 6;
@@ -2621,93 +2780,28 @@
             <div class="os-top-status"><span class="os-pill">All Systems Operational</span><span>10:20:01 PM</span><span>Ou</span></div>
           </header>
 
-          <main class="office-core office-map">
-            <section class="office-room sales-room" aria-label="Sales and Relationship room">
-              <div class="room-title">Sales &amp; Relationship</div>
-              <div class="room-agents">
-                <button class="agent-node" type="button" data-agent-key="ace">
-                  <img src="assets/office-agents/ace-sales.png" alt="Ace Sales" />
-                  <span class="agent-chip"><strong>Ace Sales</strong><span>ASM Sales Agent</span><small>online</small></span>
-                </button>
-                <button class="agent-node" type="button" data-agent-key="mina">
-                  <img src="assets/office-agents/mina-care.png" alt="Mina Care" />
-                  <span class="agent-chip"><strong>Mina Care</strong><span>Customer Follow-up</span><small>online</small></span>
-                </button>
-              </div>
-            </section>
-
-            <section class="office-room finance-room" aria-label="Finance and Risk room">
-              <div class="room-title">Finance &amp; Risk</div>
-              <div class="room-agents">
-                <button class="agent-node" type="button" data-agent-key="atlas">
-                  <img src="assets/office-agents/atlas-invest.png" alt="Atlas Invest" />
-                  <span class="agent-chip"><strong>Atlas Invest</strong><span>Portfolio Agent</span><small>ready</small></span>
-                </button>
-                <button class="agent-node" type="button" data-agent-key="vera">
-                  <img src="assets/office-agents/vera-shield.png" alt="Vera Shield" />
-                  <span class="agent-chip"><strong>Vera Shield</strong><span>Risk Manager</span><small>guard</small></span>
-                </button>
-              </div>
-            </section>
-
-            <section class="office-room command-room" aria-label="Nova command room">
-              <div class="room-title">Nova Command</div>
-              <div class="room-agents">
-                <button class="agent-node chief-node" type="button" data-agent-key="nova">
-                  <img src="assets/office-agents/nova-chief.png" alt="Nova Chief" />
-                  <span class="agent-chip"><strong>Nova Chief</strong><span>Chief of Staff</span><small>dispatch</small></span>
-                </button>
-              </div>
-            </section>
-
-            <section class="office-room content-room" aria-label="Content and Documents room">
-              <div class="room-title">Content &amp; Documents</div>
-              <div class="room-agents">
-                <button class="agent-node" type="button" data-agent-key="lina">
-                  <img src="assets/office-agents/lina-voice.png" alt="Lina Voice" />
-                  <span class="agent-chip"><strong>Lina Voice</strong><span>LinkedIn &amp; Email</span><small>content</small></span>
-                </button>
-                <button class="agent-node" type="button" data-agent-key="dara">
-                  <img src="assets/office-agents/dara-docs.png" alt="Dara Docs" />
-                  <span class="agent-chip"><strong>Dara Docs</strong><span>Document Studio</span><small>docs</small></span>
-                </button>
-              </div>
-            </section>
-
-            <section class="office-room product-room single-agent" aria-label="Product knowledge room">
-              <div class="room-title">Product Knowledge</div>
-              <div class="room-agents">
-                <button class="agent-node" type="button" data-agent-key="keno">
-                  <img src="assets/office-agents/keno-expert.png" alt="Keno Expert" />
-                  <span class="agent-chip"><strong>Keno Expert</strong><span>Product Knowledge</span><small>tech</small></span>
-                </button>
-              </div>
-            </section>
-
-            <section class="office-room life-room" aria-label="Life and Memory room">
-              <div class="room-title">Life &amp; Memory</div>
-              <div class="room-agents">
-                <button class="agent-node" type="button" data-agent-key="luna">
-                  <img src="assets/office-agents/luna-balance.png" alt="Luna Balance" />
-                  <span class="agent-chip"><strong>Luna Balance</strong><span>Life Room</span><small>planner</small></span>
-                </button>
-                <button class="agent-node" type="button" data-agent-key="nimo">
-                  <img src="assets/office-agents/nimo-vault.png" alt="Nimo Vault" />
-                  <span class="agent-chip"><strong>Nimo Vault</strong><span>Memory Steward</span><small>vault</small></span>
-                </button>
-              </div>
-            </section>
-
-            <section class="office-room vault-room single-agent" aria-label="Archive vault">
-              <div class="room-title">Archive Vault</div>
-              <div class="room-agents">
-                <button class="agent-node" type="button" data-agent-key="nimo">
-                  <img src="assets/office-agents/nimo-vault.png" alt="Nimo Vault archive station" />
-                  <span class="agent-chip"><strong>Nimo Vault</strong><span>Google Drive / Logs</span><small>storage</small></span>
-                </button>
-              </div>
-            </section>
-
+          <main class="office-core office-scene">
+            <img class="office-scene-image" src="assets/office-scene-core.png" alt="Ou AI Command Office scene with agent rooms" />
+            <span class="scene-name-fix nova-fix" data-no="1">Nova Chief</span>
+            <span class="scene-name-fix ace-fix" data-no="2">Ace Sales</span>
+            <span class="scene-name-fix mina-fix" data-no="3">Mina Care</span>
+            <span class="scene-name-fix atlas-fix" data-no="4">Atlas Invest</span>
+            <span class="scene-name-fix vera-fix" data-no="5">Vera Shield</span>
+            <span class="scene-name-fix keno-fix" data-no="6">Keno Expert</span>
+            <span class="scene-name-fix dara-fix" data-no="7">Dara Docs</span>
+            <span class="scene-name-fix lina-fix" data-no="8">Lina Voice</span>
+            <span class="scene-name-fix luna-fix" data-no="9">Luna Balance</span>
+            <span class="scene-name-fix nimo-fix" data-no="10">Nimo Vault</span>
+            <button class="scene-hotspot nova" type="button" data-agent-key="nova">Nova Chief</button>
+            <button class="scene-hotspot ace" type="button" data-agent-key="ace">Ace Sales</button>
+            <button class="scene-hotspot mina" type="button" data-agent-key="mina">Mina Care</button>
+            <button class="scene-hotspot atlas" type="button" data-agent-key="atlas">Atlas Invest</button>
+            <button class="scene-hotspot vera" type="button" data-agent-key="vera">Vera Shield</button>
+            <button class="scene-hotspot lina" type="button" data-agent-key="lina">Lina Voice</button>
+            <button class="scene-hotspot dara" type="button" data-agent-key="dara">Dara Docs</button>
+            <button class="scene-hotspot keno" type="button" data-agent-key="keno">Keno Expert</button>
+            <button class="scene-hotspot luna" type="button" data-agent-key="luna">Luna Balance</button>
+            <button class="scene-hotspot nimo" type="button" data-agent-key="nimo">Nimo Vault</button>
             <section class="agent-detail" id="agentDetail"><strong>Nova Chief</strong><p>Click any agent to see current role, work status, and next action.</p><small>READY</small></section>
           </main>
 
