@@ -2515,6 +2515,15 @@
             inset 0 1px 0 rgba(255, 255, 255, 0.24);
         }
 
+        .scene-name-fix.active {
+          border-color: color-mix(in srgb, var(--fix-accent, #20dcff) 92%, #ffffff);
+          box-shadow:
+            0 0 0 2px rgba(255, 255, 255, 0.16),
+            0 0 28px color-mix(in srgb, var(--fix-accent, #20dcff), transparent 26%),
+            0 10px 22px rgba(0, 0, 0, 0.48),
+            inset 0 1px 0 rgba(255, 255, 255, 0.24);
+        }
+
         .scene-name-fix::before {
           content: attr(data-no);
           display: inline-flex;
@@ -3268,31 +3277,156 @@
       });
 
       const agentStatus = {
-        nova: ["Nova Chief", "Command owner. Routes Telegram/dashboard commands, assigns agents, reviews QC, and returns the final answer to Ou.", "DISPATCH READY"],
-        ace: ["Ace Sales", "Sales lead. Prepares visit plans, opportunity analysis, proposal inputs, and weekly ProXES reports.", "SALES READY"],
-        mina: ["Mina Care", "Customer care. Drafts follow-up emails, relationship notes, reminders, and Salesforce update text.", "FOLLOW-UP READY"],
-        atlas: ["Atlas Invest", "Portfolio analyst. Checks allocation truth first, then prepares DCA/buy-wait-hold recommendations.", "WAITING FOR DATA"],
-        vera: ["Vera Shield", "Risk gate. Flags missing source truth, concentration risk, overreach, and privacy/safety issues.", "RISK GUARD"],
-        lina: ["Lina Voice", "Communication agent. Writes LinkedIn posts, captions, customer emails, and tone variants.", "CONTENT READY"],
-        dara: ["Dara Docs", "Document studio. Structures PDF, Excel, slides, forms, layouts, and final readiness checks.", "DOCUMENT READY"],
-        keno: ["Keno Expert", "Product knowledge. Maps customer needs to product fit, technical notes, objections, and proposal support.", "TECH READY"],
-        luna: ["Luna Balance", "Life room. Handles family reminders, balance planning, astrology lens, and timing suggestions.", "PLANNER READY"],
-        nimo: ["Nimo Vault", "Memory steward. Classifies public/private data, Drive folder, naming, archive, and retrieval rules.", "VAULT READY"]
+        nova: {
+          name: "Nova Chief",
+          avatar: "assets/office-agents/nova-chief.png",
+          role: "Chief of Staff. Central command, routing, QC, approval, and final delivery.",
+          status: "DISPATCH READY",
+          current: "Watching all dashboard and Telegram commands, classifying task type, selecting context route, and preparing the final QC layer.",
+          next: "Route the next Ou request to only the relevant specialist agents, then consolidate their results before delivery.",
+          pipeline: ["Receive Ou input", "Classify objective", "Select agents", "Review output", "Approve and return"],
+          saveTo: "00_Command_Center/Daily Brief/"
+        },
+        ace: {
+          name: "Ace Sales",
+          avatar: "assets/office-agents/ace-sales.png",
+          role: "ASM Sales Agent. Visit planning, opportunities, proposals, and weekly sales report.",
+          status: "SALES READY",
+          current: "Preparing visit brief structure, opportunity notes, proposal support, and sales pipeline actions for ProXES work.",
+          next: "When Ou gives customer context, build customer snapshot, pain point, opportunity, product fit, and next action.",
+          pipeline: ["Review customer objective", "Map opportunity", "Prepare visit/proposal", "Return draft to Nova"],
+          saveTo: "02_Sales_ProXES/Visit Briefs/"
+        },
+        mina: {
+          name: "Mina Care",
+          avatar: "assets/office-agents/mina-care.png",
+          role: "Customer Follow-up. Relationship notes, reminders, follow-up emails, Salesforce draft.",
+          status: "FOLLOW-UP READY",
+          current: "Standing by for customer follow-up tasks, relationship maintenance, reminder creation, and Salesforce update text.",
+          next: "Draft a polite follow-up email and CRM note once Ou provides customer name, meeting note, or last action.",
+          pipeline: ["Read customer context", "Draft follow-up", "Set reminder", "Return to Nova"],
+          saveTo: "02_Sales_ProXES/Follow-up Emails/"
+        },
+        atlas: {
+          name: "Atlas Invest",
+          avatar: "assets/office-agents/atlas-invest.png",
+          role: "Portfolio Agent. Allocation, DCA, portfolio monitoring, and investment summary.",
+          status: "WAITING FOR DATA",
+          current: "Waiting for portfolio/allocation truth before any DCA decision. Live timing remains a separate secondary check.",
+          next: "Use portfolio_plan.json or a fresh portfolio export, then decide buy, wait, rebalance, or hold cash.",
+          pipeline: ["Load allocation truth", "Check target gap", "Review timing", "Return recommendation to Nova"],
+          saveTo: "04_Investment/DCA Logs/"
+        },
+        vera: {
+          name: "Vera Shield",
+          avatar: "assets/office-agents/vera-shield.png",
+          role: "Risk Manager. Downside protection, privacy, missing-source checks, and safeguards.",
+          status: "RISK GUARD",
+          current: "Checking for missing source truth, overconfident claims, privacy exposure, concentration risk, and unsupported decisions.",
+          next: "Review the next agent recommendation before Nova approves it for Ou.",
+          pipeline: ["Review plan", "Flag risk", "Suggest safeguard", "Return risk notes to Nova"],
+          saveTo: "04_Investment/Risk Notes/"
+        },
+        keno: {
+          name: "Keno Expert",
+          avatar: "assets/office-agents/keno-expert.png",
+          role: "Product Knowledge. Technical explanation, product comparison, and solution mapping.",
+          status: "TECH READY",
+          current: "Ready to map customer needs to product fit, technical benefits, limitations, and proposal support.",
+          next: "Use customer application details to prepare product fit, technical notes, objections, and proposal inputs.",
+          pipeline: ["Read product need", "Match solution", "Explain fit", "Return technical answer"],
+          saveTo: "02_Sales_ProXES/Proposals/"
+        },
+        dara: {
+          name: "Dara Docs",
+          avatar: "assets/office-agents/dara-docs.png",
+          role: "Document Studio. PDF, Excel, slides, layout, formatting, and document QA.",
+          status: "DOCUMENT READY",
+          current: "Ready to structure documents, clean layouts, prepare templates, and check readability/print readiness.",
+          next: "When Ou provides file or brief, create requirement summary, layout plan, draft, and QC notes.",
+          pipeline: ["Read requirement", "Draft layout", "Create/check file", "Return to Nova"],
+          saveTo: "05_Documents_Studio/"
+        },
+        lina: {
+          name: "Lina Voice",
+          avatar: "assets/office-agents/lina-voice.png",
+          role: "LinkedIn & Email. Customer-facing copy, captions, tone variants, business English.",
+          status: "CONTENT READY",
+          current: "Ready to write LinkedIn posts, email drafts, captions, tone rewrites, and concise executive messages.",
+          next: "Use audience, purpose, and key points to draft copy, then send it back to Nova for tone/QC review.",
+          pipeline: ["Review audience", "Draft copy", "Tune tone", "Return to Nova"],
+          saveTo: "05_Documents_Studio/Templates/"
+        },
+        luna: {
+          name: "Luna Balance",
+          avatar: "assets/office-agents/luna-balance.png",
+          role: "Life Room. Family planning, routines, reminders, timing, life balance, astrology lens.",
+          status: "PLANNER READY",
+          current: "Ready for private-safe life planning, reminders, work-life balance, and timing suggestions.",
+          next: "Build a practical life plan or astrology reading only from safe context provided by Ou.",
+          pipeline: ["Review life context", "Prioritize gently", "Suggest action", "Return to Nova"],
+          saveTo: "06_Life_Astrology/Daily Reading/"
+        },
+        nimo: {
+          name: "Nimo Vault",
+          avatar: "assets/office-agents/nimo-vault.png",
+          role: "Memory Steward. Data vault, public/private separation, tagging, archive, retrieval.",
+          status: "VAULT READY",
+          current: "Mapping Drive folders, file naming, privacy classification, and storage/retrieval rules.",
+          next: "Classify the next output as GitHub-safe or Drive-only, then suggest folder path and file name.",
+          pipeline: ["Classify data", "Tag source", "Choose folder", "Return storage rule"],
+          saveTo: "99_Archive/"
+        }
       };
 
       const agentDetail = document.querySelector("#agentDetail");
       let agentDetailTimer;
 
+      function renderOsRightAgent(agentKey) {
+        const data = agentStatus[agentKey];
+        if (!data || !osRightTitle || !osRightTabs || !osRightContent) return;
+        osRightTitle.innerHTML = `${escapeHtml(data.name)} <span class="dot"></span>`;
+        osRightTabs.innerHTML = '<button class="active">Now</button><button>Next</button><button>Pipeline</button><button>Output</button>';
+        osRightContent.innerHTML = `
+          <article>
+            <img src="${escapeHtml(data.avatar)}" alt="${escapeHtml(data.name)}" />
+            <div><strong>Role</strong><p>${escapeHtml(data.role)}</p></div>
+            <small>${escapeHtml(data.status)}</small>
+          </article>
+          <article>
+            <div><strong>Currently Doing</strong><p>${escapeHtml(data.current)}</p></div>
+            <small>now</small>
+          </article>
+          <article>
+            <div><strong>Next Step</strong><p>${escapeHtml(data.next)}</p></div>
+            <small>next</small>
+          </article>
+          <article>
+            <div>
+              <strong>Pipeline</strong>
+              <p>${data.pipeline.map((step, index) => `${index + 1}. ${escapeHtml(step)}`).join("<br>")}</p>
+            </div>
+            <small>${escapeHtml(data.pipeline.length)} steps</small>
+          </article>
+          <article>
+            <div><strong>Save Output To</strong><p>${escapeHtml(data.saveTo)}</p></div>
+            <small>Drive</small>
+          </article>
+        `;
+      }
+
       document.querySelectorAll("[data-agent-key]").forEach((button) => {
         button.addEventListener("click", () => {
           const data = agentStatus[button.dataset.agentKey];
           if (!data || !agentDetail) return;
-          agentDetail.querySelector("strong").textContent = data[0];
-          agentDetail.querySelector("p").textContent = data[1];
-          agentDetail.querySelector("small").textContent = data[2];
+          renderOsRightAgent(button.dataset.agentKey);
+          document.querySelectorAll("[data-agent-key]").forEach((item) => item.classList.toggle("active", item === button));
+          agentDetail.querySelector("strong").textContent = data.name;
+          agentDetail.querySelector("p").textContent = `Currently: ${data.current} Next: ${data.next}`;
+          agentDetail.querySelector("small").textContent = data.status;
           agentDetail.classList.add("show");
           clearTimeout(agentDetailTimer);
-          agentDetailTimer = setTimeout(() => agentDetail.classList.remove("show"), 5200);
+          agentDetailTimer = setTimeout(() => agentDetail.classList.remove("show"), 7000);
         });
       });
 
