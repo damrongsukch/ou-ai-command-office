@@ -403,6 +403,137 @@
         text-transform: uppercase;
       }
 
+      .nova-chat-card {
+        display: grid;
+        gap: 10px;
+        margin-top: 12px;
+        padding: 12px;
+        border: 1px solid rgba(32, 220, 255, 0.18);
+        border-radius: 8px;
+        background:
+          radial-gradient(circle at 12% 0%, rgba(32, 220, 255, 0.12), transparent 30%),
+          rgba(4, 13, 25, 0.76);
+      }
+
+      .nova-chat-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+      }
+
+      .nova-chat-head strong {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #e8fbff;
+        font-size: 12px;
+        text-transform: uppercase;
+      }
+
+      .nova-chat-head strong::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 16px rgba(77, 229, 166, 0.65);
+      }
+
+      .nova-chat-head small {
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .nova-chat-log {
+        display: grid;
+        gap: 8px;
+        max-height: 260px;
+        overflow: auto;
+        padding: 2px 2px 4px;
+      }
+
+      .chat-bubble {
+        width: fit-content;
+        max-width: 92%;
+        padding: 9px 10px;
+        border: 1px solid rgba(88, 217, 255, 0.16);
+        border-radius: 8px;
+        background: rgba(8, 22, 38, 0.82);
+        color: #d9edf8;
+        font-size: 12px;
+        line-height: 1.45;
+        white-space: pre-wrap;
+      }
+
+      .chat-bubble.user {
+        justify-self: end;
+        border-color: rgba(32, 220, 255, 0.35);
+        background: rgba(32, 220, 255, 0.12);
+        color: #effdff;
+      }
+
+      .chat-bubble.nova {
+        border-color: rgba(77, 229, 166, 0.28);
+        background: rgba(21, 51, 44, 0.72);
+      }
+
+      .chat-bubble.system {
+        max-width: 100%;
+        border-color: rgba(255, 209, 95, 0.24);
+        background: rgba(255, 209, 95, 0.08);
+        color: #ffe9a8;
+      }
+
+      .chat-bubble small {
+        display: block;
+        margin-bottom: 4px;
+        color: rgba(239, 253, 255, 0.68);
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .nova-chat-form {
+        display: grid;
+        grid-template-columns: 1fr 58px;
+        gap: 7px;
+      }
+
+      .nova-chat-form textarea {
+        min-height: 46px;
+        max-height: 128px;
+      }
+
+      .nova-chat-send {
+        display: grid;
+        place-items: center;
+        min-height: 46px;
+        color: #e8fbff;
+        font-size: 12px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
+      .chat-quick-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+
+      .chat-chip {
+        width: auto;
+        padding: 6px 8px;
+        border-radius: 999px;
+        color: #bcefff;
+        background: rgba(32, 220, 255, 0.08);
+        font-size: 10px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+
       .section-label {
         display: flex;
         align-items: center;
@@ -3177,6 +3308,25 @@
             </div>
           </section>
 
+          <section class="nova-chat-card" aria-label="Chat with Nova Chief">
+            <div class="nova-chat-head">
+              <strong>Chat with Nova</strong>
+              <small id="novaChatStatus">Ready</small>
+            </div>
+            <div class="nova-chat-log" id="novaChatLog" aria-live="polite">
+              <div class="chat-bubble nova"><small>Nova Chief</small>สวัสดีครับ Ou พิมพ์งานที่อยากให้ Nova จัดการได้เลย เช่น Morning Engine, follow-up ลูกค้า, DCA หรือสรุปงานวันนี้.</div>
+            </div>
+            <form class="nova-chat-form" id="novaChatForm">
+              <textarea id="novaChatInput" placeholder="พิมพ์คุยกับ Nova..." rows="2"></textarea>
+              <button class="nova-chat-send" type="submit">Send</button>
+            </form>
+            <div class="chat-quick-row">
+              <button class="chat-chip" type="button" data-chat-prompt="Nova Chief, prepare Morning Engine today.">Morning</button>
+              <button class="chat-chip" type="button" data-chat-prompt="Nova Chief, route today's DCA decision to Atlas Invest and Vera Shield. Use allocation truth first and live timing as a separate check. Source truth: https://damrongsukch.github.io/my-portfolio-monitor-2026/">DCA</button>
+              <button class="chat-chip" type="button" data-chat-prompt="Nova Chief, summarize my next actions and pending follow-ups.">Next Actions</button>
+            </div>
+          </section>
+
           <section class="context-card" id="contextReducerCard" aria-live="polite">
             <h3>Nova Context Reducer</h3>
             <div class="context-grid">
@@ -3897,6 +4047,10 @@
       ];
 
       const commandText = document.querySelector("#commandText");
+      const novaChatLog = document.querySelector("#novaChatLog");
+      const novaChatInput = document.querySelector("#novaChatInput");
+      const novaChatForm = document.querySelector("#novaChatForm");
+      const novaChatStatus = document.querySelector("#novaChatStatus");
       const workflowConsole = document.querySelector("#workflowConsole");
       const activeOutput = document.querySelector("#activeOutput");
       const drivePath = document.querySelector("#drivePath");
@@ -4402,6 +4556,58 @@
         `;
       }
 
+      function appendChatBubble(role, label, text) {
+        const bubble = document.createElement("div");
+        bubble.className = `chat-bubble ${role}`;
+        bubble.innerHTML = `<small>${escapeHtml(label)}</small>${escapeHtml(text)}`;
+        novaChatLog.appendChild(bubble);
+        novaChatLog.scrollTop = novaChatLog.scrollHeight;
+        return bubble;
+      }
+
+      function compactNovaReply(text = "") {
+        const clean = String(text).trim();
+        if (!clean) return "Nova received the command, but no response text came back. Check Agent Output for details.";
+        const lines = clean.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+        const useful = lines
+          .filter((line) => !/^status:|^owner:|^room:|^save to:|^priority:|^assigned:|^log file:/i.test(line))
+          .slice(0, 8);
+        return (useful.length ? useful : lines.slice(0, 8)).join("\n").slice(0, 1200);
+      }
+
+      async function runNovaChat(message) {
+        const command = message.trim();
+        if (!command) return;
+        appendChatBubble("user", "Ou", command);
+        commandText.value = command;
+        renderContextPlan(buildContextPlan(command, currentAgent));
+        novaChatInput.value = "";
+        novaChatStatus.textContent = "Thinking";
+        const pendingBubble = appendChatBubble("system", "Nova", "รับคำสั่งแล้ว กำลังจัด routing และเรียก backend...");
+
+        try {
+          const backendResult = await sendToBackend(command, currentAgent);
+          pendingBubble.remove();
+          if (backendResult?.ok) {
+            renderBackendResult(backendResult);
+            appendChatBubble("nova", "Nova Chief", compactNovaReply(backendResult.output));
+            saveCurrentTask("Draft");
+          } else {
+            renderOutput("Command Accepted", currentAgent, command, currentAgent.workflow);
+            appendChatBubble("nova", "Nova Chief", "รับงานแล้วครับ ผมจัดเป็น draft ใน Agent Output ให้ Ou review ต่อได้เลย.");
+            saveCurrentTask("Draft");
+          }
+        } catch (error) {
+          pendingBubble.remove();
+          renderOutput("Command Accepted", currentAgent, command, currentAgent.workflow);
+          activeOutput.insertAdjacentHTML("beforeend", `<span class="backend-note">Local fallback - ${escapeHtml(error.message)}</span>`);
+          appendChatBubble("system", "Nova Offline Fallback", `Backend ยังตอบไม่ได้: ${error.message}\nผมสร้าง draft local ไว้ใน Agent Output ให้ก่อนครับ.`);
+          saveCurrentTask("Draft");
+        } finally {
+          novaChatStatus.textContent = "Ready";
+        }
+      }
+
       async function copyText(text, label) {
         try {
           await navigator.clipboard.writeText(text);
@@ -4458,6 +4664,25 @@
           commandText.value = template.command;
           renderContextPlan(buildContextPlan(template.command, agent));
           renderOutput(template.title, agent, template.command, template.sections);
+        });
+      });
+
+      novaChatForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        runNovaChat(novaChatInput.value);
+      });
+
+      novaChatInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !event.shiftKey) {
+          event.preventDefault();
+          runNovaChat(novaChatInput.value);
+        }
+      });
+
+      document.querySelectorAll("[data-chat-prompt]").forEach((node) => {
+        node.addEventListener("click", () => {
+          novaChatInput.value = node.dataset.chatPrompt;
+          novaChatInput.focus();
         });
       });
 
