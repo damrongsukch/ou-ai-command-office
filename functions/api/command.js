@@ -262,7 +262,9 @@ function hasPortfolioSourceTruth(command = "") {
     "target_weight",
     "holdings:"
   ].some((term) => value.includes(term));
-  const hasTickerLikeData = /\b[A-Z]{2,5}\b/.test(command) && /\d/.test(command);
+  const tickerTokens = command.match(/\b[A-Z]{2,5}\b/g) || [];
+  const ignoredTickerWords = new Set(["DCA", "USD", "RSI", "EMA", "VIX", "API", "PDF", "CSV", "JSON"]);
+  const hasTickerLikeData = tickerTokens.some((token) => !ignoredTickerWords.has(token)) && /\d/.test(command);
   return hasExplicitFile || hasAttachedSnapshot || hasStructuredAllocation || hasTickerLikeData;
 }
 
