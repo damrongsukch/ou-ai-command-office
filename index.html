@@ -4518,12 +4518,25 @@
         });
       });
 
+      function syncHashPanel() {
+        const hash = window.location.hash.replace("#", "");
+        if (["knowledge", "workflow", "tasks"].includes(hash)) {
+          openViewPanel(hash);
+        }
+        if (hash === "archive") {
+          selectAgent("memory");
+          activeOutput.innerHTML = "<h3>Archive Vault</h3><p>Nimo Vault is selected. Use the Drive Vault card to open the private Google Drive folder when needed.</p>";
+        }
+      }
+
       updateClock();
       setInterval(updateClock, 30000);
       selectAgent("chief");
       renderHistory();
       renderContextPlan();
       updateBackendStatus();
+      syncHashPanel();
+      window.addEventListener("hashchange", syncHashPanel);
     </script>
   </body>
 </html>

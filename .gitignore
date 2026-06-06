@@ -9,6 +9,8 @@ real_portfolio_export/
 real_portfolio_exports/
 node_modules/
 dist/
+outputs/*.png
+outputs/*preview*.html
 .DS_Store
 
 # Out of scope for static MVP v1. Re-enable intentionally for backend/Cloudflare phase.
