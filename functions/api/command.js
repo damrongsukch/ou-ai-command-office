@@ -249,6 +249,25 @@ function inferAssignedAgents(command = "", routedAgentId = "chief") {
     .filter(Boolean);
 }
 
+function hasPortfolioSourceTruth(command = "") {
+  const value = command.toLowerCase();
+  const hasSourceName = [
+    "portfolio_plan",
+    "dashboard",
+    "holding",
+    "holdings",
+    "allocation table",
+    "target allocation",
+    "current weight",
+    "target weight",
+    "broker export",
+    "dime export"
+  ].some((term) => value.includes(term));
+  const hasTickerLikeData = /\b[A-Z]{2,5}\b/.test(command) && /\d/.test(command);
+  const hasJsonLikeData = value.includes("asset_list") || value.includes("target_allocation") || value.includes("current_allocation");
+  return hasSourceName || hasTickerLikeData || hasJsonLikeData;
+}
+
 function slug(text = "") {
   return text
     .replace(/&/g, "and")
@@ -638,11 +657,16 @@ export async function onRequestPost(context) {
   const now = new Date().toISOString();
   const hasOpenAiKey = Boolean(context.env?.OPENAI_API_KEY);
   const hasWorkersAi = Boolean(context.env?.AI);
+  const taskType = inferTaskType(command, agentId);
   let mode = "local_draft";
   let output = buildSmartLocalOutput(command, agent, agentId);
   let backendNote = "Returned a smart local draft. OpenAI and Cloudflare Workers AI are optional and only run when configured.";
 
-  if (hasOpenAiKey) {
+  if ((taskType === "investment" || taskType === "risk_review") && !hasPortfolioSourceTruth(command)) {
+    mode = "source_required";
+    output = buildSmartLocalOutput(command, agent, agentId);
+    backendNote = "Portfolio guardrail blocked AI generation because the command did not include current allocation truth or live timing data. Nova returned deterministic source-required guidance to avoid invented portfolio numbers.";
+  } else if (hasOpenAiKey) {
     try {
       output = await buildAiOutput(command, agent, context.env, contextPlan);
       mode = "ai";
