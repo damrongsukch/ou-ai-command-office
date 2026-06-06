@@ -269,6 +269,38 @@ function hasPortfolioSourceTruth(command = "") {
   return hasExplicitFile || hasPortfolioMonitorUrl || hasAttachedSnapshot || hasStructuredAllocation || hasTickerLikeData;
 }
 
+function hasPortfolioMonitorUrl(command = "") {
+  return command.toLowerCase().includes("damrongsukch.github.io/my-portfolio-monitor-2026");
+}
+
+function compactMatch(text, pattern, maxLength = 9000) {
+  const match = text.match(pattern);
+  return match ? match[0].slice(0, maxLength) : "";
+}
+
+async function loadPortfolioMonitorSnapshot(command = "") {
+  if (!hasPortfolioMonitorUrl(command)) return "";
+  const scriptUrl = "https://damrongsukch.github.io/my-portfolio-monitor-2026/script.js?v=20260605-rsi-threshold-colors";
+  const response = await fetch(scriptUrl, { cf: { cacheTtl: 60 } }).catch((error) => {
+    throw new Error(`Cannot fetch portfolio monitor script. ${error.message}`);
+  });
+  if (!response.ok) throw new Error(`Cannot fetch portfolio monitor script. HTTP ${response.status}`);
+  const script = await response.text();
+  const parts = [
+    compactMatch(script, /let holdings = \[[\s\S]*?\];/, 12000),
+    compactMatch(script, /let signalBoard = [\s\S]*?\}\)\);/, 5000),
+    compactMatch(script, /let kpis = \{[\s\S]*?\};/, 5000),
+    compactMatch(script, /const MIN_ORDER_USD = [\s\S]*?;/, 200),
+    compactMatch(script, /const preferredHoldingOrder = \[[\s\S]*?\];/, 1200)
+  ].filter(Boolean);
+  if (!parts.length) throw new Error("Portfolio monitor script did not expose a readable snapshot.");
+  return [
+    "SOURCE: My Portfolio Monitor 2026 public dashboard snapshot.",
+    "Use only these ticker symbols, weights, signals, RSI values, cash, KPIs, and DCA rules. Do not invent Stock A/B/C or fake allocation.",
+    ...parts
+  ].join("\n\n");
+}
+
 function slug(text = "") {
   return text
     .replace(/&/g, "and")
@@ -561,7 +593,7 @@ function extractResponseText(payload) {
   return parts.join("\n").trim();
 }
 
-async function buildAiOutput(command, agent, env, contextPlan) {
+async function buildAiOutput(command, agent, env, contextPlan, sourceSnapshot = "") {
   const response = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: {
@@ -571,7 +603,7 @@ async function buildAiOutput(command, agent, env, contextPlan) {
     body: JSON.stringify({
       model: env.OPENAI_MODEL || "gpt-5-nano",
       instructions: buildAgentInstructionsWithContext(agent, contextPlan),
-      input: command,
+      input: sourceSnapshot ? `${command}\n\n${sourceSnapshot}` : command,
       max_output_tokens: 900
     })
   });
@@ -598,7 +630,7 @@ function extractWorkersAiText(payload) {
   return "";
 }
 
-async function buildWorkersAiOutput(command, agent, env, contextPlan, priorError = "") {
+async function buildWorkersAiOutput(command, agent, env, contextPlan, priorError = "", sourceSnapshot = "") {
   if (!env.AI) throw new Error("Cloudflare Workers AI binding is not configured.");
 
   const models = (env.CLOUDFLARE_AI_MODEL || "@cf/openai/gpt-oss-20b,@cf/meta/llama-3.1-8b-instruct")
@@ -618,6 +650,8 @@ async function buildWorkersAiOutput(command, agent, env, contextPlan, priorError
     "Keep it concise, practical, and action-ready.",
     "",
     "Portfolio rule if this is investment work: allocation truth first, live timing second, whole-share/order feasibility third, risk gate before buy, hold cash is allowed.",
+    sourceSnapshot ? "Portfolio source snapshot is provided below. Use only its tickers and values. Do not invent placeholders." : "",
+    sourceSnapshot,
     "",
     "Ou command:",
     command
@@ -660,23 +694,36 @@ export async function onRequestPost(context) {
   const hasOpenAiKey = Boolean(context.env?.OPENAI_API_KEY);
   const hasWorkersAi = Boolean(context.env?.AI);
   const taskType = inferTaskType(command, agentId);
+  let sourceSnapshot = "";
+  let sourceError = "";
+  if ((taskType === "investment" || taskType === "risk_review") && hasPortfolioMonitorUrl(command)) {
+    try {
+      sourceSnapshot = await loadPortfolioMonitorSnapshot(command);
+    } catch (error) {
+      sourceError = error.message;
+    }
+  }
   let mode = "local_draft";
   let output = buildSmartLocalOutput(command, agent, agentId);
   let backendNote = "Returned a smart local draft. OpenAI and Cloudflare Workers AI are optional and only run when configured.";
 
-  if ((taskType === "investment" || taskType === "risk_review") && !hasPortfolioSourceTruth(command)) {
+  if ((taskType === "investment" || taskType === "risk_review") && hasPortfolioMonitorUrl(command) && !sourceSnapshot) {
+    mode = "source_required";
+    output = buildSmartLocalOutput(command, agent, agentId);
+    backendNote = `Portfolio guardrail blocked AI generation because the Portfolio Monitor snapshot could not be loaded. ${sourceError}`;
+  } else if ((taskType === "investment" || taskType === "risk_review") && !hasPortfolioSourceTruth(command)) {
     mode = "source_required";
     output = buildSmartLocalOutput(command, agent, agentId);
     backendNote = "Portfolio guardrail blocked AI generation because the command did not include current allocation truth or live timing data. Nova returned deterministic source-required guidance to avoid invented portfolio numbers.";
   } else if (hasOpenAiKey) {
     try {
-      output = await buildAiOutput(command, agent, context.env, contextPlan);
+      output = await buildAiOutput(command, agent, context.env, contextPlan, sourceSnapshot);
       mode = "ai";
       backendNote = "Generated by OpenAI Responses API through Cloudflare Pages Functions.";
     } catch (error) {
       if (hasWorkersAi) {
         try {
-          output = await buildWorkersAiOutput(command, agent, context.env, contextPlan, error.message);
+          output = await buildWorkersAiOutput(command, agent, context.env, contextPlan, error.message, sourceSnapshot);
           mode = "cloudflare_ai";
           backendNote = `OpenAI call failed, so Nova used Cloudflare Workers AI fallback. OpenAI error: ${error.message}`;
         } catch (workersAiError) {
@@ -692,7 +739,7 @@ export async function onRequestPost(context) {
     }
   } else if (hasWorkersAi) {
     try {
-      output = await buildWorkersAiOutput(command, agent, context.env, contextPlan);
+      output = await buildWorkersAiOutput(command, agent, context.env, contextPlan, "", sourceSnapshot);
       mode = "cloudflare_ai";
       backendNote = "Generated by Cloudflare Workers AI through Cloudflare Pages Functions.";
     } catch (workersAiError) {
