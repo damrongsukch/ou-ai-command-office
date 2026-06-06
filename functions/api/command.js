@@ -352,7 +352,7 @@ function buildSmartLocalOutput(command, agent, agentId) {
     `Request Summary: ${command}`
   ];
 
-  if (hasAny(value, ["morning engine", "daily brief", "today", "วันนี้"])) {
+  if (taskType === "command" && hasAny(value, ["morning engine", "daily brief", "today", "วันนี้"])) {
     return [
       ...header,
       "",
