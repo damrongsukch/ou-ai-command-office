@@ -2894,9 +2894,9 @@
           </main>
 
           <aside class="os-right">
-            <h2>Live Coordination <span class="dot"></span></h2>
-            <div class="os-tabs"><button class="active">All Activity</button><button>Tasks</button><button>Alerts</button><button>Mentions</button></div>
-            <div class="os-feed">
+            <h2 id="osRightTitle">Live Coordination <span class="dot"></span></h2>
+            <div class="os-tabs" id="osRightTabs"><button class="active">All Activity</button><button>Tasks</button><button>Alerts</button><button>Mentions</button></div>
+            <div class="os-feed" id="osRightContent">
               <article><img src="assets/office-agents/nova-chief.png" alt="Nova Chief" /><div><strong>Nova Chief</strong><p>Ready to dispatch Telegram and dashboard commands.</p></div><small>Live</small></article>
               <article><img src="assets/office-agents/ace-sales.png" alt="Ace Sales" /><div><strong>Ace Sales</strong><p>Closed-loop sales routing is ready for visit briefs and proposals.</p></div><small>Update</small></article>
               <article><img src="assets/office-agents/mina-care.png" alt="Mina Care" /><div><strong>Mina Care</strong><p>Follow-up drafts, retention notes, and reminders queued.</p></div><small>Follow-up</small></article>
@@ -3171,7 +3171,58 @@
 
     <script>
       const dashboardToast = document.querySelector("#dashboardToast");
+      const osRightTitle = document.querySelector("#osRightTitle");
+      const osRightTabs = document.querySelector("#osRightTabs");
+      const osRightContent = document.querySelector("#osRightContent");
       let dashboardToastTimer;
+
+      function renderOsRightDefault() {
+        if (!osRightTitle || !osRightTabs || !osRightContent) return;
+        osRightTitle.innerHTML = 'Live Coordination <span class="dot"></span>';
+        osRightTabs.innerHTML = '<button class="active">All Activity</button><button>Tasks</button><button>Alerts</button><button>Mentions</button>';
+        osRightContent.innerHTML = `
+          <article><img src="assets/office-agents/nova-chief.png" alt="Nova Chief" /><div><strong>Nova Chief</strong><p>Ready to dispatch Telegram and dashboard commands.</p></div><small>Live</small></article>
+          <article><img src="assets/office-agents/ace-sales.png" alt="Ace Sales" /><div><strong>Ace Sales</strong><p>Closed-loop sales routing is ready for visit briefs and proposals.</p></div><small>Update</small></article>
+          <article><img src="assets/office-agents/mina-care.png" alt="Mina Care" /><div><strong>Mina Care</strong><p>Follow-up drafts, retention notes, and reminders queued.</p></div><small>Follow-up</small></article>
+          <article><img src="assets/office-agents/atlas-invest.png" alt="Atlas Invest" /><div><strong>Atlas Invest</strong><p>DCA waits for allocation truth before decision.</p></div><small>Ready</small></article>
+          <article><img src="assets/office-agents/vera-shield.png" alt="Vera Shield" /><div><strong>Vera Shield</strong><p>Risk gate active for missing or private source data.</p></div><small>Guard</small></article>
+          <article><img src="assets/office-agents/nimo-vault.png" alt="Nimo Vault" /><div><strong>Nimo Vault</strong><p>Drive vault paths mapped for approved outputs.</p></div><small>Vault</small></article>
+        `;
+      }
+
+      function renderOsRightKnowledge() {
+        if (!osRightTitle || !osRightTabs || !osRightContent || !Array.isArray(knowledgeBase)) return;
+        osRightTitle.innerHTML = 'Knowledge Base <span class="dot"></span>';
+        osRightTabs.innerHTML = '<button class="active">Categories</button><button>Sources</button><button>Privacy</button><button>Routes</button>';
+        osRightContent.innerHTML = knowledgeBase.map((item) => `
+          <article>
+            <div>
+              <strong>${escapeHtml(item.title)}</strong>
+              <p>${escapeHtml(item.summary)}</p>
+              <p><small>${escapeHtml(item.owner)} - ${escapeHtml(item.route)} route</small></p>
+            </div>
+            <small>${escapeHtml(item.sources.length)} src</small>
+          </article>
+        `).join("");
+      }
+
+      function renderOsRightWorkflow() {
+        if (!osRightTitle || !osRightTabs || !osRightContent) return;
+        osRightTitle.innerHTML = 'Workflow Pipeline <span class="dot"></span>';
+        osRightTabs.innerHTML = '<button class="active">Flow</button><button>QC</button><button>Drive</button><button>Logs</button>';
+        osRightContent.innerHTML = ["Ou Input", "Nova Triage", "Context Reducer", "Specialist Agents", "Nova QC", "Drive Storage", "Log Entry", "Final Delivery"].map((step, index) => `
+          <article><div><strong>${index + 1}. ${step}</strong><p>Global command pipeline. Sub-agent output always returns to Nova before Ou receives it.</p></div><small>step</small></article>
+        `).join("");
+      }
+
+      function renderOsRightTasks() {
+        if (!osRightTitle || !osRightTabs || !osRightContent) return;
+        osRightTitle.innerHTML = 'Tasks & Tickets <span class="dot"></span>';
+        osRightTabs.innerHTML = '<button class="active">Today</button><button>Upcoming</button><button>Waiting</button><button>Done</button>';
+        osRightContent.innerHTML = tasks.map((task, index) => `
+          <article><div><strong>${index + 1}. ${escapeHtml(task[0])}</strong><p>${escapeHtml(task[1])} - ${escapeHtml(task[2])} - ${escapeHtml(task[3])}</p></div><small>task</small></article>
+        `).join("");
+      }
 
       document.querySelectorAll("[data-action-title]").forEach((item) => {
         item.addEventListener("click", () => {
@@ -3193,16 +3244,19 @@
 
       function openViewPanel(panelName) {
         if (panelName === "knowledge") {
+          renderOsRightKnowledge();
           renderKnowledgeBase();
           setMenuActive("knowledge");
           return;
         }
         if (panelName === "workflow") {
+          renderOsRightWorkflow();
           renderWorkflowPipelinePanel();
           setMenuActive("workflow");
           return;
         }
         if (panelName === "tasks") {
+          renderOsRightTasks();
           renderTasksPanel();
           setMenuActive("tasks");
           return;
