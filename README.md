@@ -168,7 +168,7 @@ Cloudflare Pages deployment:
 - It returns orchestration metadata: Nova owner, global workflow, QC criteria, and final delivery rule.
 - It calls the OpenAI Responses API server-side when `OPENAI_API_KEY` is configured.
 - It uses `OPENAI_MODEL` when configured, otherwise defaults to `gpt-5-nano` as the low-cost API model.
-- It can use Cloudflare Workers AI via the `AI` binding as a no/low-cost test fallback. Default Workers AI model: `@cf/openai/gpt-oss-20b`.
+- It can use Cloudflare Workers AI via the `AI` binding as a no/low-cost test fallback. Default Workers AI model chain: `@cf/openai/gpt-oss-20b`, then `@cf/meta/llama-3.1-8b-instruct`.
 - It falls back to public-safe smart local draft output if OpenAI is not configured or the API call fails.
 - It captures MVP approval/save metadata through `POST /api/approve`.
 - It does not read or write Google Drive.

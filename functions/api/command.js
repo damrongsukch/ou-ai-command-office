@@ -580,24 +580,43 @@ function extractWorkersAiText(payload) {
 async function buildWorkersAiOutput(command, agent, env, contextPlan, priorError = "") {
   if (!env.AI) throw new Error("Cloudflare Workers AI binding is not configured.");
 
-  const model = env.CLOUDFLARE_AI_MODEL || "@cf/openai/gpt-oss-20b";
+  const models = (env.CLOUDFLARE_AI_MODEL || "@cf/openai/gpt-oss-20b,@cf/meta/llama-3.1-8b-instruct")
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean);
   const prompt = [
-    buildAgentInstructionsWithContext(agent, contextPlan),
+    "You are Nova Chief for Ou AI Command Office.",
+    "Answer directly with a useful work product. Do not explain the system, provider, fallback, model, or quota.",
+    "Every result is a draft for Nova review until Ou approves it. Do not claim anything was saved, sent, uploaded, or stored.",
+    `Agent owner: ${agent.name}`,
+    `Room: ${agent.route}`,
+    `Suggested Drive folder only: ${agent.saveTo}`,
+    `Context route: ${contextPlan.route}`,
+    `Use these sections if relevant: ${agent.sections.join(", ")}`,
+    "If data is missing, state the exact missing source and provide the safest useful draft.",
+    "Keep it concise, practical, and action-ready.",
     "",
-    "Important: Do not mention Cloudflare, Workers AI, OpenAI quota, fallback mode, model name, or provider in the final user-facing answer.",
-    priorError ? `OpenAI fallback reason: ${priorError}` : "",
+    "Portfolio rule if this is investment work: allocation truth first, live timing second, whole-share/order feasibility third, risk gate before buy, hold cash is allowed.",
     "",
     "Ou command:",
     command
-  ].filter(Boolean).join("\n");
+  ].join("\n");
 
-  const payload = await env.AI.run(model, {
-    prompt,
-    max_tokens: 700
-  });
-  const output = extractWorkersAiText(payload);
-  if (!output) throw new Error("Cloudflare Workers AI returned an empty response.");
-  return output;
+  const errors = [];
+  for (const model of models) {
+    try {
+      const payload = await env.AI.run(model, {
+        prompt,
+        max_tokens: 700
+      });
+      const output = extractWorkersAiText(payload);
+      if (output) return output;
+      errors.push(`${model}: empty response`);
+    } catch (error) {
+      errors.push(`${model}: ${error.message}`);
+    }
+  }
+  throw new Error(`Cloudflare Workers AI failed. ${errors.join(" | ")}`);
 }
 
 export async function onRequestPost(context) {
