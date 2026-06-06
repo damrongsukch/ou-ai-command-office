@@ -2809,6 +2809,9 @@
         .os-right {
           grid-column: 3;
           grid-row: 1 / 4;
+          display: grid;
+          grid-template-rows: auto auto minmax(0, 1fr) auto;
+          gap: 0;
           padding: 18px 14px;
           border-left: 1px solid rgba(132, 169, 190, 0.16);
           background:
@@ -2851,6 +2854,9 @@
         .os-feed {
           display: grid;
           gap: 11px;
+          min-height: 0;
+          overflow: auto;
+          padding-right: 2px;
         }
 
         .os-feed article {
@@ -2887,6 +2893,29 @@
           color: #aebfd1;
           font-size: 12px;
           line-height: 1.35;
+        }
+
+        .os-right .nova-chat-card {
+          margin-top: 14px;
+          padding: 11px;
+          border-radius: 14px;
+          background:
+            radial-gradient(circle at 12% 0%, rgba(32, 220, 255, 0.14), transparent 34%),
+            linear-gradient(145deg, rgba(9, 28, 49, 0.88), rgba(4, 13, 25, 0.9));
+        }
+
+        .os-right .nova-chat-log {
+          max-height: 150px;
+        }
+
+        .os-right .nova-chat-form {
+          grid-template-columns: minmax(0, 1fr) 54px;
+        }
+
+        .os-right .nova-chat-form textarea {
+          min-height: 44px;
+          padding: 10px;
+          font-size: 12px;
         }
 
         .agent-status-feed {
@@ -3235,6 +3264,24 @@
               <article><img src="assets/office-agents/vera-shield.png" alt="Vera Shield" /><div><strong>Vera Shield</strong><p>Risk gate active for missing or private source data.</p></div><small>Guard</small></article>
               <article><img src="assets/office-agents/nimo-vault.png" alt="Nimo Vault" /><div><strong>Nimo Vault</strong><p>Drive vault paths mapped for approved outputs.</p></div><small>Vault</small></article>
             </div>
+            <section class="nova-chat-card" aria-label="Chat with Nova Chief">
+              <div class="nova-chat-head">
+                <strong>Chat with Nova</strong>
+                <small id="novaChatStatus">Ready</small>
+              </div>
+              <div class="nova-chat-log" id="novaChatLog" aria-live="polite">
+                <div class="chat-bubble nova"><small>Nova Chief</small>พิมพ์งานที่ต้องการให้ Nova จัดการได้เลย เช่น Morning Engine, Follow-up, DCA, หรือสรุปงานวันนี้.</div>
+              </div>
+              <form class="nova-chat-form" id="novaChatForm">
+                <textarea id="novaChatInput" placeholder="พิมพ์คุยกับ Nova..." rows="2"></textarea>
+                <button class="nova-chat-send" type="submit">Send</button>
+              </form>
+              <div class="chat-quick-row">
+                <button class="chat-chip" type="button" data-chat-prompt="Nova Chief, prepare Morning Engine today.">Morning</button>
+                <button class="chat-chip" type="button" data-chat-prompt="Nova Chief, route today's DCA decision to Atlas Invest and Vera Shield. Use allocation truth first and live timing as a separate check. Source truth: https://damrongsukch.github.io/my-portfolio-monitor-2026/">DCA</button>
+                <button class="chat-chip" type="button" data-chat-prompt="Nova Chief, summarize my next actions and pending follow-ups.">Next Actions</button>
+              </div>
+            </section>
           </aside>
 
           <footer class="os-bottom">
@@ -3305,25 +3352,6 @@
             <div class="command-row">
               <textarea id="commandText" placeholder="Type your command...">Prepare Morning Engine for today.</textarea>
               <button class="send-btn" id="sendCommand" aria-label="Run command">Run</button>
-            </div>
-          </section>
-
-          <section class="nova-chat-card" aria-label="Chat with Nova Chief">
-            <div class="nova-chat-head">
-              <strong>Chat with Nova</strong>
-              <small id="novaChatStatus">Ready</small>
-            </div>
-            <div class="nova-chat-log" id="novaChatLog" aria-live="polite">
-              <div class="chat-bubble nova"><small>Nova Chief</small>สวัสดีครับ Ou พิมพ์งานที่อยากให้ Nova จัดการได้เลย เช่น Morning Engine, follow-up ลูกค้า, DCA หรือสรุปงานวันนี้.</div>
-            </div>
-            <form class="nova-chat-form" id="novaChatForm">
-              <textarea id="novaChatInput" placeholder="พิมพ์คุยกับ Nova..." rows="2"></textarea>
-              <button class="nova-chat-send" type="submit">Send</button>
-            </form>
-            <div class="chat-quick-row">
-              <button class="chat-chip" type="button" data-chat-prompt="Nova Chief, prepare Morning Engine today.">Morning</button>
-              <button class="chat-chip" type="button" data-chat-prompt="Nova Chief, route today's DCA decision to Atlas Invest and Vera Shield. Use allocation truth first and live timing as a separate check. Source truth: https://damrongsukch.github.io/my-portfolio-monitor-2026/">DCA</button>
-              <button class="chat-chip" type="button" data-chat-prompt="Nova Chief, summarize my next actions and pending follow-ups.">Next Actions</button>
             </div>
           </section>
 
