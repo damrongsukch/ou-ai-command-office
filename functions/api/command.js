@@ -251,21 +251,19 @@ function inferAssignedAgents(command = "", routedAgentId = "chief") {
 
 function hasPortfolioSourceTruth(command = "") {
   const value = command.toLowerCase();
-  const hasSourceName = [
-    "portfolio_plan",
-    "dashboard",
-    "holding",
-    "holdings",
-    "allocation table",
-    "target allocation",
-    "current weight",
-    "target weight",
-    "broker export",
-    "dime export"
+  const hasExplicitFile = ["portfolio_plan.json", "broker export", "dime export", "holdings csv", "portfolio export"].some((term) => value.includes(term));
+  const hasAttachedSnapshot = (value.includes("attached") || value.includes("แนบ") || value.includes("screenshot") || value.includes("snapshot")) &&
+    (value.includes("dashboard") || value.includes("portfolio") || value.includes("holding"));
+  const hasStructuredAllocation = [
+    "asset_list",
+    "target_allocation",
+    "current_allocation",
+    "current_weight",
+    "target_weight",
+    "holdings:"
   ].some((term) => value.includes(term));
   const hasTickerLikeData = /\b[A-Z]{2,5}\b/.test(command) && /\d/.test(command);
-  const hasJsonLikeData = value.includes("asset_list") || value.includes("target_allocation") || value.includes("current_allocation");
-  return hasSourceName || hasTickerLikeData || hasJsonLikeData;
+  return hasExplicitFile || hasAttachedSnapshot || hasStructuredAllocation || hasTickerLikeData;
 }
 
 function slug(text = "") {
