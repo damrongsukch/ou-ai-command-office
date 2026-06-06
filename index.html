@@ -4563,6 +4563,8 @@
         const isAi = result.mode === "ai";
         const modeLabel = isAi
           ? "OpenAI backend"
+          : result.mode === "portfolio_snapshot"
+            ? "Portfolio snapshot"
           : result.mode === "local_fallback"
             ? "AI fallback to smart local"
             : result.mode === "local_draft"

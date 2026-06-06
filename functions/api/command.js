@@ -304,8 +304,154 @@ function compactMatch(text, pattern, maxLength = 9000) {
   return match ? match[0].slice(0, maxLength) : "";
 }
 
-async function loadPortfolioMonitorSnapshot(command = "") {
-  if (!hasPortfolioMonitorUrl(command)) return "";
+const PORTFOLIO_SHEET_ID = "1rV26pJqw8rMNO0nplvE9K0gsMCotfZ4dgvXs5kgRFDk";
+
+function parseCsv(text = "") {
+  const rows = [];
+  let row = [];
+  let cell = "";
+  let quoted = false;
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    const next = text[index + 1];
+    if (char === '"' && quoted && next === '"') {
+      cell += '"';
+      index += 1;
+    } else if (char === '"') {
+      quoted = !quoted;
+    } else if (char === "," && !quoted) {
+      row.push(cell);
+      cell = "";
+    } else if ((char === "\n" || char === "\r") && !quoted) {
+      if (char === "\r" && next === "\n") index += 1;
+      row.push(cell);
+      if (row.some((value) => String(value).trim())) rows.push(row);
+      row = [];
+      cell = "";
+    } else {
+      cell += char;
+    }
+  }
+  row.push(cell);
+  if (row.some((value) => String(value).trim())) rows.push(row);
+  return rows;
+}
+
+function rowsToObjects(rows = []) {
+  const [headers = [], ...body] = rows;
+  return body.map((row) => Object.fromEntries(headers.map((header, index) => [String(header || "").trim(), row[index] || ""])));
+}
+
+function rowAny(row = {}, names = [], fallback = "") {
+  const keys = Array.isArray(names) ? names : [names];
+  for (const key of keys) {
+    if (row[key] != null && row[key] !== "") return row[key];
+  }
+  const normalized = Object.fromEntries(Object.entries(row).map(([key, value]) => [
+    String(key).toLowerCase().replace(/[^a-z0-9]/g, ""),
+    value
+  ]));
+  for (const key of keys) {
+    const found = normalized[String(key).toLowerCase().replace(/[^a-z0-9]/g, "")];
+    if (found != null && found !== "") return found;
+  }
+  return fallback;
+}
+
+function numberFrom(value) {
+  const parsed = Number(String(value ?? "").replace(/[^0-9.-]/g, ""));
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function cleanMoney(value, fallback = "0") {
+  const text = String(value ?? "").trim();
+  return text || fallback;
+}
+
+async function fetchPortfolioSheet(sheetName) {
+  const url = `https://docs.google.com/spreadsheets/d/${PORTFOLIO_SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}&headers=1`;
+  const response = await fetch(url, { cf: { cacheTtl: 60 } });
+  if (!response.ok) throw new Error(`Google Sheet ${sheetName} returned HTTP ${response.status}`);
+  return rowsToObjects(parseCsv(await response.text()));
+}
+
+function normalizeHoldingRow(row = {}) {
+  const ticker = String(rowAny(row, ["Ticker", "Symbol"], "")).trim().toUpperCase();
+  return {
+    ticker,
+    layer: rowAny(row, ["Asset_Layer", "Asset Layer", "Layer"], ""),
+    shares: rowAny(row, ["Total_Shares", "Total Shares", "Shares"], "0"),
+    price: cleanMoney(rowAny(row, ["Current_Price_USD", "Current Price USD", "Price"], "0")),
+    marketValueThb: cleanMoney(rowAny(row, ["Market_Value_THB", "Market Value THB", "Value THB"], "0")),
+    marketValueUsd: cleanMoney(rowAny(row, ["Market_Value_USD", "Market Value USD", "Value USD"], "")),
+    weight: cleanMoney(rowAny(row, ["Weight", "Current Weight"], "0")),
+    targetA: cleanMoney(rowAny(row, ["Target_A", "Target A"], "")),
+    targetB: cleanMoney(rowAny(row, ["Target_B", "Target B"], "")),
+    targetWeight: cleanMoney(rowAny(row, ["Target_Weight", "Target Weight", "Target"], "")),
+    signal: rowAny(row, ["Signal"], "HOLD"),
+    pl: rowAny(row, ["PL_Percent", "P/L %", "PL %"], "")
+  };
+}
+
+function normalizeSignalRow(row = {}) {
+  return {
+    ticker: String(rowAny(row, ["Ticker", "Symbol"], "")).trim().toUpperCase(),
+    signal: rowAny(row, ["Signal", "EMA_Signal", "EMA Signal"], ""),
+    rsi7: cleanMoney(rowAny(row, ["RSI 7", "RSI7", "RSI_7"], "")),
+    rsi14: cleanMoney(rowAny(row, ["RSI 14", "RSI14", "RSI_14"], "")),
+    priority: cleanMoney(rowAny(row, ["Priority", "Rank"], "")),
+    smartDcaUsd: cleanMoney(rowAny(row, ["Smart DCA $", "Smart_DCA_USD", "Smart DCA USD", "Smart_DCA"], "")),
+    trend: rowAny(row, ["Total_Trend", "Total Trend", "Trend", "EMA_Trend"], "")
+  };
+}
+
+function kpiLookup(rows = []) {
+  const out = {};
+  for (const row of rows) {
+    const key = String(rowAny(row, ["Metric", "Name"], "")).trim();
+    const value = rowAny(row, ["Value"], "");
+    if (key) out[key] = value;
+  }
+  return out;
+}
+
+function extractRequestedTicker(command = "") {
+  const ignored = new Set(["NOVA", "CHIEF", "DCA", "USD", "RSI", "EMA", "VIX", "API", "PDF", "CSV", "JSON"]);
+  return (String(command).match(/\b[A-Z]{2,5}\b/g) || []).find((token) => !ignored.has(token)) || "";
+}
+
+async function loadPortfolioMonitorData(command = "") {
+  if (!hasPortfolioMonitorUrl(command)) return { text: "", holdings: [], signals: [], kpis: {}, source: "" };
+  try {
+    const [holdingsRows, signalRows, kpiRows] = await Promise.all([
+      fetchPortfolioSheet("Looker_Holdings"),
+      fetchPortfolioSheet("Looker_Signals"),
+      fetchPortfolioSheet("Looker_KPI")
+    ]);
+    const holdings = holdingsRows.map(normalizeHoldingRow).filter((item) => item.ticker);
+    const signals = signalRows.map(normalizeSignalRow).filter((item) => item.ticker);
+    const kpis = kpiLookup(kpiRows);
+    return {
+      source: "live_google_sheet",
+      holdings,
+      signals,
+      kpis,
+      text: [
+        "SOURCE: My Portfolio Monitor 2026 live Google Sheet snapshot.",
+        "Use only these live sheet rows. Do not invent prices, shares, weights, targets, or signals.",
+        `HOLDINGS_JSON: ${JSON.stringify(holdings)}`,
+        `SIGNALS_JSON: ${JSON.stringify(signals)}`,
+        `KPIS_JSON: ${JSON.stringify(kpis)}`
+      ].join("\n\n")
+    };
+  } catch (error) {
+    const fallback = await loadPortfolioScriptSnapshot(command);
+    return { ...fallback, source: fallback.source || "saved_script_fallback", sheetError: error.message };
+  }
+}
+
+async function loadPortfolioScriptSnapshot(command = "") {
+  if (!hasPortfolioMonitorUrl(command)) return { text: "", holdings: [], signals: [], kpis: {}, source: "" };
   const scriptUrl = "https://damrongsukch.github.io/my-portfolio-monitor-2026/script.js?v=20260605-rsi-threshold-colors";
   const response = await fetch(scriptUrl, { cf: { cacheTtl: 60 } }).catch((error) => {
     throw new Error(`Cannot fetch portfolio monitor script. ${error.message}`);
@@ -320,11 +466,64 @@ async function loadPortfolioMonitorSnapshot(command = "") {
     compactMatch(script, /const preferredHoldingOrder = \[[\s\S]*?\];/, 1200)
   ].filter(Boolean);
   if (!parts.length) throw new Error("Portfolio monitor script did not expose a readable snapshot.");
+  return {
+    source: "saved_script_fallback",
+    holdings: [],
+    signals: [],
+    kpis: {},
+    text: [
+      "SOURCE: My Portfolio Monitor 2026 saved script fallback snapshot.",
+      "Use only these ticker symbols, weights, signals, RSI values, cash, KPIs, and DCA rules. Do not invent Stock A/B/C or fake allocation.",
+      ...parts
+    ].join("\n\n")
+  };
+}
+
+async function loadPortfolioMonitorSnapshot(command = "") {
+  return (await loadPortfolioMonitorData(command)).text;
+}
+
+function buildPortfolioTickerSnapshotOutput(command, portfolioData) {
+  const ticker = extractRequestedTicker(command);
+  if (!ticker || !portfolioData?.holdings?.length) return "";
+  const holding = portfolioData.holdings.find((item) => item.ticker === ticker);
+  const signal = portfolioData.signals?.find((item) => item.ticker === ticker) || {};
+  if (!holding) {
+    return [
+      "Atlas Invest - Portfolio Snapshot",
+      "",
+      `Ticker ${ticker} was not found in the live Portfolio Monitor holdings table.`,
+      `Source: ${portfolioData.source || "portfolio_monitor"}`,
+      "",
+      "Next Action: confirm the ticker exists in Looker_Holdings or ask Nova to review the broader portfolio."
+    ].join("\n");
+  }
+  const target = holding.targetWeight || holding.targetA || holding.targetB || "not set";
+  const gap = numberFrom(target) - numberFrom(holding.weight);
   return [
-    "SOURCE: My Portfolio Monitor 2026 public dashboard snapshot.",
-    "Use only these ticker symbols, weights, signals, RSI values, cash, KPIs, and DCA rules. Do not invent Stock A/B/C or fake allocation.",
-    ...parts
-  ].join("\n\n");
+    "Atlas Invest - Portfolio Snapshot",
+    "",
+    `Source: ${portfolioData.source === "live_google_sheet" ? "Live Google Sheet / My Portfolio Monitor 2026" : "Saved script fallback / My Portfolio Monitor 2026"}`,
+    portfolioData.sheetError ? `Sheet warning: ${portfolioData.sheetError}` : "",
+    "",
+    `${ticker}`,
+    `- Layer: ${holding.layer || "n/a"}`,
+    `- Shares: ${holding.shares}`,
+    `- Current price USD: ${holding.price}`,
+    `- Market value THB: ${holding.marketValueThb}`,
+    `- Weight: ${holding.weight}%`,
+    `- Target: ${target}${target === "not set" ? "" : "%"}`,
+    Number.isFinite(gap) && target !== "not set" ? `- Target gap: ${gap >= 0 ? "+" : ""}${gap.toFixed(2)}%` : "",
+    `- Signal: ${signal.signal || holding.signal || "n/a"}`,
+    signal.rsi7 ? `- RSI 7 / RSI 14: ${signal.rsi7} / ${signal.rsi14 || "n/a"}` : "",
+    signal.smartDcaUsd ? `- Smart DCA USD: ${signal.smartDcaUsd}` : "",
+    "",
+    "Decision:",
+    "This is a portfolio snapshot only. For buy/wait decision, Nova still needs a fresh live timing check: current price, chart location, RSI/EMA, and market risk.",
+    "",
+    "Next Action for Ou:",
+    `Ask: "DCA ${ticker} today with budget [USD], use portfolio truth first and live timing second."`
+  ].filter(Boolean).join("\n");
 }
 
 function slug(text = "") {
@@ -336,7 +535,7 @@ function slug(text = "") {
 }
 
 function isDraftMode(mode = "") {
-  return mode === "ai" || mode === "cloudflare_ai" || mode === "local_draft" || mode === "local_fallback";
+  return mode === "ai" || mode === "cloudflare_ai" || mode === "portfolio_snapshot" || mode === "local_draft" || mode === "local_fallback";
 }
 
 function buildLogEntry({ command, agentId, agent, mode, now, output, contextPlan }) {
@@ -721,10 +920,12 @@ export async function onRequestPost(context) {
   const hasWorkersAi = Boolean(context.env?.AI);
   const taskType = inferTaskType(command, agentId);
   let sourceSnapshot = "";
+  let portfolioData = null;
   let sourceError = "";
   if ((taskType === "investment" || taskType === "risk_review") && hasPortfolioMonitorUrl(command)) {
     try {
-      sourceSnapshot = await loadPortfolioMonitorSnapshot(command);
+      portfolioData = await loadPortfolioMonitorData(command);
+      sourceSnapshot = portfolioData.text;
     } catch (error) {
       sourceError = error.message;
     }
@@ -733,7 +934,13 @@ export async function onRequestPost(context) {
   let output = buildSmartLocalOutput(command, agent, agentId);
   let backendNote = "Returned a smart local draft. OpenAI and Cloudflare Workers AI are optional and only run when configured.";
 
-  if ((taskType === "investment" || taskType === "risk_review") && hasPortfolioMonitorUrl(command) && !sourceSnapshot) {
+  const tickerSnapshotOutput = portfolioData ? buildPortfolioTickerSnapshotOutput(command, portfolioData) : "";
+
+  if (tickerSnapshotOutput) {
+    mode = "portfolio_snapshot";
+    output = tickerSnapshotOutput;
+    backendNote = "Returned a deterministic portfolio ticker snapshot from My Portfolio Monitor data. AI was bypassed to avoid invented values.";
+  } else if ((taskType === "investment" || taskType === "risk_review") && hasPortfolioMonitorUrl(command) && !sourceSnapshot) {
     mode = "source_required";
     output = buildSmartLocalOutput(command, agent, agentId);
     backendNote = `Portfolio guardrail blocked AI generation because the Portfolio Monitor snapshot could not be loaded. ${sourceError}`;
