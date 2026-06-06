@@ -491,6 +491,13 @@ function buildAgentInstructions(agent) {
     `- Suggested Drive save folder: ${agent.saveTo}`,
     `- Required output sections: ${agent.sections.join(", ")}`,
     "",
+    "Output style:",
+    "- Do the task directly. Do not explain the system, provider, fallback mode, or that you are an AI.",
+    "- Start with the useful answer, not with a process disclaimer.",
+    "- Use concise headings and bullets.",
+    "- If information is missing, include an Assumptions / Missing Source section and give the best safe draft.",
+    "- Keep the answer practical for Ou to use immediately.",
+    "",
     "When acting as a specialist, write the sub-agent output as returning to Nova Chief for consolidation and QC. Do not speak as if the specialist bypasses Nova.",
     "Always include whether this is a draft for Nova review or a final Nova-approved response.",
     "Do not claim files were created, stored, uploaded, emailed, or sent unless the tool response proves that action happened. In this MVP, Google Drive save is manual after Ou approval.",
@@ -571,11 +578,11 @@ function extractWorkersAiText(payload) {
 async function buildWorkersAiOutput(command, agent, env, contextPlan, priorError = "") {
   if (!env.AI) throw new Error("Cloudflare Workers AI binding is not configured.");
 
-  const model = env.CLOUDFLARE_AI_MODEL || "@cf/meta/llama-3.1-8b-instruct";
+  const model = env.CLOUDFLARE_AI_MODEL || "@cf/openai/gpt-oss-20b";
   const prompt = [
     buildAgentInstructionsWithContext(agent, contextPlan),
     "",
-    "Provider note: You are running through Cloudflare Workers AI as the low/no-cost test fallback.",
+    "Important: Do not mention Cloudflare, Workers AI, OpenAI quota, fallback mode, model name, or provider in the final user-facing answer.",
     priorError ? `OpenAI fallback reason: ${priorError}` : "",
     "",
     "Ou command:",
