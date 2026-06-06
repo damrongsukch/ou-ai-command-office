@@ -4285,7 +4285,13 @@
           drivePath: drivePath.textContent,
           driveUrl: currentDriveUrl,
           fileName: driveFileName.textContent,
-          createdAt: new Date().toLocaleString("en-GB", { timeZone: "Asia/Bangkok", hour12: false })
+          createdAt: new Date().toLocaleString("en-GB", { timeZone: "Asia/Bangkok", hour12: false }),
+          backendResult: latestBackendResult ? {
+            mode: latestBackendResult.mode,
+            route: latestBackendResult.route,
+            logEntry: latestBackendResult.logEntry,
+            receivedAt: latestBackendResult.receivedAt
+          } : null
         };
         const next = [item, ...readHistory()];
         writeHistory(next);
@@ -4293,10 +4299,30 @@
         return item;
       }
 
-      function updateHistoryStatus(id, status) {
-        const next = readHistory().map((item) => item.id === id ? { ...item, status } : item);
+      function updateHistoryStatus(id, status, approval = null) {
+        const next = readHistory().map((item) => item.id === id ? { ...item, status, approval } : item);
         writeHistory(next);
         renderHistory();
+      }
+
+      async function approveHistoryItem(item, status) {
+        if (!backendAvailableForCurrentHost()) return null;
+        const response = await fetch("./api/approve", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            status: status === "Saved to Drive" ? "saved" : "approved",
+            title: item.title,
+            command: item.prompt,
+            saveTo: item.drivePath,
+            route: item.backendResult?.route || {
+              agentName: item.agent,
+              saveTo: item.drivePath
+            }
+          })
+        });
+        if (!response.ok) throw new Error(`Approval API returned ${response.status}`);
+        return response.json();
       }
 
       function historySaveText(item) {
@@ -4498,7 +4524,31 @@
           if (item) copyText(historySaveText(item), "History Item");
         }
         if (statusButton) {
-          updateHistoryStatus(statusButton.dataset.historyStatus, statusButton.dataset.status);
+          const item = readHistory().find((entry) => entry.id === statusButton.dataset.historyStatus);
+          const status = statusButton.dataset.status;
+          if (!item) return;
+          if (status === "Approved" || status === "Saved to Drive") {
+            activeOutput.innerHTML = `<h3>${escapeHtml(status)}</h3><p>Sending approval metadata to Nova backend...</p>`;
+            approveHistoryItem(item, status)
+              .then((approval) => {
+                updateHistoryStatus(item.id, status, approval);
+                activeOutput.innerHTML = `
+                  <h3>${escapeHtml(status)}</h3>
+                  <p>${escapeHtml(approval?.message || "Approval captured locally.")}</p>
+                  <dl class="agent-stats">
+                    <div><dt>Save to</dt><dd>${escapeHtml(approval?.saveTo || item.drivePath)}</dd></div>
+                    <div><dt>Output file</dt><dd>${escapeHtml(approval?.suggestedOutputFile || item.fileName)}</dd></div>
+                    <div><dt>Log file</dt><dd>${escapeHtml(approval?.suggestedLogFile || "Manual log")}</dd></div>
+                  </dl>
+                `;
+              })
+              .catch((error) => {
+                updateHistoryStatus(item.id, status);
+                activeOutput.innerHTML = `<h3>${escapeHtml(status)}</h3><p>Local status updated. Approval backend was not available: ${escapeHtml(error.message)}</p>`;
+              });
+            return;
+          }
+          updateHistoryStatus(item.id, status);
         }
       });
 

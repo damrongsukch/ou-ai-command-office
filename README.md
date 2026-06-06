@@ -159,6 +159,8 @@ Cloudflare Pages deployment:
 
 - Production dashboard: https://ou-ai-command-office-ceo.pages.dev/
 - Command endpoint: https://ou-ai-command-office-ceo.pages.dev/api/command
+- Approval endpoint: https://ou-ai-command-office-ceo.pages.dev/api/approve
+- Health endpoint: https://ou-ai-command-office-ceo.pages.dev/api/health
 
 - It receives dashboard commands through `POST /api/command`.
 - It routes the command to the right agent room.
@@ -166,15 +168,17 @@ Cloudflare Pages deployment:
 - It returns orchestration metadata: Nova owner, global workflow, QC criteria, and final delivery rule.
 - It calls the OpenAI Responses API server-side when `OPENAI_API_KEY` is configured.
 - It falls back to public-safe smart local draft output if OpenAI is not configured or the API call fails.
+- It captures MVP approval/save metadata through `POST /api/approve`.
 - It does not read or write Google Drive.
 - It does not store private data.
 - It must never expose `private_context` data in the UI.
+- `/api/private-context` is optional and returns a setup message until the correct `PRIVATE_DB` binding is configured.
 
 GitHub Pages cannot run this backend function, so the dashboard falls back to local/manual mode there. Cloudflare Pages or `wrangler pages dev` can run the `/api/command` endpoint.
 
 Next backend phases:
 
-1. Add approval status endpoint.
-2. Add private task/output database.
+1. Add persistent audit log storage.
+2. Reconnect optional D1 private context after the correct Cloudflare database is created.
 3. Add Google Drive save after Ou approval.
 4. Add optional calendar/email connectors after privacy rules are settled.

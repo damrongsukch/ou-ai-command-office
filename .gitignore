@@ -21,8 +21,10 @@ functions/*
 !functions/api/
 functions/api/*
 !functions/api/command.js
+!functions/api/approve.js
+!functions/api/health.js
+!functions/api/private-context.js
 !functions/api/telegram/
 functions/api/telegram/*
 !functions/api/telegram/webhook.js
 migrations/
-wrangler.toml
