@@ -1,0 +1,80 @@
+{
+  "version": "nova_context_reducer_v1",
+  "default_budget_tokens": 8000,
+  "quality_gates": [
+    "accuracy_preserved",
+    "no_missing_expected_context",
+    "no_irrelevant_private_context",
+    "token_reduction_above_50_pct",
+    "source_list_visible"
+  ],
+  "routes": {
+    "command": {
+      "budget_tokens": 8000,
+      "agents": ["Nova Chief"],
+      "include": [
+        "prompts/chief_of_staff.md",
+        "prompts/morning_engine.md",
+        "data/tasks.json",
+        "data/recent_outputs.json",
+        "data/google_drive_structure.md"
+      ],
+      "exclude": ["real customer files", "real portfolio exports", "private astrology context"]
+    },
+    "sales": {
+      "budget_tokens": 10000,
+      "agents": ["Nova Chief", "Ace Sales", "Mina Care", "Keno Expert", "Lina Voice"],
+      "include": [
+        "prompts/asm_sales.md",
+        "prompts/customer_follow_up.md",
+        "prompts/product_knowledge.md",
+        "prompts/linkedin_email.md",
+        "data/customer_crm.csv",
+        "data/google_drive_structure.md"
+      ],
+      "exclude": ["portfolio_plan.json unless requested", "life astrology context"]
+    },
+    "portfolio": {
+      "budget_tokens": 6000,
+      "agents": ["Nova Chief", "Atlas Invest", "Vera Shield"],
+      "include": [
+        "prompts/portfolio_agent.md",
+        "prompts/risk_manager.md",
+        "data/portfolio_plan.json",
+        "data/google_drive_structure.md"
+      ],
+      "exclude": ["customer_crm.csv", "sales prompts", "life astrology context"]
+    },
+    "document": {
+      "budget_tokens": 9000,
+      "agents": ["Nova Chief", "Dara Docs", "Lina Voice"],
+      "include": [
+        "prompts/document_studio.md",
+        "prompts/linkedin_email.md",
+        "prompts/quality_gate.md",
+        "data/google_drive_structure.md"
+      ],
+      "exclude": ["private files unless attached by Ou", "portfolio live data"]
+    },
+    "life": {
+      "budget_tokens": 7000,
+      "agents": ["Nova Chief", "Luna Balance"],
+      "include": [
+        "prompts/life_astrology.md",
+        "data/ou_profile.md",
+        "data/google_drive_structure.md"
+      ],
+      "exclude": ["family astrology details unless explicitly provided locally", "customer data"]
+    },
+    "memory": {
+      "budget_tokens": 5000,
+      "agents": ["Nova Chief", "Nimo Vault"],
+      "include": [
+        "prompts/memory_data_steward.md",
+        "data/google_drive_structure.md",
+        "data/audit_log_schema.json"
+      ],
+      "exclude": ["raw private_context data", "large historical logs"]
+    }
+  }
+}

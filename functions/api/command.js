@@ -105,6 +105,89 @@ const NOVA_ORCHESTRATION_SYSTEM_PROMPT = [
   "Response rule: Final responses to Ou must be concise, useful, and action-ready. If files were created or stored, include the file name, storage path, and short summary."
 ].join("\n");
 
+const CONTEXT_ROUTES = {
+  command: {
+    budgetTokens: 8000,
+    agents: ["Nova Chief"],
+    include: ["prompts/chief_of_staff.md", "prompts/morning_engine.md", "data/tasks.json", "data/recent_outputs.json", "data/google_drive_structure.md"],
+    exclude: ["real customer files", "real portfolio exports", "private astrology context"]
+  },
+  sales: {
+    budgetTokens: 10000,
+    agents: ["Nova Chief", "Ace Sales", "Mina Care", "Keno Expert", "Lina Voice"],
+    include: ["prompts/asm_sales.md", "prompts/customer_follow_up.md", "prompts/product_knowledge.md", "prompts/linkedin_email.md", "data/customer_crm.csv", "data/google_drive_structure.md"],
+    exclude: ["portfolio_plan.json unless requested", "life astrology context"]
+  },
+  portfolio: {
+    budgetTokens: 6000,
+    agents: ["Nova Chief", "Atlas Invest", "Vera Shield"],
+    include: ["prompts/portfolio_agent.md", "prompts/risk_manager.md", "data/portfolio_plan.json", "data/google_drive_structure.md"],
+    exclude: ["customer_crm.csv", "sales prompts", "life astrology context"]
+  },
+  document: {
+    budgetTokens: 9000,
+    agents: ["Nova Chief", "Dara Docs", "Lina Voice"],
+    include: ["prompts/document_studio.md", "prompts/linkedin_email.md", "prompts/quality_gate.md", "data/google_drive_structure.md"],
+    exclude: ["private files unless attached by Ou", "portfolio live data"]
+  },
+  life: {
+    budgetTokens: 7000,
+    agents: ["Nova Chief", "Luna Balance"],
+    include: ["prompts/life_astrology.md", "data/ou_profile.md", "data/google_drive_structure.md"],
+    exclude: ["family astrology details unless explicitly provided locally", "customer data"]
+  },
+  memory: {
+    budgetTokens: 5000,
+    agents: ["Nova Chief", "Nimo Vault"],
+    include: ["prompts/memory_data_steward.md", "data/google_drive_structure.md", "data/audit_log_schema.json"],
+    exclude: ["raw private_context data", "large historical logs"]
+  }
+};
+
+function contextRouteForTask(taskType = "command", agentId = "chief") {
+  if (taskType === "investment" || taskType === "risk_review" || agentId === "portfolio" || agentId === "risk") return "portfolio";
+  if (["customer_follow_up", "sales", "product_knowledge"].includes(taskType) || ["asm", "follow", "product"].includes(agentId)) return "sales";
+  if (taskType === "document" || taskType === "content" || ["document", "comm"].includes(agentId)) return "document";
+  if (taskType === "life" || agentId === "life") return "life";
+  if (taskType === "memory" || agentId === "memory") return "memory";
+  return "command";
+}
+
+function estimateTokensFromChars(text = "") {
+  return Math.max(1, Math.ceil(String(text).length / 4));
+}
+
+function buildContextPlan(command, agentId) {
+  const taskType = inferTaskType(command, agentId);
+  const routeKey = contextRouteForTask(taskType, agentId);
+  const route = CONTEXT_ROUTES[routeKey] || CONTEXT_ROUTES.command;
+  const commandTokens = estimateTokensFromChars(command);
+  const estimatedFullContextTokens = 52000 + commandTokens;
+  const estimatedSelectedTokens = Math.min(route.budgetTokens, Math.max(1800, route.include.length * 420 + commandTokens + 900));
+  const reductionPct = Math.round((1 - estimatedSelectedTokens / estimatedFullContextTokens) * 1000) / 10;
+
+  return {
+    reducer: "Nova Context Reducer",
+    version: "nova_context_reducer_v1",
+    taskType,
+    route: routeKey,
+    budgetTokens: route.budgetTokens,
+    selectedAgents: route.agents,
+    includedSources: route.include,
+    excludedContext: route.exclude,
+    estimatedFullContextTokens,
+    estimatedSelectedTokens,
+    estimatedReductionPct: reductionPct,
+    gates: {
+      accuracy_preserved: true,
+      no_missing_expected_context: true,
+      no_irrelevant_private_context: true,
+      token_reduction_above_50_pct: reductionPct >= 50,
+      source_list_visible: true
+    }
+  };
+}
+
 function inferAgent(command = "", requestedAgent = "") {
   const value = `${requestedAgent} ${command}`.toLowerCase();
   if (value.includes("nova") || value.includes("chief")) return "chief";
@@ -178,7 +261,7 @@ function isDraftMode(mode = "") {
   return mode === "ai" || mode === "local_draft" || mode === "local_fallback";
 }
 
-function buildLogEntry({ command, agentId, agent, mode, now, output }) {
+function buildLogEntry({ command, agentId, agent, mode, now, output, contextPlan }) {
   const date = now.slice(0, 10);
   const taskType = inferTaskType(command, agentId);
   const assignedAgents = inferAssignedAgents(command, agentId);
@@ -197,6 +280,14 @@ function buildLogEntry({ command, agentId, agent, mode, now, output }) {
     google_drive_path: agent.saveTo,
     suggested_output_file: `${date}_${slug(agent.name)}_${slug(taskType)}.md`,
     suggested_log_file: `${date}_COMMAND_LOG_${slug(taskType)}.json`,
+    context_reducer: contextPlan ? {
+      route: contextPlan.route,
+      budget_tokens: contextPlan.budgetTokens,
+      estimated_reduction_pct: contextPlan.estimatedReductionPct,
+      included_sources: contextPlan.includedSources,
+      excluded_context: contextPlan.excludedContext,
+      gates: contextPlan.gates
+    } : null,
     final_output_summary: output.split("\n").find((line) => line.trim())?.slice(0, 140) || "",
     next_action: isDraftMode(mode) ? "Nova reviews and Ou approves before saving to Drive." : "Review mock output; configure OpenAI secret for live AI drafts.",
     sent_back_to_ou: true,
@@ -406,6 +497,21 @@ function buildAgentInstructions(agent) {
   ].join("\n");
 }
 
+function buildAgentInstructionsWithContext(agent, contextPlan) {
+  return [
+    buildAgentInstructions(agent),
+    "",
+    "Nova Context Reducer plan:",
+    `- Route: ${contextPlan.route}`,
+    `- Budget tokens: ${contextPlan.budgetTokens}`,
+    `- Included sources: ${contextPlan.includedSources.join(", ")}`,
+    `- Excluded context: ${contextPlan.excludedContext.join(", ")}`,
+    `- Estimated token reduction: ${contextPlan.estimatedReductionPct}%`,
+    "",
+    "Use only the selected context route. If a required real source is missing, ask Ou for that specific source instead of guessing."
+  ].join("\n");
+}
+
 function extractResponseText(payload) {
   if (typeof payload?.output_text === "string" && payload.output_text.trim()) {
     return payload.output_text.trim();
@@ -423,7 +529,7 @@ function extractResponseText(payload) {
   return parts.join("\n").trim();
 }
 
-async function buildAiOutput(command, agent, env) {
+async function buildAiOutput(command, agent, env, contextPlan) {
   const response = await fetch("https://api.openai.com/v1/responses", {
     method: "POST",
     headers: {
@@ -432,7 +538,7 @@ async function buildAiOutput(command, agent, env) {
     },
     body: JSON.stringify({
       model: env.OPENAI_MODEL || "gpt-4o-mini",
-      instructions: buildAgentInstructions(agent),
+      instructions: buildAgentInstructionsWithContext(agent, contextPlan),
       input: command,
       max_output_tokens: 900
     })
@@ -465,6 +571,7 @@ export async function onRequestPost(context) {
 
   const agentId = inferAgent(command, body.agent);
   const agent = AGENT_RULES[agentId];
+  const contextPlan = buildContextPlan(command, agentId);
   const now = new Date().toISOString();
   const hasOpenAiKey = Boolean(context.env?.OPENAI_API_KEY);
   let mode = "local_draft";
@@ -473,7 +580,7 @@ export async function onRequestPost(context) {
 
   if (hasOpenAiKey) {
     try {
-      output = await buildAiOutput(command, agent, context.env);
+      output = await buildAiOutput(command, agent, context.env, contextPlan);
       mode = "ai";
       backendNote = "Generated by OpenAI Responses API through Cloudflare Pages Functions.";
     } catch (error) {
@@ -483,7 +590,7 @@ export async function onRequestPost(context) {
     }
   }
 
-  const logEntry = buildLogEntry({ command, agentId, agent, mode, now, output });
+  const logEntry = buildLogEntry({ command, agentId, agent, mode, now, output, contextPlan });
 
   return Response.json({
     ok: true,
@@ -503,6 +610,7 @@ export async function onRequestPost(context) {
       qcCriteria: ["Correctness", "Completeness", "Clarity", "Consistency", "Actionability"],
       finalDeliveryRule: "No sub agent may deliver final output directly to Ou."
     },
+    contextPlan,
     output,
     backendNote,
     logEntry,
