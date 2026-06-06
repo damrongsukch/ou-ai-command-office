@@ -280,6 +280,64 @@
         line-height: 1.45;
       }
 
+      .kb-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .kb-card {
+        display: grid;
+        gap: 8px;
+        padding: 12px;
+        border: 1px solid rgba(88, 217, 255, 0.16);
+        border-radius: 10px;
+        background: rgba(4, 18, 33, 0.72);
+      }
+
+      .kb-card strong {
+        color: #e6f6ff;
+        font-size: 13px;
+      }
+
+      .kb-card p {
+        margin: 0;
+        color: #a9bbcc;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .kb-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .kb-meta span {
+        padding: 4px 7px;
+        border: 1px solid rgba(52, 211, 153, 0.18);
+        border-radius: 999px;
+        color: #7ee7c0;
+        background: rgba(52, 211, 153, 0.08);
+        font-size: 10px;
+        font-weight: 800;
+      }
+
+      .kb-sources {
+        margin: 0;
+        padding-left: 16px;
+        color: #93a9bd;
+        font-size: 11px;
+        line-height: 1.5;
+      }
+
+      @media (max-width: 760px) {
+        .kb-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
       .helper-text {
         margin-top: -3px;
         margin-bottom: 9px;
@@ -2796,7 +2854,7 @@
               <a href="./team.html"><i>AG</i><span>Agents</span><b>10</b></a>
               <button type="button" data-action-title="Workflow Pipeline" data-action-detail="Ou input -> Nova triage -> specialist agents -> QC -> Drive/log -> output."><i>WF</i><span>Workflow Pipeline</span><b></b></button>
               <button type="button" data-action-title="Tasks & Tickets" data-action-detail="Task inbox is in backend phase. Telegram commands already route through Nova."><i>TK</i><span>Tasks & Tickets</span><b></b></button>
-              <a href="./docs/nova_orchestration_sop.md"><i>KB</i><span>Knowledge Base</span><b></b></a>
+              <button type="button" data-view-panel="knowledge"><i>KB</i><span>Knowledge Base</span><b>8</b></button>
               <button type="button" data-action-title="Data & Insights" data-action-detail="Insights panel will connect portfolio, sales, and task summaries in the next data phase."><i>DI</i><span>Data & Insights</span><b></b></button>
               <a href="https://drive.google.com/drive/folders/1uDn-U5ZFm7yRhoUu9gvdvu2xy3UGS_lU?usp=sharing" target="_blank" rel="noopener"><i>AV</i><span>Archive Vault</span><b></b></a>
               <a href="./docs/telegram_nova_setup.md"><i>CM</i><span>Communications</span><b></b></a>
@@ -2887,9 +2945,9 @@
           <nav class="os-nav" aria-label="AI OS navigation">
             <button class="active" type="button"><i>CC</i><span>Command Center</span><b>10</b></button>
             <button type="button"><i>AG</i><span>Agents</span><b>10</b></button>
-            <button type="button"><i>WF</i><span>Workflow Pipeline</span><b>7</b></button>
-            <button type="button"><i>TK</i><span>Tasks & Tickets</span><b>24</b></button>
-            <button type="button"><i>KB</i><span>Knowledge Base</span><b>82%</b></button>
+            <button type="button" data-view-panel="workflow"><i>WF</i><span>Workflow Pipeline</span><b>7</b></button>
+            <button type="button" data-view-panel="tasks"><i>TK</i><span>Tasks & Tickets</span><b>24</b></button>
+            <button type="button" data-view-panel="knowledge"><i>KB</i><span>Knowledge Base</span><b>8</b></button>
             <button type="button"><i>AV</i><span>Archive Vault</span><b>OK</b></button>
           </nav>
           <section class="system-card">
@@ -3126,6 +3184,35 @@
         });
       });
 
+      function setMenuActive(panelName) {
+        document.querySelectorAll(".os-menu button, .os-nav button").forEach((item) => item.classList.remove("active"));
+        document.querySelectorAll("[data-view-panel]").forEach((item) => {
+          item.classList.toggle("active", item.dataset.viewPanel === panelName);
+        });
+      }
+
+      function openViewPanel(panelName) {
+        if (panelName === "knowledge") {
+          renderKnowledgeBase();
+          setMenuActive("knowledge");
+          return;
+        }
+        if (panelName === "workflow") {
+          renderWorkflowPipelinePanel();
+          setMenuActive("workflow");
+          return;
+        }
+        if (panelName === "tasks") {
+          renderTasksPanel();
+          setMenuActive("tasks");
+          return;
+        }
+      }
+
+      document.querySelectorAll("[data-view-panel]").forEach((item) => {
+        item.addEventListener("click", () => openViewPanel(item.dataset.viewPanel));
+      });
+
       const agentStatus = {
         nova: ["Nova Chief", "Command owner. Routes Telegram/dashboard commands, assigns agents, reviews QC, and returns the final answer to Ou.", "DISPATCH READY"],
         ace: ["Ace Sales", "Sales lead. Prepares visit plans, opportunity analysis, proposal inputs, and weekly ProXES reports.", "SALES READY"],
@@ -3321,6 +3408,73 @@
           saveTo: "99_Archive/"
         }
       };
+
+      const knowledgeBase = [
+        {
+          title: "Product Knowledge",
+          owner: "Keno Expert",
+          route: "sales",
+          summary: "Product and solution notes for customer fit, technical explanation, proposal support, and objection handling.",
+          sources: ["prompts/product_knowledge.md", "data/customer_crm.csv", "02_Sales_ProXES/Proposals/"],
+          uses: ["Product fit", "Technical Q&A", "Proposal input", "Objection support"]
+        },
+        {
+          title: "Sales SOP",
+          owner: "Ace Sales",
+          route: "sales",
+          summary: "Visit brief, follow-up, Salesforce draft notes, weekly report, and opportunity tracking rules.",
+          sources: ["prompts/asm_sales.md", "prompts/customer_follow_up.md", "prompts/weekly_sales_report.md"],
+          uses: ["Visit plan", "Meeting summary", "Follow-up email", "Weekly report"]
+        },
+        {
+          title: "Portfolio Rules",
+          owner: "Atlas Invest",
+          route: "portfolio",
+          summary: "Allocation truth first, timing second, risk gate before any DCA recommendation.",
+          sources: ["prompts/portfolio_agent.md", "prompts/risk_manager.md", "data/portfolio_plan.json"],
+          uses: ["DCA decision", "Allocation gap", "Risk watch", "Buy/wait/hold cash"]
+        },
+        {
+          title: "Document Studio",
+          owner: "Dara Docs",
+          route: "document",
+          summary: "PDF, Excel, slides, infographic, layout, QA, and print/readiness rules.",
+          sources: ["prompts/document_studio.md", "prompts/quality_gate.md", "05_Documents_Studio/"],
+          uses: ["PDF A4", "Excel template", "Presentation", "Artwork review"]
+        },
+        {
+          title: "Voice Templates",
+          owner: "Lina Voice",
+          route: "document",
+          summary: "LinkedIn posts, English email, caption, customer tone, and executive summary references.",
+          sources: ["prompts/linkedin_email.md", "05_Documents_Studio/Templates/"],
+          uses: ["LinkedIn post", "Customer email", "Caption", "Tone rewrite"]
+        },
+        {
+          title: "Life & Astrology Rules",
+          owner: "Luna Balance",
+          route: "life",
+          summary: "Private-safe daily/weekly life planning rules. Real birth/family details stay outside public repo.",
+          sources: ["prompts/life_astrology.md", "data/ou_profile.md", "06_Life_Astrology/"],
+          uses: ["Daily reading", "Weekly reading", "Family planning", "Timing suggestion"]
+        },
+        {
+          title: "Drive Storage Rules",
+          owner: "Nimo Vault",
+          route: "memory",
+          summary: "Google Drive vault structure, naming rules, public/private split, archive, and retrieval guidance.",
+          sources: ["data/google_drive_structure.md", "prompts/memory_data_steward.md", "99_Archive/"],
+          uses: ["Save path", "File naming", "Privacy classification", "Archive lookup"]
+        },
+        {
+          title: "Nova Orchestration",
+          owner: "Nova Chief",
+          route: "command",
+          summary: "Central command rules: Ou input to Nova first, sub agents return to Nova, QC before final delivery.",
+          sources: ["prompts/nova_orchestration_system.md", "docs/nova_context_reducer.md", "data/context_manifest.json"],
+          uses: ["Task routing", "Quality gate", "Context reduction", "Final approval"]
+        }
+      ];
 
       const teamRooms = [
         { title: "Command Room", agentIds: ["chief", "memory"] },
@@ -3598,6 +3752,77 @@
             <button type="button" data-copy-current="summary">Copy Drive Info</button>
           </div>
           <pre class="prompt-preview">${escapeHtml(currentPromptText)}</pre>
+        `;
+      }
+
+      function renderKnowledgeBase() {
+        currentWorkflowTitle = "Knowledge Base";
+        const currentPlan = buildContextPlan(commandText.value || "Open Knowledge Base", currentAgent);
+        currentPromptText = [
+          "Nova Chief, use Knowledge Base as a public-safe reference library.",
+          "",
+          "Rules:",
+          "- Use only the relevant category for the task.",
+          "- Do not load real customer, family, portfolio export, or confidential files from GitHub.",
+          "- If real source truth is needed, ask Ou to provide it or open the correct Google Drive folder.",
+          "- Return all specialist results to Nova before final delivery.",
+          "",
+          "Available categories:",
+          ...knowledgeBase.map((item, index) => `${index + 1}. ${item.title} - ${item.owner} - route: ${item.route}`)
+        ].join("\n");
+        currentLogText = "";
+        renderContextPlan(currentPlan);
+        activeOutput.innerHTML = `
+          <h3>Knowledge Base</h3>
+          <p><strong>Purpose:</strong> Public-safe library for agent reference, SOPs, prompt templates, route rules, and Drive storage guidance.</p>
+          <p><strong>Privacy:</strong> Real customer, family, portfolio export, and confidential files stay in Google Drive/private context only.</p>
+          <div class="output-actions">
+            <button type="button" data-copy-current="prompt">Copy KB Prompt</button>
+            <button type="button" data-copy-current="summary">Copy Drive Info</button>
+          </div>
+          <div class="kb-grid">
+            ${knowledgeBase.map((item) => `
+              <article class="kb-card">
+                <strong>${escapeHtml(item.title)}</strong>
+                <p>${escapeHtml(item.summary)}</p>
+                <div class="kb-meta">
+                  <span>${escapeHtml(item.owner)}</span>
+                  <span>${escapeHtml(item.route)}</span>
+                </div>
+                <ul class="kb-sources">
+                  ${item.sources.map((source) => `<li>${escapeHtml(source)}</li>`).join("")}
+                </ul>
+              </article>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      function renderWorkflowPipelinePanel() {
+        currentWorkflowTitle = "Workflow Pipeline";
+        currentPromptText = "Ou Input -> Nova Chief -> Specialist Agents -> Return to Nova -> QC -> Google Drive -> Log Entry -> Final Delivery.";
+        activeOutput.innerHTML = `
+          <h3>Workflow Pipeline</h3>
+          <p>Every request starts with Nova Chief, then Nova selects only the relevant agents and context to reduce token load.</p>
+          <div class="kb-grid">
+            ${["Ou Input", "Nova Triage", "Context Reducer", "Specialist Agents", "Nova QC", "Drive Storage", "Log Entry", "Final Delivery"].map((step, index) => `
+              <article class="kb-card"><strong>${index + 1}. ${step}</strong><p>${escapeHtml(currentPromptText)}</p></article>
+            `).join("")}
+          </div>
+        `;
+      }
+
+      function renderTasksPanel() {
+        currentWorkflowTitle = "Tasks & Tickets";
+        currentPromptText = "Nova task queue uses dashboard mock tasks until real database/ticket storage is enabled.";
+        activeOutput.innerHTML = `
+          <h3>Tasks & Tickets</h3>
+          <p>The task queue is currently a mock/local view for workflow testing before a real database is connected.</p>
+          <div class="kb-grid">
+            ${tasks.map((task, index) => `
+              <article class="kb-card"><strong>${index + 1}. ${escapeHtml(task[0])}</strong><p>${escapeHtml(task[1])} - ${escapeHtml(task[2])} - ${escapeHtml(task[3])}</p></article>
+            `).join("")}
+          </div>
         `;
       }
 

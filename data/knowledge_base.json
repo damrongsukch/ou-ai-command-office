@@ -1,0 +1,79 @@
+{
+  "version": "knowledge_base_v1",
+  "purpose": "Public-safe reference library for Ou AI Command Office agents.",
+  "privacy_rule": "Do not store real customer, family, portfolio export, or confidential files here. Real files stay in Google Drive/private_context.",
+  "categories": [
+    {
+      "id": "product_knowledge",
+      "title": "Product Knowledge",
+      "owner": "Keno Expert",
+      "route": "sales",
+      "summary": "Product and solution notes used for customer fit, technical explanation, proposal support, and objection handling.",
+      "sources": ["prompts/product_knowledge.md", "data/customer_crm.csv", "02_Sales_ProXES/Proposals/"],
+      "use_cases": ["Product fit", "Technical Q&A", "Proposal input", "Customer objection support"]
+    },
+    {
+      "id": "sales_sop",
+      "title": "Sales SOP",
+      "owner": "Ace Sales",
+      "route": "sales",
+      "summary": "Sales workflow rules for visit briefs, follow-up, Salesforce draft notes, weekly report, and opportunity tracking.",
+      "sources": ["prompts/asm_sales.md", "prompts/customer_follow_up.md", "prompts/weekly_sales_report.md"],
+      "use_cases": ["Visit plan", "Meeting summary", "Follow-up email", "Weekly sales report"]
+    },
+    {
+      "id": "portfolio_rules",
+      "title": "Portfolio Rules",
+      "owner": "Atlas Invest",
+      "route": "portfolio",
+      "summary": "Portfolio decision rules: allocation truth first, timing second, risk gate before any DCA recommendation.",
+      "sources": ["prompts/portfolio_agent.md", "prompts/risk_manager.md", "data/portfolio_plan.json"],
+      "use_cases": ["DCA decision", "Allocation gap", "Risk watch", "Buy/wait/hold cash recommendation"]
+    },
+    {
+      "id": "document_studio",
+      "title": "Document Studio",
+      "owner": "Dara Docs",
+      "route": "document",
+      "summary": "Document creation and review rules for PDF, Excel, slides, infographic, layout, QA, and print readiness.",
+      "sources": ["prompts/document_studio.md", "prompts/quality_gate.md", "05_Documents_Studio/"],
+      "use_cases": ["PDF A4", "Excel template", "Presentation", "Artwork review"]
+    },
+    {
+      "id": "voice_templates",
+      "title": "Voice Templates",
+      "owner": "Lina Voice",
+      "route": "document",
+      "summary": "Writing references for LinkedIn posts, English email, caption, customer tone, and executive summary.",
+      "sources": ["prompts/linkedin_email.md", "05_Documents_Studio/Templates/"],
+      "use_cases": ["LinkedIn post", "Customer email", "Caption", "Tone rewrite"]
+    },
+    {
+      "id": "life_astrology_rules",
+      "title": "Life & Astrology Rules",
+      "owner": "Luna Balance",
+      "route": "life",
+      "summary": "Private-safe daily/weekly life planning rules. Real birth/family details stay outside public repo.",
+      "sources": ["prompts/life_astrology.md", "data/ou_profile.md", "06_Life_Astrology/"],
+      "use_cases": ["Daily reading", "Weekly reading", "Family planning", "Timing suggestion"]
+    },
+    {
+      "id": "drive_storage_rules",
+      "title": "Drive Storage Rules",
+      "owner": "Nimo Vault",
+      "route": "memory",
+      "summary": "Google Drive vault structure, naming rules, public/private split, archive, and retrieval guidance.",
+      "sources": ["data/google_drive_structure.md", "prompts/memory_data_steward.md", "99_Archive/"],
+      "use_cases": ["Save-to-Drive path", "File naming", "Privacy classification", "Archive lookup"]
+    },
+    {
+      "id": "nova_orchestration",
+      "title": "Nova Orchestration",
+      "owner": "Nova Chief",
+      "route": "command",
+      "summary": "Central command rules: Ou input must go to Nova first, sub agents return to Nova, QC before final delivery.",
+      "sources": ["prompts/nova_orchestration_system.md", "docs/nova_context_reducer.md", "data/context_manifest.json"],
+      "use_cases": ["Task routing", "Quality gate", "Context reduction", "Final approval"]
+    }
+  ]
+}
