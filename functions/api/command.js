@@ -258,7 +258,7 @@ function slug(text = "") {
 }
 
 function isDraftMode(mode = "") {
-  return mode === "ai" || mode === "local_draft" || mode === "local_fallback";
+  return mode === "ai" || mode === "cloudflare_ai" || mode === "local_draft" || mode === "local_fallback";
 }
 
 function buildLogEntry({ command, agentId, agent, mode, now, output, contextPlan }) {
@@ -493,6 +493,8 @@ function buildAgentInstructions(agent) {
     "",
     "When acting as a specialist, write the sub-agent output as returning to Nova Chief for consolidation and QC. Do not speak as if the specialist bypasses Nova.",
     "Always include whether this is a draft for Nova review or a final Nova-approved response.",
+    "Do not claim files were created, stored, uploaded, emailed, or sent unless the tool response proves that action happened. In this MVP, Google Drive save is manual after Ou approval.",
+    "If you recommend a file or Drive path, label it as suggested only.",
     "End with: Next Action for Ou."
   ].join("\n");
 }
