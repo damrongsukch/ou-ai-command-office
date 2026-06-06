@@ -476,6 +476,8 @@
       }
 
       .chat-bubble.nova {
+        width: 100%;
+        max-width: 100%;
         border-color: rgba(77, 229, 166, 0.28);
         background: rgba(21, 51, 44, 0.72);
       }
@@ -2905,7 +2907,7 @@
         }
 
         .os-right .nova-chat-log {
-          max-height: 150px;
+          max-height: min(32vh, 300px);
         }
 
         .os-right .nova-chat-form {
@@ -4603,6 +4605,25 @@
         return (useful.length ? useful : lines.slice(0, 8)).join("\n").slice(0, 1200);
       }
 
+      function novaChatReplyFromBackend(result, command) {
+        const route = result?.contextPlan?.route || result?.route?.agentId || "command";
+        if (result?.mode === "source_required" && route === "portfolio") {
+          return [
+            "ผมยังไม่ควรฟันธงหุ้นตัวนี้จากแชตอย่างเดียวครับ",
+            "",
+            "ต้องใช้ข้อมูลจริงก่อน:",
+            "1. Portfolio Monitor / portfolio_plan.json เพื่อดู weight, target, signal, RSI",
+            "2. Live price/chart เพื่อดู timing แยกต่างหาก",
+            "",
+            `คำสั่งที่รับ: ${command}`,
+            "",
+            "ส่งใหม่แบบนี้ได้เลย:",
+            "เช็คหุ้น AVGO โดยใช้ https://damrongsukch.github.io/my-portfolio-monitor-2026/ แล้วดู live timing แยกให้ด้วย"
+          ].join("\n");
+        }
+        return compactNovaReply(result?.output || "");
+      }
+
       async function runNovaChat(message) {
         const command = message.trim();
         if (!command) return;
@@ -4618,7 +4639,7 @@
           pendingBubble.remove();
           if (backendResult?.ok) {
             renderBackendResult(backendResult);
-            appendChatBubble("nova", "Nova Chief", compactNovaReply(backendResult.output));
+            appendChatBubble("nova", "Nova Chief", novaChatReplyFromBackend(backendResult, command));
             saveCurrentTask("Draft");
           } else {
             renderOutput("Command Accepted", currentAgent, command, currentAgent.workflow);

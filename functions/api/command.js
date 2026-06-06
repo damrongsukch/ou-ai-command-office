@@ -188,12 +188,38 @@ function buildContextPlan(command, agentId) {
   };
 }
 
+function hasPortfolioIntent(command = "") {
+  const value = String(command).toLowerCase();
+  const tickerTokens = String(command).match(/\b[A-Z]{2,5}\b/g) || [];
+  const ignoredTickerWords = new Set(["NOVA", "CHIEF", "DCA", "USD", "RSI", "EMA", "VIX", "API", "PDF", "CSV", "JSON"]);
+  const hasTicker = tickerTokens.some((token) => !ignoredTickerWords.has(token));
+  return [
+    "portfolio",
+    "dca",
+    "allocation",
+    "atlas",
+    "stock",
+    "ticker",
+    "shares",
+    "holding",
+    "holdings",
+    "invest",
+    "investment",
+    "หุ้น",
+    "พอร์ต",
+    "ลงทุน",
+    "เช็คหุ้น",
+    "ดูหุ้น",
+    "ซื้อหุ้น"
+  ].some((term) => value.includes(term)) || hasTicker;
+}
+
 function inferAgent(command = "", requestedAgent = "") {
   const value = `${requestedAgent} ${command}`.toLowerCase();
+  if (hasPortfolioIntent(command)) return "portfolio";
   if (value.includes("nova") || value.includes("chief")) return "chief";
   if (value.includes("risk") || value.includes("vera") || value.includes("shield") || value.includes("downside")) return "risk";
   if (value.includes("product") || value.includes("technical") || value.includes("keno") || value.includes("solution")) return "product";
-  if (value.includes("portfolio") || value.includes("dca") || value.includes("allocation") || value.includes("atlas")) return "portfolio";
   if (value.includes("follow") || value.includes("mina") || value.includes("salesforce")) return "follow";
   if (value.includes("linkedin") || value.includes("caption") || value.includes("lina") || value.includes("tone")) return "comm";
   if (value.includes("email") && !value.includes("follow")) return "comm";
@@ -206,7 +232,7 @@ function inferAgent(command = "", requestedAgent = "") {
 
 function inferTaskType(command = "", agentId = "chief") {
   const value = command.toLowerCase();
-  if (value.includes("dca") || value.includes("portfolio") || value.includes("allocation")) return "investment";
+  if (hasPortfolioIntent(command)) return "investment";
   if (value.includes("risk") || value.includes("downside") || agentId === "risk") return "risk_review";
   if (value.includes("follow") || value.includes("salesforce")) return "customer_follow_up";
   if (value.includes("sales") || value.includes("visit") || value.includes("proposal") || value.includes("weekly")) return "sales";
@@ -233,7 +259,7 @@ function inferAssignedAgents(command = "", routedAgentId = "chief") {
   if (value.includes("sales") || value.includes("visit") || value.includes("proposal") || value.includes("weekly")) selected.add("asm");
   if (value.includes("follow") || value.includes("customer") || value.includes("salesforce")) selected.add("follow");
   if (value.includes("product") || value.includes("technical") || value.includes("solution")) selected.add("product");
-  if (value.includes("portfolio") || value.includes("dca") || value.includes("allocation")) selected.add("portfolio");
+  if (hasPortfolioIntent(command)) selected.add("portfolio");
   if (value.includes("risk") || value.includes("downside") || value.includes("shield")) selected.add("risk");
   if (value.includes("document") || value.includes("pdf") || value.includes("excel") || value.includes("ppt")) selected.add("document");
   if (value.includes("linkedin") || value.includes("email") || value.includes("caption") || value.includes("tone")) selected.add("comm");
