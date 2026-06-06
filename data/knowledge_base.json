@@ -26,9 +26,9 @@
       "title": "Portfolio Rules",
       "owner": "Atlas Invest",
       "route": "portfolio",
-      "summary": "Portfolio decision rules: allocation truth first, timing second, risk gate before any DCA recommendation.",
+      "summary": "Portfolio decision rules: allocation truth first, live timing second, Dime/order feasibility third, and Vera Shield risk gate before any DCA recommendation.",
       "sources": ["prompts/portfolio_agent.md", "prompts/risk_manager.md", "data/portfolio_plan.json"],
-      "use_cases": ["DCA decision", "Allocation gap", "Risk watch", "Buy/wait/hold cash recommendation"]
+      "use_cases": ["DCA decision", "Allocation gap", "RSI/EMA/VIX timing check", "52-week range check", "Whole-share feasibility", "Buy/wait/hold cash recommendation"]
     },
     {
       "id": "document_studio",

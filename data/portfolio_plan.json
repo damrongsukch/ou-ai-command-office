@@ -1,15 +1,58 @@
 {
   "strategy": "buy-only DCA",
   "asset_limit": 10,
+  "portfolio_owner": "Ou",
+  "portfolio_agent": "Atlas Invest",
+  "risk_agent": "Vera Shield",
+  "decision_style": "allocation-aware, timing-aware, cash-is-allowed",
   "source_of_truth": {
     "allocation": "portfolio dashboard or latest portfolio_plan.json",
-    "timing": "fresh live market data only"
+    "timing": "fresh live market data only",
+    "execution_feasibility": "broker/order rules such as Dime whole-share constraints"
   },
+  "decision_ranking": [
+    "target allocation gap",
+    "live chart quality",
+    "order-size feasibility",
+    "risk veto",
+    "cash hold option"
+  ],
   "rules": {
     "do_not_use_memory_as_current_portfolio_truth": true,
     "refresh_live_market_data_every_time": true,
-    "allow_hold_cash": true
+    "allow_hold_cash": true,
+    "do_not_force_buy": true,
+    "check_whole_share_feasibility": true,
+    "avoid_buying_overweight_assets": true,
+    "avoid_chasing_near_52_week_high_without_clear_reason": true,
+    "separate_allocation_decision_from_entry_timing": true
   },
+  "required_live_checks": [
+    "current price",
+    "52_week_range_position",
+    "RSI",
+    "EMA trend",
+    "VIX or broad market risk mood",
+    "recent catalyst or ex-dividend date if relevant",
+    "whole-share or minimum-order constraint"
+  ],
+  "known_execution_constraints": [
+    {
+      "asset": "MLPI",
+      "rule": "Do not recommend fractional buying when the available budget is below one full share."
+    },
+    {
+      "asset": "ROCQ",
+      "rule": "Do not recommend fractional buying when the available budget is below one full share."
+    }
+  ],
+  "output_decision_options": [
+    "buy",
+    "wait",
+    "hold cash",
+    "needs live data",
+    "needs allocation truth"
+  ],
   "required_fields_for_real_plan": [
     "asset_list",
     "target_allocation",
@@ -21,6 +64,6 @@
     "whole_share_constraints",
     "excluded_assets",
     "review_frequency"
-  ]
+  ],
+  "privacy_note": "This file is a public-safe rules template. Real holdings, balances, brokerage screenshots, and transaction history must stay in Google Drive/private context."
 }
-
