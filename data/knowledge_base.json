@@ -27,7 +27,7 @@
       "owner": "Atlas Invest",
       "route": "portfolio",
       "summary": "Portfolio decision rules: allocation truth first, live timing second, Dime/order feasibility third, and Vera Shield risk gate before any DCA recommendation.",
-      "sources": ["prompts/portfolio_agent.md", "prompts/risk_manager.md", "data/portfolio_plan.json"],
+      "sources": ["prompts/portfolio_agent.md", "prompts/risk_manager.md", "data/portfolio_plan.json", "https://damrongsukch.github.io/my-portfolio-monitor-2026/"],
       "use_cases": ["DCA decision", "Allocation gap", "RSI/EMA/VIX timing check", "52-week range check", "Whole-share feasibility", "Buy/wait/hold cash recommendation"]
     },
     {

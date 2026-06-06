@@ -6,9 +6,37 @@
   "risk_agent": "Vera Shield",
   "decision_style": "allocation-aware, timing-aware, cash-is-allowed",
   "source_of_truth": {
-    "allocation": "portfolio dashboard or latest portfolio_plan.json",
+    "allocation": "My Portfolio Monitor 2026 dashboard or latest portfolio_plan.json",
+    "portfolio_monitor_url": "https://damrongsukch.github.io/my-portfolio-monitor-2026/",
+    "google_sheet_id": "1rV26pJqw8rMNO0nplvE9K0gsMCotfZ4dgvXs5kgRFDk",
     "timing": "fresh live market data only",
     "execution_feasibility": "broker/order rules such as Dime whole-share constraints"
+  },
+  "dashboard_fields": {
+    "kpi_sheet": "Looker_KPI",
+    "holdings_sheet": "Looker_Holdings",
+    "nav_sheet": "Looker_NAV",
+    "monthly_sheet": "Looker_Monthly",
+    "signals_sheet": "Looker_Signals",
+    "important_fields": [
+      "Ticker",
+      "Asset_Layer",
+      "Total_Shares",
+      "Current_Price_USD",
+      "Market_Value_THB",
+      "Weight",
+      "Target_A",
+      "Target_B",
+      "Target_Weight",
+      "Signal",
+      "RSI 7",
+      "RSI 14",
+      "Smart DCA USD",
+      "Priority",
+      "Market Mode",
+      "Cash",
+      "VIX"
+    ]
   },
   "decision_ranking": [
     "target allocation gap",
@@ -35,6 +63,13 @@
     "VIX or broad market risk mood",
     "recent catalyst or ex-dividend date if relevant",
     "whole-share or minimum-order constraint"
+  ],
+  "portfolio_monitor_rules": [
+    "Use portfolio monitor holdings/weights/targets as allocation truth when the link or dashboard snapshot is provided.",
+    "Use Market Mode to choose Target_A or Target_B when available.",
+    "Use Signals and RSI 7 / RSI 14 for DCA candidate ranking.",
+    "Use Smart DCA USD only as sizing guidance, not as an automatic buy instruction.",
+    "Use Cash and budget together; if budget is below minimum order or whole-share feasibility, hold cash."
   ],
   "known_execution_constraints": [
     {

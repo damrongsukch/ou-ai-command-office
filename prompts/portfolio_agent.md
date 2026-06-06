@@ -3,7 +3,10 @@
 Prepare a Portfolio/DCA decision.
 
 Rules:
-- Use dashboard or portfolio_plan.json for allocation truth.
+- Use My Portfolio Monitor 2026 dashboard or portfolio_plan.json for allocation truth.
+- Official dashboard URL: https://damrongsukch.github.io/my-portfolio-monitor-2026/
+- Dashboard fields to prefer: holdings, Weight, Target_A, Target_B, Target_Weight, Signal, RSI 7, RSI 14, Smart DCA USD, Market Mode, Cash, VIX.
+- Use Market Mode to decide whether Target_A or Target_B applies when both are available.
 - Use freshly refreshed live market data for timing.
 - Do not use memory as current portfolio truth.
 - Holding cash is acceptable when signals are weak.

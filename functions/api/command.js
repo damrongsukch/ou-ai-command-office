@@ -252,6 +252,7 @@ function inferAssignedAgents(command = "", routedAgentId = "chief") {
 function hasPortfolioSourceTruth(command = "") {
   const value = command.toLowerCase();
   const hasExplicitFile = ["portfolio_plan.json", "broker export", "dime export", "holdings csv", "portfolio export"].some((term) => value.includes(term));
+  const hasPortfolioMonitorUrl = value.includes("damrongsukch.github.io/my-portfolio-monitor-2026");
   const hasAttachedSnapshot = (value.includes("attached") || value.includes("แนบ") || value.includes("screenshot") || value.includes("snapshot")) &&
     (value.includes("dashboard") || value.includes("portfolio") || value.includes("holding"));
   const hasStructuredAllocation = [
@@ -265,7 +266,7 @@ function hasPortfolioSourceTruth(command = "") {
   const tickerTokens = command.match(/\b[A-Z]{2,5}\b/g) || [];
   const ignoredTickerWords = new Set(["DCA", "USD", "RSI", "EMA", "VIX", "API", "PDF", "CSV", "JSON"]);
   const hasTickerLikeData = tickerTokens.some((token) => !ignoredTickerWords.has(token)) && /\d/.test(command);
-  return hasExplicitFile || hasAttachedSnapshot || hasStructuredAllocation || hasTickerLikeData;
+  return hasExplicitFile || hasPortfolioMonitorUrl || hasAttachedSnapshot || hasStructuredAllocation || hasTickerLikeData;
 }
 
 function slug(text = "") {
@@ -403,18 +404,19 @@ function buildSmartLocalOutput(command, agent, agentId) {
       ...header,
       "",
       "Portfolio / DCA Workflow:",
-      "1. Portfolio Truth Source: use portfolio_plan.json, dashboard export, or latest sheet as allocation truth first.",
+      "1. Portfolio Truth Source: use My Portfolio Monitor 2026, portfolio_plan.json, dashboard export, or latest sheet as allocation truth first.",
       "2. Allocation Gap: compare current weight vs target weight before naming any buy.",
-      "3. Timing Lens: check live market/chart separately after allocation truth is known.",
-      "4. Required Live Checks: current price, 52-week range position, RSI, EMA trend, VIX/market risk mood, and catalyst/dividend timing if relevant.",
-      "5. Execution Feasibility: check broker/order rules and whole-share constraints before recommending a buy.",
-      "6. Decision Rule: Buy only when allocation gap, price setup, RSI/EMA/VIX, and order-size feasibility agree.",
-      "7. Risk Note: Vera Shield should veto stretched, overweight, near-high, below-order-size, or incomplete-data decisions.",
+      "3. Dashboard Fields: use holdings, Weight, Target_A/Target_B, Signal, RSI 7, RSI 14, Smart DCA USD, Market Mode, Cash, and VIX.",
+      "4. Timing Lens: check live market/chart separately after allocation truth is known.",
+      "5. Required Live Checks: current price, 52-week range position, RSI, EMA trend, VIX/market risk mood, and catalyst/dividend timing if relevant.",
+      "6. Execution Feasibility: check broker/order rules and whole-share constraints before recommending a buy.",
+      "7. Decision Rule: Buy only when allocation gap, price setup, RSI/EMA/VIX, and order-size feasibility agree.",
+      "8. Risk Note: Vera Shield should veto stretched, overweight, near-high, below-order-size, or incomplete-data decisions.",
       "",
       "Current Decision: WAIT FOR SOURCE TRUTH.",
       "Reason: this command did not include current holdings/allocation or live timing data.",
       "",
-      "Next Action for Ou: attach portfolio_plan.json, dashboard screenshot/export, or today allocation table."
+      "Next Action for Ou: attach portfolio_plan.json, dashboard screenshot/export, today allocation table, or the My Portfolio Monitor 2026 link."
     ].join("\n");
   }
 
