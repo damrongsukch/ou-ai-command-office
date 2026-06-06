@@ -167,6 +167,7 @@ Cloudflare Pages deployment:
 - It embeds `prompts/nova_orchestration_system.md` as the Nova Chief orchestration contract for AI responses.
 - It returns orchestration metadata: Nova owner, global workflow, QC criteria, and final delivery rule.
 - It calls the OpenAI Responses API server-side when `OPENAI_API_KEY` is configured.
+- It uses `OPENAI_MODEL` when configured, otherwise defaults to `gpt-5-nano` as the low-cost API model.
 - It falls back to public-safe smart local draft output if OpenAI is not configured or the API call fails.
 - It captures MVP approval/save metadata through `POST /api/approve`.
 - It does not read or write Google Drive.

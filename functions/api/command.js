@@ -537,7 +537,7 @@ async function buildAiOutput(command, agent, env, contextPlan) {
       Authorization: `Bearer ${env.OPENAI_API_KEY}`
     },
     body: JSON.stringify({
-      model: env.OPENAI_MODEL || "gpt-4o-mini",
+      model: env.OPENAI_MODEL || "gpt-5-nano",
       instructions: buildAgentInstructionsWithContext(agent, contextPlan),
       input: command,
       max_output_tokens: 900
