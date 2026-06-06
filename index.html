@@ -2730,6 +2730,169 @@
           line-height: 1.35;
         }
 
+        .agent-status-feed {
+          gap: 12px;
+        }
+
+        .agent-status-feed article {
+          border-bottom: 0;
+        }
+
+        .agent-hero-card {
+          display: grid !important;
+          grid-template-columns: 76px 1fr;
+          gap: 14px !important;
+          align-items: center !important;
+          padding: 14px !important;
+          border: 1px solid rgba(88, 217, 255, 0.18);
+          border-radius: 16px;
+          background:
+            radial-gradient(circle at 24% 18%, rgba(32, 220, 255, 0.16), transparent 38%),
+            linear-gradient(140deg, rgba(14, 36, 61, 0.94), rgba(5, 14, 29, 0.96));
+          box-shadow: 0 18px 38px rgba(0, 0, 0, 0.28);
+        }
+
+        .agent-hero-card img {
+          width: 74px;
+          height: 74px;
+          border: 1px solid rgba(255, 255, 255, 0.16);
+          border-radius: 18px;
+          background: rgba(255, 255, 255, 0.06);
+          object-fit: cover;
+        }
+
+        .agent-hero-card h3 {
+          margin: 0;
+          color: #f4fbff;
+          font-size: 18px;
+          line-height: 1.1;
+        }
+
+        .agent-hero-card p {
+          margin-top: 6px;
+          color: #a9c3d9;
+          font-size: 12px;
+        }
+
+        .agent-hero-card .status-chip {
+          display: inline-flex;
+          width: max-content;
+          margin-top: 9px;
+          padding: 5px 8px;
+          border-radius: 999px;
+          color: #06111f;
+          background: #34d399;
+          font-size: 10px;
+          font-weight: 900;
+        }
+
+        .agent-action-card {
+          display: block !important;
+          grid-template-columns: none !important;
+          padding: 13px !important;
+          border: 1px solid rgba(132, 169, 190, 0.14);
+          border-radius: 14px;
+          background: rgba(8, 22, 38, 0.78);
+        }
+
+        .agent-action-card strong {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #e8f7ff;
+          font-size: 13px;
+        }
+
+        .agent-action-card strong::before {
+          content: "";
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: #20dcff;
+          box-shadow: 0 0 14px rgba(32, 220, 255, 0.65);
+        }
+
+        .agent-action-card.next strong::before {
+          background: #f59e0b;
+          box-shadow: 0 0 14px rgba(245, 158, 11, 0.55);
+        }
+
+        .agent-action-card p {
+          margin-top: 8px;
+          color: #b8cde0;
+          font-size: 12px;
+          line-height: 1.45;
+        }
+
+        .agent-stepper {
+          display: grid !important;
+          grid-template-columns: none !important;
+          gap: 8px !important;
+          padding: 13px !important;
+          border: 1px solid rgba(52, 211, 153, 0.16);
+          border-radius: 14px;
+          background: rgba(4, 24, 30, 0.72);
+        }
+
+        .agent-stepper header {
+          display: flex;
+          justify-content: space-between;
+          gap: 10px;
+          color: #dffbf0;
+          font-size: 12px;
+          font-weight: 900;
+        }
+
+        .step-row {
+          display: grid;
+          grid-template-columns: 24px 1fr;
+          gap: 8px;
+          align-items: center;
+          color: #aac2d7;
+          font-size: 12px;
+        }
+
+        .step-row b {
+          display: grid;
+          place-items: center;
+          width: 22px;
+          height: 22px;
+          border-radius: 7px;
+          color: #04111d;
+          background: #60a5fa;
+          font-size: 11px;
+        }
+
+        .agent-mini-grid {
+          display: grid !important;
+          grid-template-columns: 1fr;
+          gap: 9px !important;
+          align-items: stretch !important;
+          padding-bottom: 0 !important;
+        }
+
+        .agent-mini-tile {
+          padding: 11px;
+          border: 1px solid rgba(132, 169, 190, 0.13);
+          border-radius: 13px;
+          background: rgba(255, 255, 255, 0.045);
+        }
+
+        .agent-mini-tile small {
+          display: block;
+          color: #83a0b8;
+          font-size: 10px;
+          text-transform: uppercase;
+        }
+
+        .agent-mini-tile b {
+          display: block;
+          margin-top: 4px;
+          color: #dffaff;
+          font-size: 12px;
+          line-height: 1.35;
+        }
+
         .os-bottom {
           grid-column: 2;
           grid-row: 3;
@@ -3189,6 +3352,7 @@
         if (!osRightTitle || !osRightTabs || !osRightContent) return;
         osRightTitle.innerHTML = 'Live Coordination <span class="dot"></span>';
         osRightTabs.innerHTML = '<button class="active">All Activity</button><button>Tasks</button><button>Alerts</button><button>Mentions</button>';
+        osRightContent.className = "os-feed";
         osRightContent.innerHTML = `
           <article><img src="assets/office-agents/nova-chief.png" alt="Nova Chief" /><div><strong>Nova Chief</strong><p>Ready to dispatch Telegram and dashboard commands.</p></div><small>Live</small></article>
           <article><img src="assets/office-agents/ace-sales.png" alt="Ace Sales" /><div><strong>Ace Sales</strong><p>Closed-loop sales routing is ready for visit briefs and proposals.</p></div><small>Update</small></article>
@@ -3203,6 +3367,7 @@
         if (!osRightTitle || !osRightTabs || !osRightContent || !Array.isArray(knowledgeBase)) return;
         osRightTitle.innerHTML = 'Knowledge Base <span class="dot"></span>';
         osRightTabs.innerHTML = '<button class="active">Categories</button><button>Sources</button><button>Privacy</button><button>Routes</button>';
+        osRightContent.className = "os-feed";
         osRightContent.innerHTML = knowledgeBase.map((item) => `
           <article>
             <div>
@@ -3219,6 +3384,7 @@
         if (!osRightTitle || !osRightTabs || !osRightContent) return;
         osRightTitle.innerHTML = 'Workflow Pipeline <span class="dot"></span>';
         osRightTabs.innerHTML = '<button class="active">Flow</button><button>QC</button><button>Drive</button><button>Logs</button>';
+        osRightContent.className = "os-feed";
         osRightContent.innerHTML = ["Ou Input", "Nova Triage", "Context Reducer", "Specialist Agents", "Nova QC", "Drive Storage", "Log Entry", "Final Delivery"].map((step, index) => `
           <article><div><strong>${index + 1}. ${step}</strong><p>Global command pipeline. Sub-agent output always returns to Nova before Ou receives it.</p></div><small>step</small></article>
         `).join("");
@@ -3228,6 +3394,7 @@
         if (!osRightTitle || !osRightTabs || !osRightContent) return;
         osRightTitle.innerHTML = 'Tasks & Tickets <span class="dot"></span>';
         osRightTabs.innerHTML = '<button class="active">Today</button><button>Upcoming</button><button>Waiting</button><button>Done</button>';
+        osRightContent.className = "os-feed";
         osRightContent.innerHTML = tasks.map((task, index) => `
           <article><div><strong>${index + 1}. ${escapeHtml(task[0])}</strong><p>${escapeHtml(task[1])} - ${escapeHtml(task[2])} - ${escapeHtml(task[3])}</p></div><small>task</small></article>
         `).join("");
@@ -3386,31 +3553,32 @@
         const data = agentStatus[agentKey];
         if (!data || !osRightTitle || !osRightTabs || !osRightContent) return;
         osRightTitle.innerHTML = `${escapeHtml(data.name)} <span class="dot"></span>`;
-        osRightTabs.innerHTML = '<button class="active">Now</button><button>Next</button><button>Pipeline</button><button>Output</button>';
+        osRightTabs.innerHTML = '<button class="active">Overview</button><button>Now</button><button>Next</button><button>Drive</button>';
+        osRightContent.className = "os-feed agent-status-feed";
         osRightContent.innerHTML = `
-          <article>
+          <article class="agent-hero-card">
             <img src="${escapeHtml(data.avatar)}" alt="${escapeHtml(data.name)}" />
-            <div><strong>Role</strong><p>${escapeHtml(data.role)}</p></div>
-            <small>${escapeHtml(data.status)}</small>
-          </article>
-          <article>
-            <div><strong>Currently Doing</strong><p>${escapeHtml(data.current)}</p></div>
-            <small>now</small>
-          </article>
-          <article>
-            <div><strong>Next Step</strong><p>${escapeHtml(data.next)}</p></div>
-            <small>next</small>
-          </article>
-          <article>
             <div>
-              <strong>Pipeline</strong>
-              <p>${data.pipeline.map((step, index) => `${index + 1}. ${escapeHtml(step)}`).join("<br>")}</p>
+              <h3>${escapeHtml(data.name)}</h3>
+              <p>${escapeHtml(data.role)}</p>
+              <span class="status-chip">${escapeHtml(data.status)}</span>
             </div>
-            <small>${escapeHtml(data.pipeline.length)} steps</small>
           </article>
-          <article>
-            <div><strong>Save Output To</strong><p>${escapeHtml(data.saveTo)}</p></div>
-            <small>Drive</small>
+          <article class="agent-action-card">
+            <strong>Currently Doing</strong>
+            <p>${escapeHtml(data.current)}</p>
+          </article>
+          <article class="agent-action-card next">
+            <strong>Next Step</strong>
+            <p>${escapeHtml(data.next)}</p>
+          </article>
+          <article class="agent-stepper">
+            <header><span>Working Pipeline</span><small>${escapeHtml(data.pipeline.length)} steps</small></header>
+            ${data.pipeline.map((step, index) => `<div class="step-row"><b>${index + 1}</b><span>${escapeHtml(step)}</span></div>`).join("")}
+          </article>
+          <article class="agent-mini-grid">
+            <div class="agent-mini-tile"><small>Save Output</small><b>${escapeHtml(data.saveTo)}</b></div>
+            <div class="agent-mini-tile"><small>Return Rule</small><b>Back to Nova QC</b></div>
           </article>
         `;
       }
