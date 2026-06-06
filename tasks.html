@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ou AI Command Office - Tasks & Tickets</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #030b16;
+        --panel: rgba(7, 21, 37, 0.84);
+        --line: rgba(119, 171, 217, 0.2);
+        --text: #f4f8ff;
+        --muted: #9fb1c8;
+        --cyan: #22d3ee;
+        --green: #34d399;
+        --blue: #60a5fa;
+        --purple: #a78bfa;
+        --gold: #f59e0b;
+        --red: #fb7185;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0; min-height: 100vh; color: var(--text);
+        background:
+          radial-gradient(circle at 24% 2%, rgba(32, 220, 255, 0.16), transparent 32%),
+          radial-gradient(circle at 78% 34%, rgba(167, 139, 250, 0.11), transparent 30%),
+          #030b16;
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+      }
+      a { color: inherit; text-decoration: none; }
+      .shell { min-height: 100vh; display: grid; grid-template-columns: 220px minmax(0, 1fr); }
+      .side {
+        padding: 22px 14px; border-right: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(5, 18, 36, 0.98), rgba(2, 8, 18, 0.98));
+      }
+      .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 26px; font-size: 28px; font-weight: 900; }
+      .brand-mark { width: 30px; height: 30px; border: 5px solid var(--cyan); border-right-color: var(--purple); border-radius: 50%; }
+      .menu { display: grid; gap: 9px; }
+      .menu a {
+        display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 10px;
+        min-height: 44px; padding: 9px 12px; border: 1px solid rgba(119, 171, 217, 0.1);
+        border-radius: 13px; color: #d7e6fb; background: rgba(255, 255, 255, 0.025); font-size: 13px;
+      }
+      .menu a.active, .menu a:hover {
+        border-color: rgba(32, 220, 255, 0.28);
+        background: linear-gradient(90deg, rgba(32, 220, 255, 0.14), rgba(96, 165, 250, 0.06));
+      }
+      .icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; color: var(--cyan); background: rgba(32, 220, 255, 0.1); font-size: 11px; font-weight: 900; }
+      .main { padding: 24px; }
+      .top { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 18px; }
+      h1, h2, h3, p { margin: 0; }
+      h1 { font-size: clamp(30px, 4vw, 50px); line-height: 1; }
+      .subtitle { margin-top: 12px; color: var(--muted); max-width: 720px; line-height: 1.55; }
+      .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+      .actions a {
+        padding: 10px 12px; border: 1px solid rgba(32, 220, 255, 0.25); border-radius: 999px;
+        background: rgba(32, 220, 255, 0.08); color: #e8fbff; font-size: 12px; font-weight: 800;
+      }
+      .board { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 16px; align-items: start; }
+      .column, .brief, .task {
+        border: 1px solid var(--line); border-radius: 20px; background: var(--panel); box-shadow: 0 22px 70px rgba(0,0,0,0.25);
+      }
+      .column { padding: 16px; display: grid; gap: 12px; }
+      .column-header { display: flex; align-items: center; justify-content: space-between; }
+      .column-header h2 { font-size: 18px; }
+      .count { display: grid; place-items: center; min-width: 30px; height: 30px; border-radius: 10px; color: #04111f; background: var(--green); font-weight: 900; }
+      .task { padding: 14px; display: grid; gap: 10px; border-radius: 16px; }
+      .task-top { display: flex; justify-content: space-between; gap: 12px; }
+      .task h3 { font-size: 15px; }
+      .task p { color: var(--muted); font-size: 12px; line-height: 1.45; }
+      .agent { display: flex; align-items: center; gap: 8px; color: #dcecff; font-size: 12px; font-weight: 800; }
+      .agent img { width: 30px; height: 30px; border-radius: 10px; object-fit: cover; }
+      .priority { padding: 5px 8px; border-radius: 999px; font-size: 10px; font-weight: 900; text-transform: uppercase; }
+      .high { color: #17040a; background: var(--red); }
+      .medium { color: #160f02; background: var(--gold); }
+      .low { color: #04111f; background: var(--green); }
+      .brief { margin-top: 16px; padding: 18px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+      .brief div { padding: 14px; border-radius: 16px; background: rgba(255,255,255,0.04); }
+      .brief span { display: block; color: var(--muted); font-size: 12px; }
+      .brief strong { display: block; margin-top: 8px; color: var(--green); font-size: 20px; }
+      @media (max-width: 1120px) { .board { grid-template-columns: 1fr; } .brief { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+      @media (max-width: 780px) {
+        .shell { display: block; }
+        .side { position: sticky; top: 0; z-index: 3; display: flex; gap: 12px; overflow-x: auto; padding: 12px; }
+        .brand { margin: 0; min-width: 120px; }
+        .menu { display: flex; }
+        .menu a { min-width: 56px; grid-template-columns: 1fr; justify-items: center; }
+        .menu span:not(.icon), .menu em, .brand span:last-child { display: none; }
+        .main { padding: 16px; }
+        .top { display: grid; }
+        .brief { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="side">
+        <a class="brand" href="./"><span class="brand-mark"></span><span>Ou AI OS</span></a>
+        <nav class="menu" aria-label="Office navigation">
+          <a href="./"><span class="icon">CC</span><span>Command Center</span></a>
+          <a href="./team.html"><span class="icon">AG</span><span>Agents</span><em>10</em></a>
+          <a href="./workflow.html"><span class="icon">WF</span><span>Workflow Pipeline</span></a>
+          <a class="active" href="./tasks.html"><span class="icon">TK</span><span>Tasks & Tickets</span></a>
+          <a href="./knowledge.html"><span class="icon">KB</span><span>Knowledge Base</span><em>8</em></a>
+          <a href="https://drive.google.com/drive/folders/1uDn-U5ZFm7yRhoUu9gvdvu2xy3UGS_lU?usp=sharing" target="_blank" rel="noopener"><span class="icon">AV</span><span>Archive Vault</span></a>
+        </nav>
+      </aside>
+      <main class="main">
+        <section class="top">
+          <div>
+            <h1>Tasks & Tickets</h1>
+            <p class="subtitle">A clean operating board for the MVP phase. These are public-safe demo tasks that show how Nova should route, review, approve, store, and log work before final delivery.</p>
+          </div>
+          <div class="actions">
+            <a href="./workflow.html">View Workflow</a>
+            <a href="./knowledge.html">Open Knowledge</a>
+            <a href="./docs/telegram_nova_setup.md">Telegram Setup</a>
+          </div>
+        </section>
+
+        <section class="board" aria-label="Task board">
+          <article class="column">
+            <div class="column-header"><h2>Today</h2><span class="count">4</span></div>
+            <div class="task">
+              <div class="task-top"><h3>Morning Engine</h3><span class="priority high">high</span></div>
+              <p>Prepare command-center brief, top priorities, waiting items, Salesforce actions, and finish-before-6 PM plan.</p>
+              <div class="agent"><img src="assets/office-agents/nova-chief.png" alt="Nova Chief" />Nova Chief</div>
+            </div>
+            <div class="task">
+              <div class="task-top"><h3>Customer Follow-up</h3><span class="priority high">high</span></div>
+              <p>Draft polite follow-up, next action, and CRM update note after customer contact.</p>
+              <div class="agent"><img src="assets/office-agents/mina-care.png" alt="Mina Care" />Mina Care</div>
+            </div>
+            <div class="task">
+              <div class="task-top"><h3>DCA Decision</h3><span class="priority medium">medium</span></div>
+              <p>Use portfolio allocation truth first, then market timing as a separate execution check.</p>
+              <div class="agent"><img src="assets/office-agents/atlas-invest.png" alt="Atlas Invest" />Atlas Invest</div>
+            </div>
+            <div class="task">
+              <div class="task-top"><h3>Document Review</h3><span class="priority medium">medium</span></div>
+              <p>Check document layout, missing fields, file readiness, and final export path.</p>
+              <div class="agent"><img src="assets/office-agents/dara-docs.png" alt="Dara Docs" />Dara Docs</div>
+            </div>
+          </article>
+
+          <article class="column">
+            <div class="column-header"><h2>Waiting</h2><span class="count">3</span></div>
+            <div class="task">
+              <div class="task-top"><h3>Drive Save Approval</h3><span class="priority medium">medium</span></div>
+              <p>Output can be stored only after Ou approves final version and destination folder.</p>
+              <div class="agent"><img src="assets/office-agents/nimo-vault.png" alt="Nimo Vault" />Nimo Vault</div>
+            </div>
+            <div class="task">
+              <div class="task-top"><h3>Risk Gate</h3><span class="priority high">high</span></div>
+              <p>Check private data exposure, missing source, and whether output is safe to show.</p>
+              <div class="agent"><img src="assets/office-agents/vera-shield.png" alt="Vera Shield" />Vera Shield</div>
+            </div>
+            <div class="task">
+              <div class="task-top"><h3>Product Fit Notes</h3><span class="priority low">low</span></div>
+              <p>Prepare reusable product explanation snippets for proposal and customer email work.</p>
+              <div class="agent"><img src="assets/office-agents/keno-expert.png" alt="Keno Expert" />Keno Expert</div>
+            </div>
+          </article>
+
+          <article class="column">
+            <div class="column-header"><h2>Done / Logged</h2><span class="count">5</span></div>
+            <div class="task">
+              <div class="task-top"><h3>Agent Office UI</h3><span class="priority low">low</span></div>
+              <p>Office scene, agent labels, and agent status panel are in place for the Command Center.</p>
+              <div class="agent"><img src="assets/office-agents/nova-chief.png" alt="Nova Chief" />Nova Chief</div>
+            </div>
+            <div class="task">
+              <div class="task-top"><h3>Team Page</h3><span class="priority low">low</span></div>
+              <p>Agent cards, avatars, skills, and workflow ownership are available as a separate page.</p>
+              <div class="agent"><img src="assets/office-agents/lina-voice.png" alt="Lina Voice" />Lina Voice</div>
+            </div>
+            <div class="task">
+              <div class="task-top"><h3>Telegram Intake</h3><span class="priority medium">medium</span></div>
+              <p>Telegram can receive commands and route to the Cloudflare endpoint for Nova handling.</p>
+              <div class="agent"><img src="assets/office-agents/nova-chief.png" alt="Nova Chief" />Nova Chief</div>
+            </div>
+          </article>
+        </section>
+
+        <section class="brief" aria-label="Task status summary">
+          <div><span>Mode</span><strong>MVP Demo</strong></div>
+          <div><span>Next Backend</span><strong>Approval API</strong></div>
+          <div><span>Storage</span><strong>Drive after QC</strong></div>
+          <div><span>Owner</span><strong>Nova Chief</strong></div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

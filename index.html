@@ -3052,9 +3052,9 @@
             <nav class="os-menu" aria-label="Main dashboard menu">
               <button class="active" type="button" data-action-title="Command Center" data-action-detail="Dashboard home is active. Send work through Telegram or click an agent in the office."><i>CC</i><span>Command Center</span><b></b></button>
               <a href="./team.html"><i>AG</i><span>Agents</span><b>10</b></a>
-              <button type="button" data-action-title="Workflow Pipeline" data-action-detail="Ou input -> Nova triage -> specialist agents -> QC -> Drive/log -> output."><i>WF</i><span>Workflow Pipeline</span><b></b></button>
-              <button type="button" data-action-title="Tasks & Tickets" data-action-detail="Task inbox is in backend phase. Telegram commands already route through Nova."><i>TK</i><span>Tasks & Tickets</span><b></b></button>
-              <button type="button" data-view-panel="knowledge"><i>KB</i><span>Knowledge Base</span><b>8</b></button>
+              <a href="./workflow.html"><i>WF</i><span>Workflow Pipeline</span><b>7</b></a>
+              <a href="./tasks.html"><i>TK</i><span>Tasks & Tickets</span><b>24</b></a>
+              <a href="./knowledge.html"><i>KB</i><span>Knowledge Base</span><b>8</b></a>
               <button type="button" data-action-title="Data & Insights" data-action-detail="Insights panel will connect portfolio, sales, and task summaries in the next data phase."><i>DI</i><span>Data & Insights</span><b></b></button>
               <a href="https://drive.google.com/drive/folders/1uDn-U5ZFm7yRhoUu9gvdvu2xy3UGS_lU?usp=sharing" target="_blank" rel="noopener"><i>AV</i><span>Archive Vault</span><b></b></a>
               <a href="./docs/telegram_nova_setup.md"><i>CM</i><span>Communications</span><b></b></a>
@@ -3123,6 +3123,9 @@
           <p>Your Personal AI Team - Work Smarter, Decide Better, Live Balanced</p>
           <nav class="page-links" aria-label="Office pages">
             <a href="./team">Agent Team</a>
+            <a href="./workflow">Workflow</a>
+            <a href="./tasks">Tasks</a>
+            <a href="./knowledge">Knowledge</a>
             <a href="./docs/nova_orchestration_sop.md">Nova SOP</a>
             <a href="./docs/telegram_nova_setup.md">Telegram Setup</a>
           </nav>
@@ -3143,12 +3146,12 @@
         <aside class="panel left">
           <div class="os-logo"><span></span><strong>Ou AI OS</strong></div>
           <nav class="os-nav" aria-label="AI OS navigation">
-            <button class="active" type="button"><i>CC</i><span>Command Center</span><b>10</b></button>
-            <button type="button"><i>AG</i><span>Agents</span><b>10</b></button>
-            <button type="button" data-view-panel="workflow"><i>WF</i><span>Workflow Pipeline</span><b>7</b></button>
-            <button type="button" data-view-panel="tasks"><i>TK</i><span>Tasks & Tickets</span><b>24</b></button>
-            <button type="button" data-view-panel="knowledge"><i>KB</i><span>Knowledge Base</span><b>8</b></button>
-            <button type="button"><i>AV</i><span>Archive Vault</span><b>OK</b></button>
+            <button class="active" type="button" data-nav-url="./"><i>CC</i><span>Command Center</span><b>10</b></button>
+            <button type="button" data-nav-url="./team.html"><i>AG</i><span>Agents</span><b>10</b></button>
+            <button type="button" data-nav-url="./workflow.html"><i>WF</i><span>Workflow Pipeline</span><b>7</b></button>
+            <button type="button" data-nav-url="./tasks.html"><i>TK</i><span>Tasks & Tickets</span><b>24</b></button>
+            <button type="button" data-nav-url="./knowledge.html"><i>KB</i><span>Knowledge Base</span><b>8</b></button>
+            <button type="button" data-nav-url="https://drive.google.com/drive/folders/1uDn-U5ZFm7yRhoUu9gvdvu2xy3UGS_lU?usp=sharing"><i>AV</i><span>Archive Vault</span><b>OK</b></button>
           </nav>
           <section class="system-card">
             <h3>System Status</h3>
@@ -3436,6 +3439,13 @@
           dashboardToast.classList.add("show");
           clearTimeout(dashboardToastTimer);
           dashboardToastTimer = setTimeout(() => dashboardToast.classList.remove("show"), 3600);
+        });
+      });
+
+      document.querySelectorAll("[data-nav-url]").forEach((item) => {
+        item.addEventListener("click", () => {
+          const target = item.dataset.navUrl;
+          if (target) window.location.href = target;
         });
       });
 

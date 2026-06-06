@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ou AI Command Office - Workflow Pipeline</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #030b16;
+        --panel: rgba(7, 21, 37, 0.82);
+        --panel-strong: rgba(9, 28, 50, 0.94);
+        --line: rgba(119, 171, 217, 0.2);
+        --text: #f4f8ff;
+        --muted: #9fb1c8;
+        --cyan: #22d3ee;
+        --green: #34d399;
+        --blue: #60a5fa;
+        --purple: #a78bfa;
+        --gold: #f59e0b;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 22% 4%, rgba(32, 220, 255, 0.16), transparent 32%),
+          radial-gradient(circle at 82% 18%, rgba(96, 165, 250, 0.12), transparent 26%),
+          linear-gradient(135deg, #020713, #071525 46%, #030b16);
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+      }
+      a { color: inherit; text-decoration: none; }
+      .shell { min-height: 100vh; display: grid; grid-template-columns: 220px minmax(0, 1fr); }
+      .side {
+        padding: 22px 14px;
+        border-right: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(5, 18, 36, 0.98), rgba(2, 8, 18, 0.98));
+      }
+      .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 26px; font-size: 28px; font-weight: 900; }
+      .brand-mark { width: 30px; height: 30px; border: 5px solid var(--cyan); border-right-color: var(--purple); border-radius: 50%; }
+      .menu { display: grid; gap: 9px; }
+      .menu a {
+        display: grid; grid-template-columns: 28px 1fr auto; align-items: center; gap: 10px;
+        min-height: 44px; padding: 9px 12px; border: 1px solid rgba(119, 171, 217, 0.1);
+        border-radius: 13px; color: #d7e6fb; background: rgba(255, 255, 255, 0.025); font-size: 13px;
+      }
+      .menu a.active, .menu a:hover {
+        border-color: rgba(32, 220, 255, 0.28);
+        background: linear-gradient(90deg, rgba(32, 220, 255, 0.14), rgba(96, 165, 250, 0.06));
+      }
+      .icon { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 9px; color: var(--cyan); background: rgba(32, 220, 255, 0.1); font-size: 11px; font-weight: 900; }
+      .main { padding: 24px; }
+      .hero {
+        display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.6fr); gap: 18px; margin-bottom: 18px;
+      }
+      .card, .step, .matrix-card, .agent-card {
+        border: 1px solid var(--line); border-radius: 20px; background: var(--panel); box-shadow: 0 22px 70px rgba(0, 0, 0, 0.26);
+      }
+      .hero-card { padding: 26px; background: linear-gradient(135deg, rgba(32, 220, 255, 0.13), rgba(96, 165, 250, 0.05)), var(--panel-strong); }
+      .eyebrow { margin: 0 0 10px; color: var(--cyan); font-size: 12px; font-weight: 900; letter-spacing: 0.12em; text-transform: uppercase; }
+      h1, h2, h3, p { margin: 0; }
+      h1 { font-size: clamp(30px, 4vw, 52px); line-height: 1; }
+      .hero-card p { margin-top: 14px; max-width: 760px; color: #bed1e4; line-height: 1.65; }
+      .hero-stats { display: grid; gap: 10px; padding: 18px; }
+      .stat { display: flex; justify-content: space-between; gap: 14px; padding: 12px; border-radius: 14px; background: rgba(255, 255, 255, 0.04); color: var(--muted); }
+      .stat strong { color: var(--green); }
+      .pipeline {
+        display: grid; grid-template-columns: repeat(8, minmax(130px, 1fr)); gap: 12px; margin-bottom: 18px;
+      }
+      .step {
+        position: relative; min-height: 156px; padding: 16px; overflow: hidden;
+        background: linear-gradient(180deg, rgba(8, 26, 48, 0.96), rgba(5, 15, 28, 0.94));
+      }
+      .step::after {
+        content: ""; position: absolute; inset: auto -34px -34px auto; width: 92px; height: 92px; border-radius: 50%;
+        background: rgba(32, 220, 255, 0.08);
+      }
+      .step b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 12px; color: #04111f; background: var(--cyan); }
+      .step h2 { margin-top: 14px; font-size: 15px; }
+      .step p { margin-top: 8px; color: var(--muted); font-size: 12px; line-height: 1.45; }
+      .matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+      .matrix-card { padding: 18px; }
+      .matrix-card h2 { font-size: 20px; margin-bottom: 14px; }
+      .agent-list { display: grid; gap: 10px; }
+      .agent-card {
+        display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 12px; padding: 12px; border-radius: 16px;
+      }
+      .avatar { width: 48px; height: 48px; border-radius: 16px; object-fit: cover; background: #081a2f; }
+      .agent-card strong { display: block; }
+      .agent-card small { display: block; margin-top: 3px; color: var(--muted); }
+      .tag { padding: 6px 8px; border-radius: 999px; color: #04111f; background: var(--green); font-size: 10px; font-weight: 900; text-transform: uppercase; }
+      .rule-list { display: grid; gap: 10px; color: #c8d7e7; line-height: 1.5; }
+      .rule-list div { padding: 12px; border: 1px solid rgba(119, 171, 217, 0.14); border-radius: 14px; background: rgba(255, 255, 255, 0.035); }
+      @media (max-width: 1320px) { .pipeline { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+      @media (max-width: 920px) {
+        .shell { display: block; }
+        .side { position: sticky; top: 0; z-index: 3; display: flex; gap: 12px; overflow-x: auto; padding: 12px; }
+        .brand { margin: 0; min-width: 120px; }
+        .menu { display: flex; }
+        .menu a { min-width: 56px; grid-template-columns: 1fr; justify-items: center; }
+        .menu span:not(.icon), .menu em, .brand span:last-child { display: none; }
+        .main { padding: 16px; }
+        .hero, .matrix { grid-template-columns: 1fr; }
+        .pipeline { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="side">
+        <a class="brand" href="./"><span class="brand-mark"></span><span>Ou AI OS</span></a>
+        <nav class="menu" aria-label="Office navigation">
+          <a href="./"><span class="icon">CC</span><span>Command Center</span></a>
+          <a href="./team.html"><span class="icon">AG</span><span>Agents</span><em>10</em></a>
+          <a class="active" href="./workflow.html"><span class="icon">WF</span><span>Workflow Pipeline</span></a>
+          <a href="./tasks.html"><span class="icon">TK</span><span>Tasks & Tickets</span></a>
+          <a href="./knowledge.html"><span class="icon">KB</span><span>Knowledge Base</span><em>8</em></a>
+          <a href="https://drive.google.com/drive/folders/1uDn-U5ZFm7yRhoUu9gvdvu2xy3UGS_lU?usp=sharing" target="_blank" rel="noopener"><span class="icon">AV</span><span>Archive Vault</span></a>
+        </nav>
+      </aside>
+      <main class="main">
+        <section class="hero">
+          <article class="card hero-card">
+            <p class="eyebrow">Nova command workflow</p>
+            <h1>Workflow Pipeline</h1>
+            <p>Every request starts with Nova Chief. Specialist agents help only when selected, then return their work to Nova for quality control, Drive storage, logging, and final delivery to Ou.</p>
+          </article>
+          <aside class="card hero-stats">
+            <div class="stat"><span>Routing Owner</span><strong>Nova Chief</strong></div>
+            <div class="stat"><span>Specialist Agents</span><strong>9</strong></div>
+            <div class="stat"><span>QC Criteria</span><strong>5 Gates</strong></div>
+            <div class="stat"><span>Storage Mode</span><strong>Drive First</strong></div>
+          </aside>
+        </section>
+
+        <section class="pipeline" aria-label="Global workflow pipeline">
+          <article class="step"><b>1</b><h2>Ou Input</h2><p>Command arrives from dashboard, Telegram, or ChatGPT handoff.</p></article>
+          <article class="step"><b>2</b><h2>Nova Triage</h2><p>Nova understands objective, task type, urgency, and missing context.</p></article>
+          <article class="step"><b>3</b><h2>Context Reducer</h2><p>Only route-specific knowledge is loaded to reduce tokens and noise.</p></article>
+          <article class="step"><b>4</b><h2>Specialists</h2><p>Ace, Mina, Atlas, Vera, Keno, Dara, Lina, Luna, or Nimo work only when relevant.</p></article>
+          <article class="step"><b>5</b><h2>Return to Nova</h2><p>No specialist delivers final output directly to Ou.</p></article>
+          <article class="step"><b>6</b><h2>QC Review</h2><p>Correctness, completeness, clarity, consistency, and actionability.</p></article>
+          <article class="step"><b>7</b><h2>Drive + Log</h2><p>Approved outputs go to the correct Google Drive folder and activity log.</p></article>
+          <article class="step"><b>8</b><h2>Final Delivery</h2><p>Ou receives concise, useful, action-ready final output.</p></article>
+        </section>
+
+        <section class="matrix">
+          <article class="matrix-card">
+            <h2>Agent Routing Matrix</h2>
+            <div class="agent-list">
+              <div class="agent-card"><img class="avatar" src="assets/office-agents/ace-sales.png" alt="Ace Sales" /><div><strong>Ace Sales</strong><small>Visit plan, CRM, proposal, sales report.</small></div><span class="tag">Sales</span></div>
+              <div class="agent-card"><img class="avatar" src="assets/office-agents/mina-care.png" alt="Mina Care" /><div><strong>Mina Care</strong><small>Customer follow-up, reminders, relationship care.</small></div><span class="tag">Care</span></div>
+              <div class="agent-card"><img class="avatar" src="assets/office-agents/atlas-invest.png" alt="Atlas Invest" /><div><strong>Atlas Invest</strong><small>DCA, allocation, portfolio review.</small></div><span class="tag">Invest</span></div>
+              <div class="agent-card"><img class="avatar" src="assets/office-agents/vera-shield.png" alt="Vera Shield" /><div><strong>Vera Shield</strong><small>Risk gate, privacy check, downside protection.</small></div><span class="tag">Risk</span></div>
+              <div class="agent-card"><img class="avatar" src="assets/office-agents/nimo-vault.png" alt="Nimo Vault" /><div><strong>Nimo Vault</strong><small>Drive path, memory capture, archive retrieval.</small></div><span class="tag">Memory</span></div>
+            </div>
+          </article>
+          <article class="matrix-card">
+            <h2>Operating Rules</h2>
+            <div class="rule-list">
+              <div><strong>Nova first:</strong> all work enters through Nova Chief before any specialist is selected.</div>
+              <div><strong>Relevant agents only:</strong> do not wake every agent for simple tasks.</div>
+              <div><strong>Private data guard:</strong> real customer, family, and portfolio data stays in Google Drive or private context.</div>
+              <div><strong>Token reduction:</strong> load only the current route, source manifest, and task-specific prompt.</div>
+              <div><strong>Ou approval:</strong> important outputs remain draft until Ou approves real use.</div>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ou AI Command Office - Knowledge Base</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #030b16;
+        --panel: #071525;
+        --line: rgba(119, 171, 217, 0.2);
+        --text: #f4f8ff;
+        --muted: #9fb1c8;
+        --cyan: #22d3ee;
+        --green: #34d399;
+        --blue: #60a5fa;
+        --purple: #a78bfa;
+        --gold: #f59e0b;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        color: var(--text);
+        background:
+          radial-gradient(circle at 35% 0%, rgba(32, 220, 255, 0.14), transparent 34%),
+          radial-gradient(circle at 90% 70%, rgba(167, 139, 250, 0.13), transparent 30%),
+          var(--bg);
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+      }
+      a { color: inherit; text-decoration: none; }
+      .shell {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+      }
+      .side {
+        padding: 22px 14px;
+        border-right: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(5, 18, 36, 0.98), rgba(2, 8, 18, 0.98));
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 26px;
+        font-size: 28px;
+        font-weight: 900;
+      }
+      .brand-mark {
+        width: 30px;
+        height: 30px;
+        border: 5px solid var(--cyan);
+        border-right-color: var(--purple);
+        border-radius: 50%;
+      }
+      .menu {
+        display: grid;
+        gap: 9px;
+      }
+      .menu a {
+        display: grid;
+        grid-template-columns: 28px 1fr auto;
+        align-items: center;
+        gap: 10px;
+        min-height: 44px;
+        padding: 9px 12px;
+        border: 1px solid rgba(119, 171, 217, 0.1);
+        border-radius: 13px;
+        color: #d7e6fb;
+        background: rgba(255, 255, 255, 0.025);
+        font-size: 13px;
+      }
+      .menu a.active,
+      .menu a:hover {
+        border-color: rgba(32, 220, 255, 0.28);
+        color: white;
+        background: linear-gradient(90deg, rgba(32, 220, 255, 0.14), rgba(96, 165, 250, 0.06));
+      }
+      .icon {
+        display: grid;
+        place-items: center;
+        width: 24px;
+        height: 24px;
+        border-radius: 8px;
+        color: var(--cyan);
+        background: rgba(32, 220, 255, 0.1);
+        font-size: 10px;
+        font-weight: 900;
+      }
+      .main {
+        min-width: 0;
+        padding: 26px;
+      }
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+      .hero-card,
+      .guard-card,
+      .kb-card,
+      .route-card {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background:
+          radial-gradient(circle at 12% 0%, rgba(32, 220, 255, 0.12), transparent 38%),
+          linear-gradient(145deg, rgba(10, 30, 51, 0.86), rgba(4, 14, 27, 0.92));
+        box-shadow: 0 22px 58px rgba(0, 0, 0, 0.28);
+      }
+      .hero-card {
+        padding: 24px;
+      }
+      h1, h2, h3, p { margin: 0; }
+      h1 { font-size: clamp(30px, 4vw, 48px); line-height: 1.02; }
+      .hero-card p {
+        max-width: 760px;
+        margin-top: 12px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+      }
+      .hero-actions a {
+        padding: 10px 13px;
+        border: 1px solid rgba(32, 220, 255, 0.24);
+        border-radius: 12px;
+        background: rgba(32, 220, 255, 0.08);
+        font-weight: 800;
+        font-size: 13px;
+      }
+      .guard-card {
+        padding: 18px;
+      }
+      .guard-card h2 { font-size: 18px; }
+      .guard-card ul {
+        display: grid;
+        gap: 9px;
+        margin: 14px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .guard-card li {
+        padding: 10px;
+        border: 1px solid rgba(52, 211, 153, 0.16);
+        border-radius: 12px;
+        color: #cdeadd;
+        background: rgba(52, 211, 153, 0.06);
+        font-size: 12px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 14px;
+      }
+      .kb-card {
+        min-height: 238px;
+        padding: 15px;
+        display: grid;
+        gap: 12px;
+      }
+      .kb-card header {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .kb-card h2 { font-size: 18px; }
+      .owner {
+        width: max-content;
+        padding: 5px 8px;
+        border-radius: 999px;
+        color: #06111f;
+        background: var(--green);
+        font-size: 10px;
+        font-weight: 900;
+      }
+      .kb-card p {
+        color: #aebfd1;
+        font-size: 12px;
+        line-height: 1.5;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .chips span {
+        padding: 5px 7px;
+        border: 1px solid rgba(96, 165, 250, 0.22);
+        border-radius: 999px;
+        color: #dcecff;
+        background: rgba(96, 165, 250, 0.08);
+        font-size: 10px;
+        font-weight: 800;
+      }
+      .sources {
+        display: grid;
+        gap: 5px;
+        color: #88a4bb;
+        font-size: 11px;
+      }
+      .routes {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 10px;
+        margin-top: 18px;
+      }
+      .route-card {
+        padding: 12px;
+      }
+      .route-card strong {
+        display: block;
+        color: var(--cyan);
+      }
+      .route-card small {
+        display: block;
+        margin-top: 5px;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      @media (max-width: 1180px) {
+        .shell { grid-template-columns: 78px minmax(0, 1fr); }
+        .brand span, .menu span:not(.icon), .menu em { display: none; }
+        .menu a { grid-template-columns: 1fr; justify-items: center; }
+        .hero { grid-template-columns: 1fr; }
+        .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .routes { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      }
+      @media (max-width: 720px) {
+        .shell { display: block; }
+        .side { position: sticky; top: 0; z-index: 3; display: flex; gap: 12px; overflow-x: auto; padding: 12px; }
+        .brand { margin: 0; min-width: 120px; }
+        .menu { display: flex; }
+        .menu a { min-width: 56px; }
+        .main { padding: 16px; }
+        .grid, .routes { grid-template-columns: 1fr; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <aside class="side">
+        <a class="brand" href="./"><span class="brand-mark"></span><span>Ou AI OS</span></a>
+        <nav class="menu" aria-label="Office navigation">
+          <a href="./"><span class="icon">CC</span><span>Command Center</span></a>
+          <a href="./team"><span class="icon">AG</span><span>Agents</span><em>10</em></a>
+          <a href="./workflow"><span class="icon">WF</span><span>Workflow Pipeline</span></a>
+          <a href="./tasks"><span class="icon">TK</span><span>Tasks & Tickets</span></a>
+          <a class="active" href="./knowledge"><span class="icon">KB</span><span>Knowledge Base</span><em>8</em></a>
+          <a href="https://drive.google.com/drive/folders/1uDn-U5ZFm7yRhoUu9gvdvu2xy3UGS_lU?usp=sharing" target="_blank" rel="noopener"><span class="icon">AV</span><span>Archive Vault</span></a>
+        </nav>
+      </aside>
+      <main class="main">
+        <section class="hero">
+          <article class="hero-card">
+            <h1>Knowledge Base</h1>
+            <p>Public-safe operating library for Nova and the specialist agents. This page explains what knowledge each agent may use, which route it belongs to, and what must stay private in Google Drive.</p>
+            <div class="hero-actions">
+              <a href="./docs/nova_orchestration_sop.md">Open Nova SOP</a>
+              <a href="./docs/nova_context_reducer.md">Context Reducer</a>
+              <a href="./data/knowledge_base.json">Raw JSON</a>
+            </div>
+          </article>
+          <aside class="guard-card">
+            <h2>Privacy Guard</h2>
+            <ul>
+              <li>GitHub stores code, prompts, schemas, and public-safe examples.</li>
+              <li>Google Drive stores real customer, family, portfolio, and document files.</li>
+              <li>Nova loads only the route-specific context needed for each task.</li>
+              <li>Every specialist output returns to Nova before Ou receives it.</li>
+            </ul>
+          </aside>
+        </section>
+        <section class="grid" id="kbGrid"></section>
+        <section class="routes" id="routeGrid"></section>
+      </main>
+    </div>
+    <script>
+      const categories = [
+        ["Product Knowledge", "Keno Expert", "sales", "Product and solution notes for customer fit, technical explanation, proposal support, and objection handling.", ["Product fit", "Technical Q&A", "Proposal input"], ["prompts/product_knowledge.md", "02_Sales_ProXES/Proposals/"]],
+        ["Sales SOP", "Ace Sales", "sales", "Visit brief, follow-up, Salesforce draft notes, weekly report, and opportunity tracking rules.", ["Visit plan", "Follow-up", "Weekly report"], ["prompts/asm_sales.md", "prompts/customer_follow_up.md"]],
+        ["Portfolio Rules", "Atlas Invest", "portfolio", "Allocation truth first, timing second, and risk gate before DCA recommendation.", ["DCA", "Allocation", "Risk watch"], ["prompts/portfolio_agent.md", "data/portfolio_plan.json"]],
+        ["Document Studio", "Dara Docs", "document", "PDF, Excel, slides, infographic, layout, QA, and print readiness rules.", ["PDF", "Excel", "Slides"], ["prompts/document_studio.md", "05_Documents_Studio/"]],
+        ["Voice Templates", "Lina Voice", "document", "LinkedIn posts, English email, captions, customer tone, and executive summary references.", ["Email", "LinkedIn", "Tone"], ["prompts/linkedin_email.md", "05_Documents_Studio/Templates/"]],
+        ["Life & Astrology Rules", "Luna Balance", "life", "Private-safe daily and weekly life planning rules. Real family details stay outside public repo.", ["Daily reading", "Family plan", "Timing"], ["prompts/life_astrology.md", "06_Life_Astrology/"]],
+        ["Drive Storage Rules", "Nimo Vault", "memory", "Google Drive vault structure, naming rules, public/private split, archive, and retrieval guidance.", ["Save path", "Naming", "Archive"], ["data/google_drive_structure.md", "99_Archive/"]],
+        ["Nova Orchestration", "Nova Chief", "command", "Central command rules: Ou input to Nova first, sub agents return to Nova, QC before final delivery.", ["Routing", "QC", "Approval"], ["prompts/nova_orchestration_system.md", "data/context_manifest.json"]]
+      ];
+      const routes = [
+        ["command", "Nova routing, morning engine, task classification."],
+        ["sales", "Customer, product, proposal, follow-up, weekly report."],
+        ["portfolio", "Allocation, DCA, risk, investment review."],
+        ["document", "Docs, email, LinkedIn, PDF, Excel, presentation."],
+        ["life", "Life planning, reminders, timing, astrology lens."],
+        ["memory", "Drive vault, archive, naming, retrieval."]
+      ];
+      document.querySelector("#kbGrid").innerHTML = categories.map((item) => `
+        <article class="kb-card">
+          <header><h2>${item[0]}</h2><span class="owner">${item[2]}</span></header>
+          <p>${item[3]}</p>
+          <div class="chips">${item[4].map((chip) => `<span>${chip}</span>`).join("")}</div>
+          <div class="sources"><strong>${item[1]}</strong>${item[5].map((source) => `<span>${source}</span>`).join("")}</div>
+        </article>
+      `).join("");
+      document.querySelector("#routeGrid").innerHTML = routes.map((route) => `
+        <article class="route-card"><strong>${route[0]}</strong><small>${route[1]}</small></article>
+      `).join("");
+    </script>
+  </body>
+</html>
