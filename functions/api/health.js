@@ -8,6 +8,7 @@ export async function onRequestGet(context) {
     commandApiReady: true,
     telegramWebhookReady: Boolean(context.env.TELEGRAM_BOT_TOKEN),
     openAiReady: Boolean(context.env.OPENAI_API_KEY),
+    workersAiReady: Boolean(context.env.AI),
     privateDbBound: dbReady,
     privateDbMode: dbReady ? "enabled" : "optional_not_configured",
   });
