@@ -2046,7 +2046,7 @@
         display: none;
       }
 
-      @media (min-width: 1381px) {
+      @media (min-width: 0px) {
         body {
           height: 100vh;
           overflow: hidden;
@@ -3204,6 +3204,7 @@
         }
       }
     </style>
+    <link rel="stylesheet" href="./ui-polish.css" />
   </head>
   <body>
     <div class="page">
@@ -3226,7 +3227,7 @@
             <div>
               <section class="os-left-card">
                 <h3>System Status</h3>
-                <div>AI Agents 10/10<br />Workflows Active<br />Storage 82%<br />Security Secure</div>
+                <div>Agents: 10 configured<br />Runtime: not checked<br />Storage: not connected<br />Mode: local preview</div>
               </section>
               <section class="os-left-card">
                 <h3>Daily Briefing</h3>
@@ -3237,7 +3238,7 @@
 
           <header class="os-top">
             <div><h1>Ou AI Command Office</h1><small><span class="dot"></span> Live Operation</small></div>
-            <div class="os-top-status"><span class="os-pill">All Systems Operational</span><span>10:20:01 PM</span><span>Ou</span></div>
+            <div class="os-top-status"><span class="os-pill">Local Preview</span><span id="osTopClock">BKK</span><span>Ou</span></div>
           </header>
 
           <main class="office-core office-scene">
@@ -3256,7 +3257,31 @@
           </main>
 
           <aside class="os-right">
-            <h2 id="osRightTitle">Live Coordination <span class="dot"></span></h2>
+            <h2>Nova Workspace <span class="dot"></span></h2>
+            <section class="ux-quick-actions" aria-label="Quick workflows">
+              <button type="button" data-chat-prompt="Nova Chief, prepare Morning Engine today."><i>MN</i><span><strong>Morning Engine</strong><small>Plan today</small></span></button>
+              <button type="button" data-chat-prompt="Nova Chief, prepare my priority customer follow-ups today."><i>FU</i><span><strong>Follow-up</strong><small>Customer actions</small></span></button>
+              <button type="button" data-chat-prompt="Nova Chief, route today's DCA decision to Atlas Invest and Vera Shield. Use allocation truth first and live timing as a separate check. Source truth: https://damrongsukch.github.io/my-portfolio-monitor-2026/"><i>DC</i><span><strong>DCA Review</strong><small>Portfolio truth</small></span></button>
+              <button type="button" data-chat-prompt="Nova Chief, summarize my next actions and pending follow-ups."><i>NX</i><span><strong>Next Actions</strong><small>Clear priorities</small></span></button>
+            </section>
+            <section class="nova-chat-card" aria-label="Chat with Nova Chief">
+              <div class="nova-chat-head">
+                <strong>Chat with Nova</strong>
+                <div class="nova-chat-head-actions"><small id="novaChatStatus">Ready</small><button type="button" id="novaChatExpand" aria-label="Open Nova chat full screen">Open</button></div>
+              </div>
+              <div class="nova-route-meta" id="novaRouteMeta"><span>Agent: Nova Chief</span><span>Source: Local context</span><span>Mode: Local preview</span></div>
+              <div class="nova-chat-log" id="novaChatLog" aria-live="polite">
+                <div class="chat-bubble nova"><small>Nova Chief</small>พิมพ์งานที่ต้องการได้เลย เช่น Morning Engine, ติดตามลูกค้า, วิเคราะห์ DCA หรือสรุปงานวันนี้</div>
+              </div>
+              <form class="nova-chat-form" id="novaChatForm">
+                <textarea id="novaChatInput" placeholder="พิมพ์คุยกับ Nova..." rows="2" aria-label="Message Nova Chief"></textarea>
+                <button class="nova-chat-send" type="submit">Send</button>
+              </form>
+              <div class="nova-chat-actions" id="novaChatActions" hidden>
+                <button type="button" id="novaApprove">Approve</button><button type="button" id="novaSaveDrive">Save to Drive</button><button type="button" id="novaCreateTask">Create Task</button><button type="button" id="novaRetry">Retry</button>
+              </div>
+            </section>
+            <div class="ux-section-title"><span id="osRightTitle">Live Coordination</span><small>Live and local activity</small></div>
             <div class="os-tabs" id="osRightTabs"><button class="active">All Activity</button><button>Tasks</button><button>Alerts</button><button>Mentions</button></div>
             <div class="os-feed" id="osRightContent">
               <article><img src="assets/office-agents/nova-chief.png" alt="Nova Chief" /><div><strong>Nova Chief</strong><p>Ready to dispatch Telegram and dashboard commands.</p></div><small>Live</small></article>
@@ -3266,32 +3291,14 @@
               <article><img src="assets/office-agents/vera-shield.png" alt="Vera Shield" /><div><strong>Vera Shield</strong><p>Risk gate active for missing or private source data.</p></div><small>Guard</small></article>
               <article><img src="assets/office-agents/nimo-vault.png" alt="Nimo Vault" /><div><strong>Nimo Vault</strong><p>Drive vault paths mapped for approved outputs.</p></div><small>Vault</small></article>
             </div>
-            <section class="nova-chat-card" aria-label="Chat with Nova Chief">
-              <div class="nova-chat-head">
-                <strong>Chat with Nova</strong>
-                <small id="novaChatStatus">Ready</small>
-              </div>
-              <div class="nova-chat-log" id="novaChatLog" aria-live="polite">
-                <div class="chat-bubble nova"><small>Nova Chief</small>พิมพ์งานที่ต้องการให้ Nova จัดการได้เลย เช่น Morning Engine, Follow-up, DCA, หรือสรุปงานวันนี้.</div>
-              </div>
-              <form class="nova-chat-form" id="novaChatForm">
-                <textarea id="novaChatInput" placeholder="พิมพ์คุยกับ Nova..." rows="2"></textarea>
-                <button class="nova-chat-send" type="submit">Send</button>
-              </form>
-              <div class="chat-quick-row">
-                <button class="chat-chip" type="button" data-chat-prompt="Nova Chief, prepare Morning Engine today.">Morning</button>
-                <button class="chat-chip" type="button" data-chat-prompt="Nova Chief, route today's DCA decision to Atlas Invest and Vera Shield. Use allocation truth first and live timing as a separate check. Source truth: https://damrongsukch.github.io/my-portfolio-monitor-2026/">DCA</button>
-                <button class="chat-chip" type="button" data-chat-prompt="Nova Chief, summarize my next actions and pending follow-ups.">Next Actions</button>
-              </div>
-            </section>
           </aside>
 
           <footer class="os-bottom">
-            <div class="os-metric"><span>Active Agents</span><b>10 / 10</b></div>
-            <div class="os-metric"><span>Tasks in Progress</span><b>23</b></div>
-            <div class="os-metric"><span>Completed Today</span><b>427</b></div>
-            <div class="os-metric"><span>System Health</span><b>100%</b></div>
-            <div class="os-metric"><span>Intelligence. Coordination. Impact.</span><b>Built for the future, today.</b></div>
+            <div class="os-metric"><span>Agent Setup</span><b>10 configured</b></div>
+            <div class="os-metric"><span>Runtime</span><b id="runtimeMetric">Not checked</b></div>
+            <div class="os-metric"><span>Data Mode</span><b>Local + Mock</b></div>
+            <div class="os-metric"><span>Environment</span><b>Local Preview</b></div>
+            <div class="os-metric"><span>Workflow</span><b>Nova First</b></div>
           </footer>
 
           <div class="action-toast" id="dashboardToast" aria-live="polite"><strong>Ready</strong><span>Select a menu item.</span></div>
@@ -3311,9 +3318,9 @@
           </nav>
         </div>
         <div class="status-strip">
-          <div class="status-item"><small>Tue 03 Jun 2026</small><strong id="clock">08:45 <small>AM BKK</small></strong></div>
-          <div class="status-item"><small>System Status</small><strong class="ok"><span class="dot"></span> All Systems Operational</strong></div>
-          <div class="status-item"><small>Agents Online</small><strong class="ok"><span class="dot"></span> 10 / 10</strong></div>
+          <div class="status-item"><small id="todayLabel">Local date</small><strong id="clock">--:-- <small>BKK</small></strong></div>
+          <div class="status-item"><small>System Status</small><strong><span class="dot"></span> Local preview</strong></div>
+          <div class="status-item"><small>Agent Setup</small><strong><span class="dot"></span> 10 configured</strong></div>
           <div class="status-item"><small>Backend</small><strong class="ok" id="backendStatus"><span class="dot"></span> Checking</strong></div>
         </div>
         <div class="user-card">
@@ -3326,11 +3333,11 @@
         <aside class="panel left">
           <div class="os-logo"><span></span><strong>Ou AI OS</strong></div>
           <nav class="os-nav" aria-label="AI OS navigation">
-            <button class="active" type="button" data-nav-url="./"><i>CC</i><span>Command Center</span><b>10</b></button>
-            <button type="button" data-nav-url="./team.html"><i>AG</i><span>Agents</span><b>10</b></button>
-            <button type="button" data-nav-url="./workflow.html"><i>WF</i><span>Workflow Pipeline</span><b>7</b></button>
-            <button type="button" data-nav-url="./tasks.html"><i>TK</i><span>Tasks & Tickets</span><b>24</b></button>
-            <button type="button" data-nav-url="./knowledge.html"><i>KB</i><span>Knowledge Base</span><b>8</b></button>
+            <button class="active" type="button" data-nav-url="./" data-mobile-label="Command"><i>CC</i><span>Command Center</span><b>10</b></button>
+            <button type="button" data-nav-url="./team.html" data-mobile-label="Agents"><i>AG</i><span>Agents</span><b>10</b></button>
+            <button type="button" data-nav-url="./workflow.html" data-mobile-label="Workflow"><i>WF</i><span>Workflow Pipeline</span><b>7</b></button>
+            <button type="button" data-nav-url="./tasks.html" data-mobile-label="Tasks"><i>TK</i><span>Tasks & Tickets</span><b>24</b></button>
+            <button type="button" data-nav-url="./knowledge.html" data-mobile-label="Knowledge"><i>KB</i><span>Knowledge Base</span><b>8</b></button>
             <button type="button" data-nav-url="https://drive.google.com/drive/folders/1uDn-U5ZFm7yRhoUu9gvdvu2xy3UGS_lU?usp=sharing"><i>AV</i><span>Archive Vault</span><b>OK</b></button>
           </nav>
           <section class="system-card">
@@ -3544,10 +3551,10 @@
 
       <footer class="footer">
         <div><strong>Ou AI Command Office</strong><br />2026 Ou AI Systems</div>
-        <div class="footer-metric"><i>AG</i><span>Active Agents<b>10 / 10</b></span></div>
-        <div class="footer-metric"><i>TK</i><span>Tasks in Progress<b>24</b></span></div>
-        <div class="footer-metric"><i>OK</i><span>Completed Today<b>128</b></span></div>
-        <div class="footer-metric"><i>SH</i><span>System Health<b>100%</b></span></div>
+        <div class="footer-metric"><i>AG</i><span>Agent Setup<b>10 configured</b></span></div>
+        <div class="footer-metric"><i>TK</i><span>Task Data<b>Local log</b></span></div>
+        <div class="footer-metric"><i>RT</i><span>Runtime<b>Not checked</b></span></div>
+        <div class="footer-metric"><i>DB</i><span>Data Source<b>Local + Mock</b></span></div>
         <div><strong>Intelligence. Coordination. Impact.</strong><br />Together, we get it done.</div>
       </footer>
     </div>
@@ -3564,13 +3571,12 @@
         osRightTitle.innerHTML = 'Live Coordination <span class="dot"></span>';
         osRightTabs.innerHTML = '<button class="active">All Activity</button><button>Tasks</button><button>Alerts</button><button>Mentions</button>';
         osRightContent.className = "os-feed";
-        osRightContent.innerHTML = `
-          <article><img src="assets/office-agents/nova-chief.png" alt="Nova Chief" /><div><strong>Nova Chief</strong><p>Ready to dispatch Telegram and dashboard commands.</p></div><small>Live</small></article>
-          <article><img src="assets/office-agents/ace-sales.png" alt="Ace Sales" /><div><strong>Ace Sales</strong><p>Closed-loop sales routing is ready for visit briefs and proposals.</p></div><small>Update</small></article>
-          <article><img src="assets/office-agents/mina-care.png" alt="Mina Care" /><div><strong>Mina Care</strong><p>Follow-up drafts, retention notes, and reminders queued.</p></div><small>Follow-up</small></article>
-          <article><img src="assets/office-agents/atlas-invest.png" alt="Atlas Invest" /><div><strong>Atlas Invest</strong><p>DCA waits for allocation truth before decision.</p></div><small>Ready</small></article>
-          <article><img src="assets/office-agents/vera-shield.png" alt="Vera Shield" /><div><strong>Vera Shield</strong><p>Risk gate active for missing or private source data.</p></div><small>Guard</small></article>
-          <article><img src="assets/office-agents/nimo-vault.png" alt="Nimo Vault" /><div><strong>Nimo Vault</strong><p>Drive vault paths mapped for approved outputs.</p></div><small>Vault</small></article>
+        const recent = readHistory().slice(0, 3);
+        osRightContent.innerHTML = recent.length ? recent.map((item) => `
+          <article><img src="assets/office-agents/nova-chief.png" alt="Nova Chief" /><div><strong>${escapeHtml(item.title || item.agent || "Nova task")}</strong><p>${escapeHtml(item.summary || item.command || "Local task log")}</p></div><small>${escapeHtml(item.status || "Local")}</small></article>
+        `).join("") : `
+          <article><img src="assets/office-agents/nova-chief.png" alt="Nova Chief" /><div><strong>No task log yet</strong><p>Send a command to Nova to create the first local activity record.</p></div><small>Local</small></article>
+          <article><img src="assets/office-agents/nimo-vault.png" alt="Nimo Vault" /><div><strong>Drive storage</strong><p>Not connected in this local preview. Approval is required before saving.</p></div><small>Not connected</small></article>
         `;
       }
 
@@ -4536,12 +4542,13 @@
         backendStatus.innerHTML = '<span class="dot"></span> Local Fallback';
       }
 
-      async function sendToBackend(command, agent) {
+      async function sendToBackend(command, agent, signal) {
         if (!backendAvailableForCurrentHost()) return null;
 
         const response = await fetch("./api/command", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal,
           body: JSON.stringify({
             command,
             agent: agent.name,
@@ -4560,8 +4567,10 @@
         currentPromptText = result.output;
         currentLogText = result.logEntry ? JSON.stringify(result.logEntry, null, 2) : "";
         if (result.contextPlan) renderContextPlan(result.contextPlan);
-        const isAi = result.mode === "ai";
-        const modeLabel = isAi
+        const isAi = result.mode === "ai" || result.mode === "openrouter_ai";
+        const modeLabel = result.mode === "openrouter_ai"
+          ? "OpenRouter backend"
+          : isAi
           ? "OpenAI backend"
           : result.mode === "portfolio_snapshot"
             ? "Portfolio snapshot"
@@ -4595,6 +4604,23 @@
         novaChatLog.appendChild(bubble);
         novaChatLog.scrollTop = novaChatLog.scrollHeight;
         return bubble;
+      }
+
+      function updateNovaMeta(result) {
+        const route = result?.route?.agentName || currentAgent?.name || "Nova Chief";
+        const sources = result?.contextPlan?.sources || result?.sources || [];
+        const sourceText = Array.isArray(sources) && sources.length ? sources.slice(0, 2).join(", ") : "Local context";
+        const mode = result?.mode || "local preview";
+        const meta = document.querySelector("#novaRouteMeta");
+        if (meta) meta.innerHTML = `<span>Agent: ${escapeHtml(route)}</span><span>Source: ${escapeHtml(sourceText)}</span><span>Mode: ${escapeHtml(mode)}</span>`;
+      }
+
+      function structuredNovaReply(result, command) {
+        const summary = compactNovaReply(result?.output || "Nova received the request and prepared a local draft.");
+        const next = result?.nextAction || "Review the result, then approve, save to Drive, or create a task.";
+        const sources = result?.contextPlan?.sources || result?.sources || [];
+        const source = Array.isArray(sources) && sources.length ? sources.join(", ") : "Local context / user command";
+        return `Summary\n${summary}\n\nNext action\n${next}\n\nSource\n${source}\n\nRequest\n${command}`;
       }
 
       function compactNovaReply(text = "") {
@@ -4633,29 +4659,42 @@
         commandText.value = command;
         renderContextPlan(buildContextPlan(command, currentAgent));
         novaChatInput.value = "";
-        novaChatStatus.textContent = "Thinking";
-        const pendingBubble = appendChatBubble("system", "Nova", "รับคำสั่งแล้ว กำลังจัด routing และเรียก backend...");
+        window.lastNovaCommand = command;
+        novaChatStatus.textContent = "Loading";
+        document.querySelector("#novaChatActions").hidden = true;
+        const pendingBubble = appendChatBubble("system", "Nova", "รับคำสั่งแล้ว กำลังเลือก Agent, ตรวจ source และเรียก backend...");
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000);
 
         try {
-          const backendResult = await sendToBackend(command, currentAgent);
+          const backendResult = await sendToBackend(command, currentAgent, controller.signal);
           pendingBubble.remove();
           if (backendResult?.ok) {
             renderBackendResult(backendResult);
-            appendChatBubble("nova", "Nova Chief", novaChatReplyFromBackend(backendResult, command));
+            updateNovaMeta(backendResult);
+            appendChatBubble("nova", "Nova Chief", structuredNovaReply(backendResult, command));
             saveCurrentTask("Draft");
+            document.querySelector("#novaChatActions").hidden = false;
           } else {
             renderOutput("Command Accepted", currentAgent, command, currentAgent.workflow);
-            appendChatBubble("nova", "Nova Chief", "รับงานแล้วครับ ผมจัดเป็น draft ใน Agent Output ให้ Ou review ต่อได้เลย.");
+            updateNovaMeta(null);
+            appendChatBubble("nova", "Nova Chief", "Summary\nรับงานแล้วและสร้าง draft ใน Agent Output\n\nNext action\nตรวจสอบก่อน Approve หรือ Create Task\n\nSource\nLocal context");
             saveCurrentTask("Draft");
+            document.querySelector("#novaChatActions").hidden = false;
           }
         } catch (error) {
           pendingBubble.remove();
           renderOutput("Command Accepted", currentAgent, command, currentAgent.workflow);
           activeOutput.insertAdjacentHTML("beforeend", `<span class="backend-note">Local fallback - ${escapeHtml(error.message)}</span>`);
-          appendChatBubble("system", "Nova Offline Fallback", `Backend ยังตอบไม่ได้: ${error.message}\nผมสร้าง draft local ไว้ใน Agent Output ให้ก่อนครับ.`);
+          const timedOut = error.name === "AbortError";
+          novaChatStatus.textContent = timedOut ? "Timeout" : "Offline";
+          appendChatBubble("system", timedOut ? "Nova Timeout" : "Nova Offline", `${timedOut ? "Backend ใช้เวลานานเกิน 60 วินาที" : "Backend ยังตอบไม่ได้"}: ${error.message}\nระบบเก็บคำสั่งไว้เป็น local draft แล้ว กด Retry เพื่อลองใหม่ได้`);
           saveCurrentTask("Draft");
+          document.querySelector("#novaChatActions").hidden = false;
         } finally {
-          novaChatStatus.textContent = "Ready";
+          clearTimeout(timeoutId);
+          if (novaChatStatus.textContent === "Loading") novaChatStatus.textContent = "Ready";
+          renderOsRightDefault();
         }
       }
 
@@ -4671,6 +4710,10 @@
       function updateClock() {
         const now = new Date();
         document.querySelector("#clock").innerHTML = `${now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Bangkok" })} <small>BKK</small>`;
+        const todayLabel = document.querySelector("#todayLabel");
+        if (todayLabel) todayLabel.textContent = now.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric", timeZone: "Asia/Bangkok" });
+        const osTopClock = document.querySelector("#osTopClock");
+        if (osTopClock) osTopClock.textContent = now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", timeZone: "Asia/Bangkok" });
       }
 
       function selectAgent(id) {
@@ -4864,6 +4907,39 @@
           activeOutput.innerHTML = "<h3>Archive Vault</h3><p>Nimo Vault is selected. Use the Drive Vault card to open the private Google Drive folder when needed.</p>";
         }
       }
+
+      const novaChatCard = document.querySelector(".nova-chat-card");
+      const novaChatActions = document.querySelector("#novaChatActions");
+      const closeExpandedChat = () => novaChatCard?.classList.remove("chat-expanded");
+      document.querySelector("#novaChatExpand")?.addEventListener("click", () => novaChatCard?.classList.toggle("chat-expanded"));
+      novaChatInput?.addEventListener("focus", () => {
+        if (window.matchMedia("(max-width: 760px)").matches) novaChatCard?.classList.add("chat-expanded");
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeExpandedChat();
+      });
+      document.querySelector("#novaRetry")?.addEventListener("click", () => window.lastNovaCommand && runNovaChat(window.lastNovaCommand));
+      document.querySelector("#novaApprove")?.addEventListener("click", () => {
+        saveCurrentTask("Approved");
+        novaChatStatus.textContent = "Approved";
+        showDashboardToast("Approved", "The latest local draft is approved for the next step.");
+        renderOsRightDefault();
+      });
+      document.querySelector("#novaCreateTask")?.addEventListener("click", () => {
+        saveCurrentTask("To do");
+        novaChatStatus.textContent = "Task created";
+        showDashboardToast("Task created", "Saved to the local task log.");
+        renderOsRightDefault();
+      });
+      document.querySelector("#novaSaveDrive")?.addEventListener("click", () => {
+        novaChatStatus.textContent = "Drive not connected";
+        showDashboardToast("Drive not connected", "Approval is saved locally. Connect Drive before real storage.");
+      });
+      document.querySelectorAll(".scene-name-fix").forEach((button) => {
+        button.setAttribute("aria-label", `Open ${button.textContent.trim()} status and next action`);
+      });
+
+      renderOsRightDefault();
 
       updateClock();
       setInterval(updateClock, 30000);

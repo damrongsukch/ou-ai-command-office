@@ -92,6 +92,7 @@
         .brief { grid-template-columns: 1fr; }
       }
     </style>
+    <link rel="stylesheet" href="./ui-polish.css" />
   </head>
   <body>
     <div class="shell">
@@ -118,9 +119,10 @@
             <a href="./docs/telegram_nova_setup.md">Telegram Setup</a>
           </div>
         </section>
+        <section class="task-tools" aria-label="Task filters"><button class="active" data-task-filter="all">All</button><button data-task-filter="today">Today</button><button data-task-filter="waiting">Waiting</button><button data-task-filter="done">Done</button></section>
 
         <section class="board" aria-label="Task board">
-          <article class="column">
+          <article class="column" data-task-group="today">
             <div class="column-header"><h2>Today</h2><span class="count">4</span></div>
             <div class="task">
               <div class="task-top"><h3>Morning Engine</h3><span class="priority high">high</span></div>
@@ -144,7 +146,7 @@
             </div>
           </article>
 
-          <article class="column">
+          <article class="column" data-task-group="waiting">
             <div class="column-header"><h2>Waiting</h2><span class="count">3</span></div>
             <div class="task">
               <div class="task-top"><h3>Drive Save Approval</h3><span class="priority medium">medium</span></div>
@@ -163,7 +165,7 @@
             </div>
           </article>
 
-          <article class="column">
+          <article class="column" data-task-group="done">
             <div class="column-header"><h2>Done / Logged</h2><span class="count">5</span></div>
             <div class="task">
               <div class="task-top"><h3>Agent Office UI</h3><span class="priority low">low</span></div>
@@ -191,5 +193,21 @@
         </section>
       </main>
     </div>
+    <script>
+      const taskState = JSON.parse(localStorage.getItem("ou-task-status") || "{}");
+      document.querySelectorAll(".task").forEach((task, index) => {
+        const title = task.querySelector("h3")?.textContent || `Task ${index + 1}`;
+        const select = document.createElement("select");
+        select.setAttribute("aria-label", `Change status for ${title}`);
+        select.innerHTML = '<option value="To do">To do</option><option value="In progress">In progress</option><option value="Waiting">Waiting</option><option value="Done">Done</option>';
+        select.value = taskState[title] || (task.closest('[data-task-group="done"]') ? "Done" : task.closest('[data-task-group="waiting"]') ? "Waiting" : "To do");
+        select.addEventListener("change", () => { taskState[title] = select.value; localStorage.setItem("ou-task-status", JSON.stringify(taskState)); task.dataset.status = select.value.toLowerCase().replace(" ", "-"); });
+        task.appendChild(select); select.dispatchEvent(new Event("change"));
+      });
+      document.querySelectorAll("[data-task-filter]").forEach((button) => button.addEventListener("click", () => {
+        document.querySelectorAll("[data-task-filter]").forEach((item) => item.classList.toggle("active", item === button));
+        document.querySelectorAll("[data-task-group]").forEach((group) => { group.hidden = button.dataset.taskFilter !== "all" && group.dataset.taskGroup !== button.dataset.taskFilter; });
+      }));
+    </script>
   </body>
 </html>

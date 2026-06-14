@@ -11,6 +11,7 @@ node_modules/
 dist/
 outputs/*.png
 outputs/*preview*.html
+data/obsidian_sync_manifest.json
 .DS_Store
 
 # Out of scope for static MVP v1. Re-enable intentionally for backend/Cloudflare phase.

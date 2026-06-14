@@ -211,6 +211,9 @@
         gap: 10px;
         margin-top: 18px;
       }
+      .synced-section { margin-top: 18px; }
+      .synced-heading { margin-bottom: 12px; }
+      .synced-heading p { margin-top: 6px; color: var(--muted); }
       .route-card {
         padding: 12px;
       }
@@ -242,8 +245,9 @@
         .grid, .routes { grid-template-columns: 1fr; }
       }
     </style>
+    <link rel="stylesheet" href="./ui-polish.css" />
   </head>
-  <body>
+  <body class="knowledge-page">
     <div class="shell">
       <aside class="side">
         <a class="brand" href="./"><span class="brand-mark"></span><span>Ou AI OS</span></a>
@@ -259,8 +263,10 @@
       <main class="main">
         <section class="hero">
           <article class="hero-card">
+            <span class="page-kicker">Ou AI Office Library</span>
             <h1>Knowledge Base</h1>
-            <p>Public-safe operating library for Nova and the specialist agents. This page explains what knowledge each agent may use, which route it belongs to, and what must stay private in Google Drive.</p>
+            <p>ค้นหา SOP, prompt, source และกติกาที่ Nova กับ Agent แต่ละตัวใช้ทำงาน โดยแยกข้อมูล public-safe ออกจากข้อมูลจริงใน Google Drive</p>
+            <div class="kb-summary"><div><strong id="knowledgeTotal">8</strong><span>Knowledge sets</span></div><div><strong>6</strong><span>Work routes</span></div><div><strong id="knowledgeSource">Local</strong><span>Current source</span></div></div>
             <div class="hero-actions">
               <a href="./docs/nova_orchestration_sop.md">Open Nova SOP</a>
               <a href="./docs/nova_context_reducer.md">Context Reducer</a>
@@ -268,17 +274,26 @@
             </div>
           </article>
           <aside class="guard-card">
-            <h2>Privacy Guard</h2>
+            <h2>Data boundary</h2>
             <ul>
-              <li>GitHub stores code, prompts, schemas, and public-safe examples.</li>
-              <li>Google Drive stores real customer, family, portfolio, and document files.</li>
-              <li>Nova loads only the route-specific context needed for each task.</li>
-              <li>Every specialist output returns to Nova before Ou receives it.</li>
+              <li><strong>Local / GitHub</strong><span>Code, prompts, schema และตัวอย่างที่ไม่เป็นความลับ</span></li>
+              <li><strong>Google Drive</strong><span>ข้อมูลลูกค้า พอร์ต ครอบครัว และเอกสารจริง</span></li>
+              <li><strong>Nova rule</strong><span>โหลดเฉพาะ context ที่จำเป็น และตรวจผลก่อนส่งให้ Ou</span></li>
             </ul>
           </aside>
         </section>
+        <section class="kb-tools" aria-label="Knowledge filters"><label class="kb-search"><span>Search</span><input id="kbSearch" type="search" placeholder="ค้นหาเรื่อง, Agent หรือ source..." aria-label="Search knowledge" /></label><label class="kb-select"><span>Category</span><select id="kbFilter" aria-label="Filter knowledge category"><option value="all">All categories</option><option value="command">Command</option><option value="sales">Sales</option><option value="portfolio">Portfolio</option><option value="document">Document</option><option value="life">Life</option><option value="memory">Memory</option></select></label></section>
+        <div class="kb-results-head"><div><h2>Knowledge library</h2><p>เลือกหัวข้อเพื่อดูรายละเอียด เจ้าของ และ source ที่เกี่ยวข้อง</p></div><strong id="kbResultCount">8 results</strong></div>
         <section class="grid" id="kbGrid"></section>
-        <section class="routes" id="routeGrid"></section>
+        <details class="route-section"><summary>View routing guide</summary><section class="routes" id="routeGrid"></section></details>
+        <section class="synced-section" hidden>
+          <div class="synced-heading">
+            <h2>Synced from Obsidian</h2>
+            <p id="obsidianSyncStatus">Loading public-safe notes...</p>
+          </div>
+          <div class="grid" id="obsidianGrid"></div>
+        </section>
+        <dialog id="kbDialog" class="kb-dialog"><button type="button" id="kbDialogClose" aria-label="Close knowledge details">Close</button><div id="kbDialogBody"></div></dialog>
       </main>
     </div>
     <script>
@@ -292,6 +307,7 @@
         ["Drive Storage Rules", "Nimo Vault", "memory", "Google Drive vault structure, naming rules, public/private split, archive, and retrieval guidance.", ["Save path", "Naming", "Archive"], ["data/google_drive_structure.md", "99_Archive/"]],
         ["Nova Orchestration", "Nova Chief", "command", "Central command rules: Ou input to Nova first, sub agents return to Nova, QC before final delivery.", ["Routing", "QC", "Approval"], ["prompts/nova_orchestration_system.md", "data/context_manifest.json"]]
       ];
+      let knowledgeItems = [...categories];
       const routes = [
         ["command", "Nova routing, morning engine, task classification."],
         ["sales", "Customer, product, proposal, follow-up, weekly report."],
@@ -300,17 +316,78 @@
         ["life", "Life planning, reminders, timing, astrology lens."],
         ["memory", "Drive vault, archive, naming, retrieval."]
       ];
-      document.querySelector("#kbGrid").innerHTML = categories.map((item) => `
-        <article class="kb-card">
-          <header><h2>${item[0]}</h2><span class="owner">${item[2]}</span></header>
+      function renderKnowledge() {
+        const query = document.querySelector("#kbSearch").value.trim().toLowerCase();
+        const filter = document.querySelector("#kbFilter").value;
+        const visible = knowledgeItems.filter((item) => (filter === "all" || item[2] === filter) && (!query || item.flat(3).join(" ").toLowerCase().includes(query)));
+        document.querySelector("#kbResultCount").textContent = `${visible.length} result${visible.length === 1 ? "" : "s"}`;
+        document.querySelector("#kbGrid").innerHTML = visible.map((item, index) => `
+        <article class="kb-card" tabindex="0" role="button" data-kb-title="${item[0]}" aria-label="Open ${item[0]} details">
+          <header><span class="kb-index">${String(index + 1).padStart(2, "0")}</span><div><h2>${item[0]}</h2><small>${item[1]}</small></div><span class="owner">${item[2]}</span></header>
           <p>${item[3]}</p>
           <div class="chips">${item[4].map((chip) => `<span>${chip}</span>`).join("")}</div>
-          <div class="sources"><strong>${item[1]}</strong>${item[5].map((source) => `<span>${source}</span>`).join("")}</div>
+          <div class="sources"><strong>Sources</strong><span>${item[5].length} linked</span><b>Open details</b></div>
         </article>
-      `).join("");
+        `).join("") || '<p class="empty-state">No matching knowledge found.</p>';
+        document.querySelectorAll("[data-kb-title]").forEach((card) => {
+          const open = () => {
+            const item = knowledgeItems.find((entry) => entry[0] === card.dataset.kbTitle);
+            document.querySelector("#kbDialogBody").innerHTML = `<h2>${item[0]}</h2><p>${item[3]}</p><h3>Owner</h3><p>${item[1]}</p><h3>Sources</h3><p>${item[5].join("<br>")}</p>`;
+            document.querySelector("#kbDialog").showModal();
+          };
+          card.addEventListener("click", open);
+          card.addEventListener("keydown", (event) => { if (event.key === "Enter" || event.key === " ") open(); });
+        });
+      }
+      document.querySelector("#kbSearch").addEventListener("input", renderKnowledge);
+      document.querySelector("#kbFilter").addEventListener("change", renderKnowledge);
+      document.querySelector("#kbDialogClose").addEventListener("click", () => document.querySelector("#kbDialog").close());
+      renderKnowledge();
       document.querySelector("#routeGrid").innerHTML = routes.map((route) => `
         <article class="route-card"><strong>${route[0]}</strong><small>${route[1]}</small></article>
       `).join("");
+
+      function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (character) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+        })[character]);
+      }
+
+      async function loadObsidianKnowledge() {
+        const status = document.querySelector("#obsidianSyncStatus");
+        const grid = document.querySelector("#obsidianGrid");
+        try {
+          const response = await fetch("./data/obsidian_knowledge.json", { cache: "no-store" });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const payload = await response.json();
+          status.textContent = `${payload.count} public-safe notes synced at ${new Date(payload.generated_utc).toLocaleString()}`;
+          const obsidianItems = payload.notes.map((note) => [
+            note.title,
+            "Obsidian Vault",
+            ({ Agents: "command", Knowledge: "memory", Operations: "command", Prompts: "command", Reference: "memory" })[note.section] || "memory",
+            note.summary,
+            note.tags || [],
+            [note.vault_path]
+          ]);
+          knowledgeItems = [...categories, ...obsidianItems];
+          document.querySelector("#knowledgeTotal").textContent = knowledgeItems.length;
+          document.querySelector("#knowledgeSource").textContent = "Local + Obsidian";
+          renderKnowledge();
+          grid.innerHTML = payload.notes.map((note) => `
+            <article class="kb-card">
+              <header><h2>${escapeHtml(note.title)}</h2><span class="owner">${escapeHtml(note.section)}</span></header>
+              <p>${escapeHtml(note.summary)}</p>
+              <div class="chips">${(note.tags || []).map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>
+              <div class="sources"><strong>Obsidian</strong><span>${escapeHtml(note.vault_path)}</span></div>
+            </article>
+          `).join("");
+        } catch (error) {
+          status.textContent = "No Obsidian export found. Run sync-obsidian.cmd on the office computer.";
+          grid.innerHTML = "";
+        }
+      }
+
+      loadObsidianKnowledge();
     </script>
   </body>
 </html>

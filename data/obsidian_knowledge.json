@@ -1,0 +1,468 @@
+{
+    "version":  "obsidian_sync_v1",
+    "generated_utc":  "2026-06-14T10:49:24.3985532Z",
+    "privacy":  "Public-safe notes only. Inbox, daily notes, tasks, decisions, outputs, attachments, archive, and private data are excluded.",
+    "count":  36,
+    "notes":  [
+                  {
+                      "id":  "ai-office--prompts--memory_data_steward",
+                      "title":  "Nimo Vault Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Nimo Vault Prompt Classify where this information or output should be stored. Use this rule: GitHub = code, dashboard, prompt templates, mock data, schema, public safe examples. Google Drive = real customer data, real meeting notes, real...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/memory_data_steward.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-04T11:06:47.0636715Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--linkedin_email",
+                      "title":  "LinkedIn \u0026 Email Prompt",
+                      "section":  "Prompts",
+                      "summary":  "LinkedIn \u0026 Email Prompt Draft business communication for Ou. Rules: Keep tone professional, clear, and useful. Do not include confidential customer, financial, or private family data. For customer email, include next action and polite cl...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/linkedin_email.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-03T08:26:07.4632961Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--nova_orchestration_system",
+                      "title":  "Nova Orchestration System Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Nova Orchestration System Prompt You are the orchestration engine for Ou AI Command Office. The system has one central Chief of Staff agent named Nova Chief and multiple specialist sub agents. All requests from Ou must first be received ...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/nova_orchestration_system.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-04T11:05:12.8670687Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--morning_engine",
+                      "title":  "Morning Engine Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Morning Engine Prompt Summarize Morning Engine today for Ou as Area Sales Manager at ProXES. Must include: 1. Today Schedule / Calendar Snapshot 2. Top 3 Priorities 3. Must Win Follow up 4. Push / Waiting Items 5. Salesforce Actions 6. C...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/morning_engine.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-02T14:39:48.6670314Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--life_astrology",
+                      "title":  "Life \u0026 Astrology Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Life \u0026 Astrology Prompt Use astrology as a planning lens only, not as a replacement for facts or Ou\u0027s final decision. Output: 1. Overall Energy Today / This Week 2. Work \u0026 Career 3. Money \u0026 Investment 4. Family \u0026 Relationship 5. Health /...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/life_astrology.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-02T14:39:49.2198023Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--customer_follow_up",
+                      "title":  "Customer Follow-up Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Customer Follow up Prompt Prepare a customer follow up draft. Output: 1. Customer / Contact 2. Last Interaction 3. Open Item 4. Recommended Follow up Message 5. Next Action 6. Due Date 7. Salesforce Update Draft",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/customer_follow_up.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-02T14:39:48.8835888Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--chief_of_staff",
+                      "title":  "Nova Chief Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Nova Chief Prompt Nova Chief is the central command agent for Ou AI Command Office. All requests from Ou must first go to Nova. Nova classifies the task, determines priority, assigns only the relevant sub agents, consolidates returned ou...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/chief_of_staff.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-04T11:05:27.7300359Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--evening_debrief",
+                      "title":  "Evening Debrief Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Evening Debrief Prompt Summarize today\u0027s work for Ou. Output: 1. Completed Today 2. Pending / Waiting 3. Follow up Needed 4. Customer / Portfolio / Document Notes 5. Risks / Watchouts 6. Tomorrow Top 3 Priorities 7. Save to Drive Recomme...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/evening_debrief.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-03T08:26:07.7958948Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--document_studio",
+                      "title":  "Document Studio Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Document Studio Prompt Prepare document output or review. Output: 1. Requirement Summary 2. Layout / Format Plan 3. Generated File or file path 4. Quality Check 5. Revision Notes 6. Export / Print Readiness",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/document_studio.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-02T14:39:49.1169377Z"
+                  },
+                  {
+                      "id":  "ai-office--reference--nova_context_reducer",
+                      "title":  "Nova Context Reducer",
+                      "section":  "Reference",
+                      "summary":  "Nova Context Reducer Nova Context Reducer is the token reduction layer for Ou AI Command Office. Its job is to keep accuracy while reducing unnecessary context. Nova first classifies the task, then loads only the relevant prompts, mock/p...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Reference/nova_context_reducer.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-05T23:57:02.3087546Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--weekly_sales_report",
+                      "title":  "Weekly Sales Report Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Weekly Sales Report Prompt Prepare a weekly ProXES sales report draft for Ou. Output: 1. Management Summary 2. Customer Visits 3. Opportunities 4. Follow up Status 5. Issues / Blockers 6. Salesforce Update Draft 7. Next Week Plan 8. Supp...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/weekly_sales_report.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-03T08:26:07.8957212Z"
+                  },
+                  {
+                      "id":  "ai-office--reference--telegram_nova_setup",
+                      "title":  "Telegram Command Inbox Setup",
+                      "section":  "Reference",
+                      "summary":  "Telegram Command Inbox Setup Telegram can be used as a fast mobile command inbox for Nova Chief. Flow: Ou Telegram Message Telegram Bot Cloudflare Pages Function Nova /api/command Telegram Reply Dashboard Audit Log Security Rules Never c...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Reference/telegram_nova_setup.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-04T12:43:37.1564072Z"
+                  },
+                  {
+                      "id":  "ai-office--reference--nova_orchestration_sop",
+                      "title":  "SOP: Ou AI Command Office",
+                      "section":  "Reference",
+                      "summary":  "SOP: Ou AI Command Office 1. Objective Ou AI Command Office is a personal AI office with one central Chief of Staff agent named Nova Chief and multiple specialist sub agents. Nova Chief receives requests from Ou, classifies the task, set...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Reference/nova_orchestration_sop.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-04T11:04:51.2581271Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--risk_manager",
+                      "title":  "Risk Manager Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Risk Manager Prompt Review this task, document, portfolio idea, or customer action for risk. Output: 1. Risk Level 2. Key Watchouts 3. What to Avoid / Delay 4. Mitigation 5. Missing Information 6. Owner / Approval Needed 7. Final Risk Note",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/risk_manager.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-03T08:26:07.3686987Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--product_knowledge",
+                      "title":  "Product Knowledge Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Product Knowledge Prompt Prepare a ProXES product fit answer for the customer/application. Use only provided customer context and public safe product knowledge in MVP v1. Output: 1. Customer Need / Application 2. Recommended ProXES Techn...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/product_knowledge.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-03T08:26:07.2506841Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--portfolio_agent",
+                      "title":  "Atlas Invest Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Atlas Invest Prompt Prepare a Portfolio/DCA decision. Rules: Use My Portfolio Monitor 2026 dashboard or portfolio plan.json for allocation truth. Official dashboard URL: https://damrongsukch.github.io/my portfolio monitor 2026/ Dashboard...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/portfolio_agent.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T10:49:21.9337995Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--quality_gate",
+                      "title":  "Quality Gate Prompt",
+                      "section":  "Prompts",
+                      "summary":  "Quality Gate Prompt Review the output before Ou uses it. Checklist: 1. Context Gate does it match Ou\u0027s situation and role? 2. Accuracy Gate are names, dates, numbers, and files correct? 3. Action Gate is the next action clear? 4. Risk Ga...",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/quality_gate.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-03T08:26:07.6807489Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--prompt-library",
+                      "title":  "Prompt Library",
+                      "section":  "Prompts",
+                      "summary":  "Prompt Library ไฟล์ prompt ต้นฉบับอยู่ในโฟลเดอร์นี้และคัดลอกจากโปรเจกต์ AI Office เมื่อวันที่ 2026 06 14 ใช้ prompt ผ่าน Command Workflow และส่งผลกลับให้ Nova Chief ตรวจ QC เสมอ Command chief of staff · nova orchestration system · mornin...",
+                      "tags":  [
+                                   "ai-office",
+                                   "prompts",
+                                   "moc"
+                               ],
+                      "vault_path":  "AI Office/Prompts/Prompt Library.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:59.4112746Z"
+                  },
+                  {
+                      "id":  "ai-office--agents--luna-balance",
+                      "title":  "Luna Balance",
+                      "section":  "Agents",
+                      "summary":  "Luna Balance สนับสนุน life planning, reminders, family planning และ astrology ในฐานะ planning lens เท่านั้น Connections Agent Directory · Nova Chief · life astrology · Privacy and Storage Rules",
+                      "tags":  [
+                                   "agent",
+                                   "life",
+                                   "private-safe"
+                               ],
+                      "vault_path":  "AI Office/Agents/Luna Balance.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:59.1155366Z"
+                  },
+                  {
+                      "id":  "ai-office--agents--lina-voice",
+                      "title":  "Lina Voice",
+                      "section":  "Agents",
+                      "summary":  "Lina Voice เขียน business English, customer emails, LinkedIn posts, captions และ tone variants Connections Agent Directory · Nova Chief · Dara Docs · linkedin email",
+                      "tags":  [
+                                   "agent",
+                                   "writing"
+                               ],
+                      "vault_path":  "AI Office/Agents/Lina Voice.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:58.9995356Z"
+                  },
+                  {
+                      "id":  "ai-office--agents--nimo-vault",
+                      "title":  "Nimo Vault",
+                      "section":  "Agents",
+                      "summary":  "Nimo Vault ดูแล data classification, naming, tagging, folder routing, privacy checks และ retrieval Connections Agent Directory · Nova Chief · memory data steward · Privacy and Storage Rules · Knowledge Map",
+                      "tags":  [
+                                   "agent",
+                                   "memory",
+                                   "storage"
+                               ],
+                      "vault_path":  "AI Office/Agents/Nimo Vault.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:59.2546963Z"
+                  },
+                  {
+                      "id":  "ai-office--agents--mina-care",
+                      "title":  "Mina Care",
+                      "section":  "Agents",
+                      "summary":  "Mina Care ดูแล follow up queue, email drafts, next actions และ Salesforce/CRM update drafts Connections Agent Directory · Nova Chief · Ace Sales · customer follow up",
+                      "tags":  [
+                                   "agent",
+                                   "sales",
+                                   "crm"
+                               ],
+                      "vault_path":  "AI Office/Agents/Mina Care.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:58.4039587Z"
+                  },
+                  {
+                      "id":  "ai-office--agents--keno-expert",
+                      "title":  "Keno Expert",
+                      "section":  "Agents",
+                      "summary":  "Keno Expert จับคู่ความต้องการลูกค้ากับเทคโนโลยี ProXES และจัดทำ technical notes Connections Agent Directory · Nova Chief · Ace Sales · product knowledge",
+                      "tags":  [
+                                   "agent",
+                                   "sales",
+                                   "product"
+                               ],
+                      "vault_path":  "AI Office/Agents/Keno Expert.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:58.5225986Z"
+                  },
+                  {
+                      "id":  "ai-office--agents--agent-directory",
+                      "title":  "Agent Directory",
+                      "section":  "Agents",
+                      "summary":  "Agent Directory Agent ห้อง หน้าที่ Nova Chief Command สั่งการ จัดลำดับ ตรวจ QC Ace Sales Sales Sales brief, proposal, weekly report Mina Care Sales Follow up, CRM, relationship care Keno Expert Sales Product knowledge และ technical fit A...",
+                      "tags":  [
+                                   "ai-office",
+                                   "agents",
+                                   "moc"
+                               ],
+                      "vault_path":  "AI Office/Agents/Agent Directory.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:26.9537861Z"
+                  },
+                  {
+                      "id":  "ai-office--agents--ace-sales",
+                      "title":  "Ace Sales",
+                      "section":  "Agents",
+                      "summary":  "Ace Sales จัดทำ ProXES sales briefs, opportunity summaries, visit plans, proposals และ weekly reports Connections Agent Directory · Nova Chief · Mina Care · Keno Expert · asm sales · weekly sales report",
+                      "tags":  [
+                                   "agent",
+                                   "sales"
+                               ],
+                      "vault_path":  "AI Office/Agents/Ace Sales.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:58.2821097Z"
+                  },
+                  {
+                      "id":  "ai-office--agents--dara-docs",
+                      "title":  "Dara Docs",
+                      "section":  "Agents",
+                      "summary":  "Dara Docs สร้างและตรวจ PDF, Excel, PowerPoint, infographic, artwork และความพร้อมส่งออก Connections Agent Directory · Nova Chief · Lina Voice · document studio · quality gate",
+                      "tags":  [
+                                   "agent",
+                                   "documents"
+                               ],
+                      "vault_path":  "AI Office/Agents/Dara Docs.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:58.8791073Z"
+                  },
+                  {
+                      "id":  "ai-office--agents--atlas-invest",
+                      "title":  "Atlas Invest",
+                      "section":  "Agents",
+                      "summary":  "Atlas Invest วิเคราะห์ allocation, DCA candidates, timing, risk และคำแนะนำ buy/wait/hold cash โดยต้องใช้ข้อมูลล่าสุด Connections Agent Directory · Nova Chief · Vera Shield · portfolio agent",
+                      "tags":  [
+                                   "agent",
+                                   "portfolio"
+                               ],
+                      "vault_path":  "AI Office/Agents/Atlas Invest.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:58.6408232Z"
+                  },
+                  {
+                      "id":  "ai-office--operations--projects-dashboard",
+                      "title":  "Projects Dashboard",
+                      "section":  "Operations",
+                      "summary":  "Projects Dashboard Active Project Owner Status Next Action Due Ou AI Command Office Nova Chief active Maintain knowledge and workflow On Hold Project Reason Review Date Completed Project Completed Output",
+                      "tags":  [
+                                   "dashboard",
+                                   "projects"
+                               ],
+                      "vault_path":  "AI Office/Operations/Projects Dashboard.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:25:16.1756037Z"
+                  },
+                  {
+                      "id":  "ai-office--operations--privacy-and-storage-rules",
+                      "title":  "Privacy and Storage Rules",
+                      "section":  "Operations",
+                      "summary":  "Privacy and Storage Rules Public safe โค้ด โครงสร้างระบบ prompt templates และ mock data เก็บใน GitHub ได้ Obsidian ใช้เป็นฐานความรู้ในเครื่อง แต่ไม่ควรนำทั้ง Vault ไปเผยแพร่ Private ข้อมูลลูกค้าจริง การเงิน portfolio exports ครอบครัว โหร...",
+                      "tags":  [
+                                   "ai-office",
+                                   "privacy",
+                                   "storage"
+                               ],
+                      "vault_path":  "AI Office/Operations/Privacy and Storage Rules.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:20:22.9351868Z"
+                  },
+                  {
+                      "id":  "ai-office--prompts--asm_sales",
+                      "title":  "ASM Sales Prompt",
+                      "section":  "Prompts",
+                      "summary":  "ASM Sales Prompt Prepare sales support for ProXES. Output: 1. Customer Snapshot 2. Situation / Background 3. Pain Point 4. Opportunity 5. Product Fit 6. Risk / Concern 7. Recommended Next Action 8. Follow up Email Draft",
+                      "tags":  {
+
+                               },
+                      "vault_path":  "AI Office/Prompts/asm_sales.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-02T14:39:48.7836037Z"
+                  },
+                  {
+                      "id":  "ai-office--operations--system-overview",
+                      "title":  "System Overview",
+                      "section":  "Operations",
+                      "summary":  "System Overview Ou AI Command Office คือสำนักงาน AI ส่วนตัว โดยมี Nova Chief เป็นศูนย์กลางรับคำสั่งและส่งงานให้ผู้เชี่ยวชาญ Operating Model ระบบ หน้าที่ GitHub โค้ด dashboard, prompts, schemas และ mock data Google Drive ไฟล์จริง ข้อมูลส่...",
+                      "tags":  [
+                                   "ai-office",
+                                   "system"
+                               ],
+                      "vault_path":  "AI Office/Operations/System Overview.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:26.9723456Z"
+                  },
+                  {
+                      "id":  "ai-office--operations--operating-manual",
+                      "title":  "Operating Manual",
+                      "section":  "Operations",
+                      "summary":  "Operating Manual ขั้นตอนทุกแผนก: Workflow Handbook รับงาน บันทึกเรื่องใหม่ใน Inbox แล้วกำหนด objective, source truth, output, owner และ due date จัดเส้นทาง ใช้ Command Workflow และเลือก agent เท่าที่จำเป็นจาก Agent Directory ตรวจคุณภาพ ส...",
+                      "tags":  [
+                                   "manual",
+                                   "ai-office"
+                               ],
+                      "vault_path":  "AI Office/Operations/Operating Manual.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T10:24:52.9823990Z"
+                  },
+                  {
+                      "id":  "ai-office--agents--vera-shield",
+                      "title":  "Vera Shield",
+                      "section":  "Agents",
+                      "summary":  "Vera Shield ตรวจ drawdown, concentration, market regime, confidential data risk และ trade offs Connections Agent Directory · Nova Chief · Atlas Invest · risk manager · Privacy and Storage Rules",
+                      "tags":  [
+                                   "agent",
+                                   "risk",
+                                   "privacy"
+                               ],
+                      "vault_path":  "AI Office/Agents/Vera Shield.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:58.7577242Z"
+                  },
+                  {
+                      "id":  "ai-office--agents--nova-chief",
+                      "title":  "Nova Chief",
+                      "section":  "Agents",
+                      "summary":  "Nova Chief Chief of Staff และศูนย์กลางการสั่งงาน: รับคำสั่ง จัดประเภท ตั้ง priority เลือก agent รวมผล ตรวจ QC และส่งผลลัพธ์สุดท้าย งานหลัก: Morning Engine, task routing, daily brief, evening debrief, quality gate Flow: Ou → Nova → Specia...",
+                      "tags":  [
+                                   "agent",
+                                   "command"
+                               ],
+                      "vault_path":  "AI Office/Agents/Nova Chief.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T02:28:58.1517877Z"
+                  },
+                  {
+                      "id":  "ai-office--operations--command-workflow",
+                      "title":  "Command Workflow",
+                      "section":  "Operations",
+                      "summary":  "Command Workflow คู่มือฉบับเต็ม: Workflow Handbook Command Formula Agent + งานที่ต้องการ + บริบท + รูปแบบผลลัพธ์ + กำหนดเวลา/ขั้นตอนถัดไป Quality Gate 1. Correctness 2. Completeness 3. Clarity 4. Consistency 5. Actionability งานจาก agent...",
+                      "tags":  [
+                                   "ai-office",
+                                   "workflow",
+                                   "nova"
+                               ],
+                      "vault_path":  "AI Office/Operations/Command Workflow.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T10:24:52.8560544Z"
+                  },
+                  {
+                      "id":  "ai-office--knowledge--knowledge-map",
+                      "title":  "Knowledge Map",
+                      "section":  "Knowledge",
+                      "summary":  "Knowledge Map ข้อมูลบริบทจริงและทะเบียนหลัก: Data Completion Center Nova Orchestration — เจ้าของ: Nova Chief Sales SOP — Ace Sales, Mina Care, Keno Expert Portfolio Rules — Atlas Invest + Vera Shield Document Studio — Dara Docs Voice Tem...",
+                      "tags":  [
+                                   "ai-office",
+                                   "knowledge",
+                                   "moc"
+                               ],
+                      "vault_path":  "AI Office/Knowledge/Knowledge Map.md",
+                      "source":  "Obsidian_Ou_Vault",
+                      "modified_utc":  "2026-06-14T10:22:20.5815786Z"
+                  }
+              ]
+}

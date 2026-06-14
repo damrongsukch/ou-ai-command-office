@@ -8,6 +8,11 @@ Rules:
 - Dashboard fields to prefer: holdings, Weight, Target_A, Target_B, Target_Weight, Signal, RSI 7, RSI 14, Smart DCA USD, Market Mode, Cash, VIX.
 - Use Market Mode to decide whether Target_A or Target_B applies when both are available.
 - Use freshly refreshed live market data for timing.
+- Use Webull as the primary live timing source. Cross-check with Yahoo Finance, TradingView, or Google Finance.
+- Record the market session and retrieval timestamp for every quote. Compare only prices from the same session.
+- For pre-market checks, capture pre-market price/change and available volume or spread context. Treat pre-market as indicative, not guaranteed execution price.
+- Use TradingView primarily for RSI, EMA trend, support/resistance, and timeframe confirmation.
+- If live sources materially disagree or the session label is unclear, return `needs live verification` instead of a buy call.
 - Do not use memory as current portfolio truth.
 - Holding cash is acceptable when signals are weak.
 - Separate allocation decision from entry timing. Allocation truth comes first; live market timing is a secondary execution check.
@@ -23,6 +28,12 @@ Output:
 1. Source Check
 2. Portfolio / Allocation Snapshot
 3. Market Timing Snapshot
+   - source URL
+   - market session
+   - retrieval time and time zone
+   - Webull price/change
+   - cross-check price/change
+   - RSI/EMA/support-resistance
 4. Candidate Table
 5. Execution Feasibility
 6. Final Buy / Wait / Hold Cash Recommendation

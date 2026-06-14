@@ -167,6 +167,7 @@ Cloudflare Pages deployment:
 - It embeds `prompts/nova_orchestration_system.md` as the Nova Chief orchestration contract for AI responses.
 - It returns orchestration metadata: Nova owner, global workflow, QC criteria, and final delivery rule.
 - It calls the OpenAI Responses API server-side when `OPENAI_API_KEY` is configured.
+- It tries OpenRouter first when `OPENROUTER_API_KEY` is configured. The default test model is `openrouter/free`; override it with `OPENROUTER_MODEL`.
 - It uses `OPENAI_MODEL` when configured, otherwise defaults to `gpt-5-nano` as the low-cost API model.
 - It can use Cloudflare Workers AI via the `AI` binding as a no/low-cost test fallback. Default Workers AI model chain: `@cf/openai/gpt-oss-20b`, then `@cf/meta/llama-3.1-8b-instruct`.
 - It falls back to public-safe smart local draft output if OpenAI is not configured or the API call fails.
@@ -184,3 +185,23 @@ Next backend phases:
 2. Reconnect optional D1 private context after the correct Cloudflare database is created.
 3. Add Google Drive save after Ou approval.
 4. Add optional calendar/email connectors after privacy rules are settled.
+
+## Obsidian Sync
+
+Local Vault: `C:\Obsidian_Ou_Vault`
+
+Run `sync-obsidian.cmd` to perform both directions:
+
+- Repo to Vault: refreshes public-safe `prompts/`, `docs/`, and JSON source data.
+- Vault to Repo: exports approved public-safe notes from Agents, Knowledge, Operations, Prompts, and Reference to `data/obsidian_knowledge.json`.
+- Private areas are excluded: Inbox, Daily Notes, tasks, decisions, outputs, attachments, archive, nested legacy vault, and all private data.
+
+Dry run:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\sync-obsidian.ps1 -Direction Both -DryRun
+```
+
+After syncing, commit/deploy the generated JSON for the Cloudflare/GitHub web app to show the updated public-safe Obsidian knowledge.
+
+For automatic local sync, run `start-obsidian-sync.cmd`. It watches the approved public-safe folders and syncs changes within about 15 seconds. Cloud deployment remains a separate reviewed step.

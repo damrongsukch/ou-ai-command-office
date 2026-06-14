@@ -105,6 +105,7 @@
         .pipeline { grid-template-columns: 1fr; }
       }
     </style>
+    <link rel="stylesheet" href="./ui-polish.css" />
   </head>
   <body>
     <div class="shell">
@@ -135,10 +136,10 @@
         </section>
 
         <section class="pipeline" aria-label="Global workflow pipeline">
-          <article class="step"><b>1</b><h2>Ou Input</h2><p>Command arrives from dashboard, Telegram, or ChatGPT handoff.</p></article>
-          <article class="step"><b>2</b><h2>Nova Triage</h2><p>Nova understands objective, task type, urgency, and missing context.</p></article>
-          <article class="step"><b>3</b><h2>Context Reducer</h2><p>Only route-specific knowledge is loaded to reduce tokens and noise.</p></article>
-          <article class="step"><b>4</b><h2>Specialists</h2><p>Ace, Mina, Atlas, Vera, Keno, Dara, Lina, Luna, or Nimo work only when relevant.</p></article>
+          <article class="step" data-flow-step="ready"><b>1</b><h2>Ou Input</h2><p>Command arrives from dashboard, Telegram, or ChatGPT handoff.</p><small class="flow-state">Ready</small></article>
+          <article class="step" data-flow-step="local"><b>2</b><h2>Nova Triage</h2><p>Nova understands objective, task type, urgency, and missing context.</p><small class="flow-state">Local</small></article>
+          <article class="step" data-flow-step="local"><b>3</b><h2>Context Reducer</h2><p>Only route-specific knowledge is loaded to reduce tokens and noise.</p><small class="flow-state">Local</small></article>
+          <article class="step" data-flow-step="waiting"><b>4</b><h2>Specialists</h2><p>Ace, Mina, Atlas, Vera, Keno, Dara, Lina, Luna, or Nimo work only when relevant.</p><small class="flow-state">Waiting</small></article>
           <article class="step"><b>5</b><h2>Return to Nova</h2><p>No specialist delivers final output directly to Ou.</p></article>
           <article class="step"><b>6</b><h2>QC Review</h2><p>Correctness, completeness, clarity, consistency, and actionability.</p></article>
           <article class="step"><b>7</b><h2>Drive + Log</h2><p>Approved outputs go to the correct Google Drive folder and activity log.</p></article>
@@ -169,5 +170,16 @@
         </section>
       </main>
     </div>
+    <script>
+      const latestRun = JSON.parse(localStorage.getItem("ou-command-history") || "[]")[0];
+      document.querySelectorAll(".step").forEach((step, index) => {
+        if (!step.querySelector(".flow-state")) {
+          const state = document.createElement("small");
+          state.className = "flow-state";
+          state.textContent = index < 3 && latestRun ? "Local log" : "Waiting";
+          step.appendChild(state);
+        }
+      });
+    </script>
   </body>
 </html>
