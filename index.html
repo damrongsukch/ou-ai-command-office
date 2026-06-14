@@ -4545,7 +4545,7 @@
       async function sendToBackend(command, agent, signal) {
         if (!backendAvailableForCurrentHost()) return null;
 
-        const response = await fetch("./api/command", {
+        const response = await fetch("/api/command", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           signal,
@@ -4655,6 +4655,11 @@
       async function runNovaChat(message) {
         const command = message.trim();
         if (!command) return;
+        if (window.novaChatBusy) return;
+        window.novaChatBusy = true;
+        const sendButton = novaChatForm.querySelector("button[type='submit']");
+        sendButton.disabled = true;
+        sendButton.textContent = "Wait";
         appendChatBubble("user", "Ou", command);
         commandText.value = command;
         renderContextPlan(buildContextPlan(command, currentAgent));
@@ -4694,6 +4699,9 @@
         } finally {
           clearTimeout(timeoutId);
           if (novaChatStatus.textContent === "Loading") novaChatStatus.textContent = "Ready";
+          window.novaChatBusy = false;
+          sendButton.disabled = false;
+          sendButton.textContent = "Send";
           renderOsRightDefault();
         }
       }
