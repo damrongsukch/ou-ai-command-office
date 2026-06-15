@@ -421,7 +421,6 @@ function extractRequestedTicker(command = "") {
 }
 
 async function loadPortfolioMonitorData(command = "") {
-  if (!hasPortfolioMonitorUrl(command)) return { text: "", holdings: [], signals: [], kpis: {}, source: "" };
   try {
     const [holdingsRows, signalRows, kpiRows] = await Promise.all([
       fetchPortfolioSheet("Looker_Holdings"),
@@ -451,7 +450,6 @@ async function loadPortfolioMonitorData(command = "") {
 }
 
 async function loadPortfolioScriptSnapshot(command = "") {
-  if (!hasPortfolioMonitorUrl(command)) return { text: "", holdings: [], signals: [], kpis: {}, source: "" };
   const scriptUrl = "https://damrongsukch.github.io/my-portfolio-monitor-2026/script.js?v=20260605-rsi-threshold-colors";
   const response = await fetch(scriptUrl, { cf: { cacheTtl: 60 } }).catch((error) => {
     throw new Error(`Cannot fetch portfolio monitor script. ${error.message}`);
@@ -955,7 +953,7 @@ export async function onRequestPost(context) {
   let sourceSnapshot = "";
   let portfolioData = null;
   let sourceError = "";
-  if ((taskType === "investment" || taskType === "risk_review") && hasPortfolioMonitorUrl(command)) {
+  if (taskType === "investment" || taskType === "risk_review") {
     try {
       portfolioData = await loadPortfolioMonitorData(command);
       sourceSnapshot = portfolioData.text;
@@ -973,14 +971,10 @@ export async function onRequestPost(context) {
     mode = "portfolio_snapshot";
     output = tickerSnapshotOutput;
     backendNote = "Returned a deterministic portfolio ticker snapshot from My Portfolio Monitor data. AI was bypassed to avoid invented values.";
-  } else if ((taskType === "investment" || taskType === "risk_review") && hasPortfolioMonitorUrl(command) && !sourceSnapshot) {
+  } else if ((taskType === "investment" || taskType === "risk_review") && !sourceSnapshot) {
     mode = "source_required";
     output = buildSmartLocalOutput(command, agent, agentId);
     backendNote = `Portfolio guardrail blocked AI generation because the Portfolio Monitor snapshot could not be loaded. ${sourceError}`;
-  } else if ((taskType === "investment" || taskType === "risk_review") && !hasPortfolioSourceTruth(command)) {
-    mode = "source_required";
-    output = buildSmartLocalOutput(command, agent, agentId);
-    backendNote = "Portfolio guardrail blocked AI generation because the command did not include current allocation truth or live timing data. Nova returned deterministic source-required guidance to avoid invented portfolio numbers.";
   } else if (hasOpenRouterKey) {
     try {
       const result = await buildOpenRouterOutput(command, agent, context.env, contextPlan, sourceSnapshot);
@@ -1050,6 +1044,13 @@ export async function onRequestPost(context) {
 
   const logEntry = buildLogEntry({ command, agentId, agent, mode, now, output, contextPlan });
 
+  const responseSources = portfolioData?.source === "live_google_sheet"
+    ? ["Live Google Sheet / My Portfolio Monitor 2026"]
+    : portfolioData?.source === "saved_script_fallback"
+      ? ["Saved dashboard snapshot / My Portfolio Monitor 2026"]
+      : contextPlan.includedSources;
+  const aiMode = ["ai", "openrouter_ai", "cloudflare_ai", "portfolio_snapshot"].includes(mode);
+
   return Response.json({
     ok: true,
     mode,
@@ -1069,13 +1070,14 @@ export async function onRequestPost(context) {
       finalDeliveryRule: "No sub agent may deliver final output directly to Ou."
     },
     contextPlan,
+    sources: responseSources,
     output,
     backendNote,
     logEntry,
     nextActions: [
-      mode === "ai" || mode === "cloudflare_ai" ? "Review the AI draft in the dashboard." : "Review the smart local draft in the dashboard.",
+      aiMode ? "Review the source-grounded result in the dashboard." : "Review the smart local draft in the dashboard.",
       "Mark Approved or Saved only after Ou confirms.",
-      mode === "ai" || mode === "cloudflare_ai" ? "Save final work to the correct Google Drive folder." : "Attach source data or configure an AI provider for deeper drafts."
+      aiMode ? "Save final work to the correct Google Drive folder." : "Attach source data or configure an AI provider for deeper drafts."
     ]
   });
 }
