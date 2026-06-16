@@ -524,6 +524,72 @@ function buildPortfolioTickerSnapshotOutput(command, portfolioData) {
   ].filter(Boolean).join("\n");
 }
 
+function buildPortfolioOverviewOutput(portfolioData) {
+  if (!portfolioData?.holdings?.length) return "";
+  const signalsByTicker = Object.fromEntries((portfolioData.signals || []).map((item) => [item.ticker, item]));
+  const rows = portfolioData.holdings.map((holding) => {
+    const target = holding.targetWeight || holding.targetA || holding.targetB || "";
+    const gap = target ? numberFrom(target) - numberFrom(holding.weight) : null;
+    const signal = signalsByTicker[holding.ticker] || {};
+    return {
+      ...holding,
+      target,
+      gap,
+      signalText: signal.signal || holding.signal || "n/a",
+      rsi7: signal.rsi7 || "",
+      rsi14: signal.rsi14 || ""
+    };
+  });
+  const underweight = rows
+    .filter((item) => Number.isFinite(item.gap) && item.gap > 0.15)
+    .sort((a, b) => b.gap - a.gap)
+    .slice(0, 5);
+  const overweight = rows
+    .filter((item) => Number.isFinite(item.gap) && item.gap < -0.15)
+    .sort((a, b) => a.gap - b.gap)
+    .slice(0, 5);
+  const watch = rows
+    .filter((item) => /buy|watch|dca|add/i.test(item.signalText))
+    .slice(0, 5);
+  const formatGap = (gap) => Number.isFinite(gap) ? `${gap >= 0 ? "+" : ""}${gap.toFixed(2)}%` : "n/a";
+  const formatPct = (value, fallback = "0") => {
+    const text = String(value || fallback).trim();
+    return text.endsWith("%") ? text : `${text}%`;
+  };
+  const rowLine = (item) => [
+    `- ${item.ticker}`,
+    `weight ${formatPct(item.weight)}`,
+    item.target ? `target ${formatPct(item.target)}` : "target n/a",
+    `gap ${formatGap(item.gap)}`,
+    `signal ${item.signalText}`,
+    item.rsi7 ? `RSI ${item.rsi7}/${item.rsi14 || "n/a"}` : ""
+  ].filter(Boolean).join(" | ");
+  return [
+    "Atlas Invest - Portfolio Check",
+    "",
+    `Source: ${portfolioData.source === "live_google_sheet" ? "Live Google Sheet / My Portfolio Monitor 2026" : "Saved dashboard snapshot / My Portfolio Monitor 2026"}`,
+    portfolioData.sheetError ? `Sheet warning: ${portfolioData.sheetError}` : "",
+    "",
+    "Portfolio KPIs:",
+    ...Object.entries(portfolioData.kpis || {}).slice(0, 8).map(([key, value]) => `- ${key}: ${value}`),
+    "",
+    "Holdings Snapshot:",
+    ...rows.slice(0, 15).map(rowLine),
+    "",
+    "Underweight / Add Candidates:",
+    ...(underweight.length ? underweight.map(rowLine) : ["- No clear underweight candidate from target gap."]),
+    "",
+    "Overweight / Wait Candidates:",
+    ...(overweight.length ? overweight.map(rowLine) : ["- No clear overweight candidate from target gap."]),
+    "",
+    "Signal Watchlist:",
+    ...(watch.length ? watch.map(rowLine) : ["- No explicit buy/watch signal in the current sheet snapshot."]),
+    "",
+    "Next Action:",
+    "Use this as allocation truth first. For a real buy decision, ask Nova: DCA today budget [USD] and check live timing separately."
+  ].filter(Boolean).join("\n");
+}
+
 function slug(text = "") {
   return text
     .replace(/&/g, "and")
@@ -966,11 +1032,16 @@ export async function onRequestPost(context) {
   let backendNote = "Returned a smart local draft. OpenRouter, OpenAI, and Cloudflare Workers AI are optional and only run when configured.";
 
   const tickerSnapshotOutput = portfolioData ? buildPortfolioTickerSnapshotOutput(command, portfolioData) : "";
+  const portfolioOverviewOutput = portfolioData ? buildPortfolioOverviewOutput(portfolioData) : "";
 
   if (tickerSnapshotOutput) {
     mode = "portfolio_snapshot";
     output = tickerSnapshotOutput;
     backendNote = "Returned a deterministic portfolio ticker snapshot from My Portfolio Monitor data. AI was bypassed to avoid invented values.";
+  } else if (portfolioOverviewOutput) {
+    mode = "portfolio_snapshot";
+    output = portfolioOverviewOutput;
+    backendNote = "Returned a deterministic portfolio overview from My Portfolio Monitor data. AI was bypassed to avoid invented portfolio values.";
   } else if ((taskType === "investment" || taskType === "risk_review") && !sourceSnapshot) {
     mode = "source_required";
     output = buildSmartLocalOutput(command, agent, agentId);

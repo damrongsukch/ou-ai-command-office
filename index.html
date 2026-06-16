@@ -4616,6 +4616,11 @@
       }
 
       function structuredNovaReply(result, command) {
+        if (result?.mode === "portfolio_snapshot") {
+          const sources = result?.sources || [];
+          const source = Array.isArray(sources) && sources.length ? sources.join(", ") : "Live portfolio source";
+          return `${result.output}\n\nSource\n${source}\n\nRequest\n${command}`;
+        }
         const summary = compactNovaReply(result?.output || "Nova received the request and prepared a local draft.");
         const next = result?.nextAction || "Review the result, then approve, save to Drive, or create a task.";
         const sources = result?.contextPlan?.sources || result?.sources || [];
@@ -4630,7 +4635,7 @@
         const useful = lines
           .filter((line) => !/^status:|^owner:|^room:|^save to:|^priority:|^assigned:|^log file:/i.test(line))
           .slice(0, 8);
-        return (useful.length ? useful : lines.slice(0, 8)).join("\n").slice(0, 1200);
+        return (useful.length ? useful : lines.slice(0, 12)).join("\n").slice(0, 2200);
       }
 
       function novaChatReplyFromBackend(result, command) {
