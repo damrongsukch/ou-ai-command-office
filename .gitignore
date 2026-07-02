@@ -14,8 +14,7 @@ outputs/*preview*.html
 data/obsidian_sync_manifest.json
 .DS_Store
 
-# Out of scope for static MVP v1. Re-enable intentionally for backend/Cloudflare phase.
-.dev.vars.example
+# Backend/Cloudflare files are tracked; real local secrets remain ignored above.
 functions/
 !functions/
 functions/*

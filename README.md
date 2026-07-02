@@ -151,6 +151,16 @@ Open `index.html` in a browser, use the Cloudflare Pages URL for AI backend test
 
 For the public dashboard, use mock data only. For real work, provide the required source truth in the command or attach it in a private workflow, then save final approved outputs manually to Google Drive.
 
+## Move to Another Computer
+
+Use [`docs/MACHINE_MIGRATION_GUIDE.md`](docs/MACHINE_MIGRATION_GUIDE.md) for the complete clone, secret restore, Cloudflare deploy, Obsidian, Google Drive, Telegram, validation, and secure-backup checklist.
+
+Run the repeatable project check with:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\project-health-check.ps1
+```
+
 ## Cloudflare Backend
 
 `functions/api/command.js` is the first backend step.
