@@ -78,7 +78,7 @@ npx.cmd wrangler --version
 ## 6. Clone and Restore
 
 ```powershell
-cd "$env:USERPROFILE\OneDrive\Documents\Office"
+cd "$env:USERPROFILE\OneDrive\Desktop\Projects"
 git clone https://github.com/damrongsukch/ou-ai-command-office.git
 cd ou-ai-command-office
 git switch main
